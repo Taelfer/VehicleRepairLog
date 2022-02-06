@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VehicleRepairLog.DataAccess;
 
@@ -11,9 +12,10 @@ using VehicleRepairLog.DataAccess;
 namespace VehicleRepairLog.DataAccess.Migrations
 {
     [DbContext(typeof(VehicleProfileStorageContext))]
-    partial class VehicleProfileStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20220206101500_EditedPartEntity")]
+    partial class EditedPartEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace VehicleRepairLog.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("PartRepair", b =>
-                {
-                    b.Property<int>("PartsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RepairsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PartsId", "RepairsId");
-
-                    b.HasIndex("RepairsId");
-
-                    b.ToTable("PartRepair");
-                });
 
             modelBuilder.Entity("VehicleRepairLog.DataAccess.Entites.Part", b =>
                 {
@@ -54,7 +41,12 @@ namespace VehicleRepairLog.DataAccess.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("RepairId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RepairId");
 
                     b.ToTable("Parts");
                 });
@@ -135,19 +127,11 @@ namespace VehicleRepairLog.DataAccess.Migrations
                     b.ToTable("Vehicles");
                 });
 
-            modelBuilder.Entity("PartRepair", b =>
+            modelBuilder.Entity("VehicleRepairLog.DataAccess.Entites.Part", b =>
                 {
-                    b.HasOne("VehicleRepairLog.DataAccess.Entites.Part", null)
-                        .WithMany()
-                        .HasForeignKey("PartsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("VehicleRepairLog.DataAccess.Entites.Repair", null)
-                        .WithMany()
-                        .HasForeignKey("RepairsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Parts")
+                        .HasForeignKey("RepairId");
                 });
 
             modelBuilder.Entity("VehicleRepairLog.DataAccess.Entites.Repair", b =>
@@ -170,6 +154,11 @@ namespace VehicleRepairLog.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("VehicleRepairLog.DataAccess.Entites.Repair", b =>
+                {
+                    b.Navigation("Parts");
                 });
 
             modelBuilder.Entity("VehicleRepairLog.DataAccess.Entites.User", b =>

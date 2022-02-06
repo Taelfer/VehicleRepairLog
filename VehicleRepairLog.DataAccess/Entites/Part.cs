@@ -11,7 +11,6 @@ namespace VehicleRepairLog.DataAccess.Entites
         public string Name { get; set; }
         public string BrandName { get; set; }
         public decimal Price { get; set; }
-        public Repair Repair { get; set; }
-        public int RepairId { get; set; }
+        public List<Repair> Repairs { get; set; }
     }
 }
