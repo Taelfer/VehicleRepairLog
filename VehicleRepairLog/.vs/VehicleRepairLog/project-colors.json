@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "4f3b1438-ed24-49b6-8157-09f108c357e6": {
+      "ProjectGuid": "4f3b1438-ed24-49b6-8157-09f108c357e6",
+      "DisplayName": "VehicleRepairLog",
+      "ColorIndex": 0
+    },
+    "fe243b16-c6fe-4113-9d66-b0e875bed0a6": {
+      "ProjectGuid": "fe243b16-c6fe-4113-9d66-b0e875bed0a6",
+      "DisplayName": "VehicleRepairLog.ApplicationServices",
+      "ColorIndex": 1
+    },
+    "7c6f61fe-cd98-47a6-8f57-70efceb8d1e5": {
+      "ProjectGuid": "7c6f61fe-cd98-47a6-8f57-70efceb8d1e5",
+      "DisplayName": "VehicleRepairLog.DataAccess",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}
