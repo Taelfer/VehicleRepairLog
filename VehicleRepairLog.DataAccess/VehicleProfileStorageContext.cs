@@ -8,7 +8,7 @@ using VehicleRepairLog.DataAccess.Entites;
 
 namespace VehicleRepairLog.DataAccess
 {
-    internal class VehicleProfileStorageContext : DbContext
+    public class VehicleProfileStorageContext : DbContext
     {
         public VehicleProfileStorageContext(DbContextOptions<VehicleProfileStorageContext> options) : base(options)
         {

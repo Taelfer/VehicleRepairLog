@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VehicleRepairLog.DataAccess.Entites
 {
-    internal class EntityBase
+    public abstract class EntityBase
     {
         [Key]
         public int Id { get; set; }

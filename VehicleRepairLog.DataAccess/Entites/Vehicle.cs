@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VehicleRepairLog.DataAccess.Entites
 {
-    internal class Vehicle : EntityBase 
+    public class Vehicle : EntityBase 
     {
         public string BrandName { get; set; }
         public int VinNumber { get; set; }
