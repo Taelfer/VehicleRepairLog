@@ -1,0 +1,28 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Parts;
+
+namespace VehicleRepairLog.Controllers
+{
+    [Route("[controller]")]
+    [ApiController]
+    public class PartsController : ControllerBase
+    {
+        private readonly IMediator mediator;
+
+        public PartsController(IMediator mediator)
+        {
+            this.mediator = mediator;
+        }
+
+        [HttpGet]
+        [Route("")]
+        public async Task<IActionResult> GetAllParts([FromQuery] GetAllPartsRequest request)
+        {
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        }
+    }
+}
