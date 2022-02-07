@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Models;
 
-namespace VehicleRepairLog.ApplicationServices.API.Domain.Responses.Parts
+namespace VehicleRepairLog.ApplicationServices.API.Domain.Responses.Vehicles
 {
-    public class GetAllPartsResponse : ResponseBase<List<Part>>
+    public class GetAllVehiclesResponse : ResponseBase<List<Vehicle>>
     {
     }
 }

@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Vehicles;
 using VehicleRepairLog.DataAccess;
 using VehicleRepairLog.DataAccess.Entites;
 
@@ -9,21 +12,19 @@ namespace VehicleRepairLog.Controllers
     [ApiController]
     public class VehiclesController : ControllerBase
     {
-        private readonly VehicleProfileStorageContext context;
-        private readonly IRepository<Vehicle> vehicleRepository;
+        private readonly IMediator mediator;
 
-        public VehiclesController(VehicleProfileStorageContext context, IRepository<Vehicle> vehicleRepository)
+        public VehiclesController(IMediator mediator)
         {
-            this.context = context;
-            this.vehicleRepository = vehicleRepository;
+            this.mediator = mediator;
         }
 
         [HttpGet]
         [Route("")]
-        public IEnumerable<Vehicle> GetAllVehicles() => this.vehicleRepository.GetAll();
-
-        [HttpGet]
-        [Route("{vehicleId}")]
-        public Vehicle GetVehicleById([FromQuery]int vehicleId) => this.vehicleRepository.GetById(vehicleId);
+        public async Task<IActionResult> GetAllVehicles([FromQuery] GetAllVehiclesRequest request)
+        {
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
 {
     public class GetAllPartsHandler : IRequestHandler<GetAllPartsRequest, GetAllPartsResponse>
     {
-        private readonly DataAccess.IRepository<DataAccess.Entites.Part> partsRepository;
+        private readonly IRepository<DataAccess.Entites.Part> partsRepository;
 
         public GetAllPartsHandler(IRepository<DataAccess.Entites.Part> partsRepository)
         {
