@@ -65,3 +65,5 @@ C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog\VehicleRepairLog\bin\Debug\net6.
 C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog\VehicleRepairLog\bin\Debug\net6.0\MediatR.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog\VehicleRepairLog\bin\Debug\net6.0\VehicleRepairLog.ApplicationServices.dll
 C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog\VehicleRepairLog\bin\Debug\net6.0\VehicleRepairLog.ApplicationServices.pdb
+C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog\VehicleRepairLog\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog\VehicleRepairLog\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses;
+using VehicleRepairLog.ApplicationServices.MappingProfiles;
 using VehicleRepairLog.DataAccess;
 
 namespace VehicleRepairLog
@@ -30,6 +31,8 @@ namespace VehicleRepairLog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(PartProfile).Assembly);
+
             services.AddMediatR(typeof(ResponseBase<>));
 
             services.AddDbContext<VehicleProfileStorageContext>(options =>

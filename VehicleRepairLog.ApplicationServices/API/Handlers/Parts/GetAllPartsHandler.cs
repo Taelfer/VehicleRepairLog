@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,26 +15,22 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
     public class GetAllPartsHandler : IRequestHandler<GetAllPartsRequest, GetAllPartsResponse>
     {
         private readonly IRepository<DataAccess.Entites.Part> partsRepository;
+        private readonly IMapper mapper;
 
-        public GetAllPartsHandler(IRepository<DataAccess.Entites.Part> partsRepository)
+        public GetAllPartsHandler(IRepository<DataAccess.Entites.Part> partsRepository, IMapper mapper)
         {
             this.partsRepository = partsRepository;
+            this.mapper = mapper;
         }
 
         public Task<GetAllPartsResponse> Handle(GetAllPartsRequest request, CancellationToken cancellationToken)
         {
             var parts = partsRepository.GetAll();
-            var partsModel = parts.Select(x => new Domain.Models.Part()
-            {
-                Id = x.Id,
-                Name = x.Name,
-                BrandName = x.BrandName,
-                Price = x.Price
-            });
+            var mappedParts = this.mapper.Map<List<Domain.Models.Part>>(parts);
 
             var response = new GetAllPartsResponse()
             {
-                Data = partsModel.ToList()
+                Data = mappedParts.ToList()
             };
 
             return Task.FromResult(response);
