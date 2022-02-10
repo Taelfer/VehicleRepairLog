@@ -23,9 +23,9 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
             this.mapper = mapper;
         }
 
-        public Task<GetAllPartsResponse> Handle(GetAllPartsRequest request, CancellationToken cancellationToken)
+        public async Task<GetAllPartsResponse> Handle(GetAllPartsRequest request, CancellationToken cancellationToken)
         {
-            var parts = partsRepository.GetAll();
+            var parts = await this.partsRepository.GetAll();
             var mappedParts = this.mapper.Map<List<Domain.Models.Part>>(parts);
 
             var response = new GetAllPartsResponse()
@@ -33,7 +33,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
                 Data = mappedParts.ToList()
             };
 
-            return Task.FromResult(response);
+            return response;
         }
     }
 }

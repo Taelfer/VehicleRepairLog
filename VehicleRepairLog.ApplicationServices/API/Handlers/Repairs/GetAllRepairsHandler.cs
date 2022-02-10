@@ -24,9 +24,9 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
             this.mapper = mapper;
         }
 
-        public Task<GetAllRepairsResponse> Handle(GetAllRepairsRequest request, CancellationToken cancellationToken)
+        public async Task<GetAllRepairsResponse> Handle(GetAllRepairsRequest request, CancellationToken cancellationToken)
         {
-            var repairs = this.repairRepository.GetAll();
+            var repairs = await this.repairRepository.GetAll();
             var mappedRepairs = this.mapper.Map <List<Domain.Models.Repair>>(repairs);
 
             var response = new GetAllRepairsResponse()
@@ -34,7 +34,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
                 Data = mappedRepairs
             };
 
-            return Task.FromResult(response);
+            return response;
         }
     }
 }

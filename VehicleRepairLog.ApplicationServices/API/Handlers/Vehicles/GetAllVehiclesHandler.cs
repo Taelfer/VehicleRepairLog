@@ -24,9 +24,9 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
             this.mapper = mapper;
         }
 
-        public Task<GetAllVehiclesResponse> Handle(GetAllVehiclesRequest request, CancellationToken cancellationToken)
+        public async Task<GetAllVehiclesResponse> Handle(GetAllVehiclesRequest request, CancellationToken cancellationToken)
         {
-            var vehicles = this.vehicleRepository.GetAll();
+            var vehicles = await this.vehicleRepository.GetAll();
             var mappedVehicles = this.mapper.Map<List<Domain.Models.Vehicle>>(vehicles);
 
             var response = new GetAllVehiclesResponse()
@@ -34,7 +34,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
                 Data = mappedVehicles
             };
 
-            return Task.FromResult(response);
+            return response;
         }
     }
 }
