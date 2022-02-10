@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VehicleRepairLog.DataAccess.Entites
+namespace VehicleRepairLog.DataAccess.Entities
 {
     public abstract class EntityBase
     {

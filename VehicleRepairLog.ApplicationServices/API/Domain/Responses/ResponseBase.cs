@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Responses
 {
-    public class ResponseBase<T>
+    public abstract class ResponseBase<T>
     {
         public T Data { get; set; }
     }

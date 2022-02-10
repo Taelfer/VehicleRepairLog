@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -15,6 +15,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CQRS\Commands\Vehicles\" />
+    <Folder Include="CQRS\Commands\Repairs\" />
+    <Folder Include="CQRS\Queries\Vehicles\" />
+    <Folder Include="CQRS\Queries\Repairs\" />
   </ItemGroup>
 
 </Project>

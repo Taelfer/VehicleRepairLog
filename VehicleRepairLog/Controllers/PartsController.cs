@@ -24,5 +24,13 @@ namespace VehicleRepairLog.Controllers
             var response = await this.mediator.Send(request);
             return this.Ok(response);
         }
+
+        [HttpPost]
+        [Route("")]
+        public async Task<IActionResult> AddPart([FromBody] AddPartRequest request)
+        {
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        }
     }
 }

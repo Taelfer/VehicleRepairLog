@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VehicleRepairLog.DataAccess.Entites;
+using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.DataAccess
 {

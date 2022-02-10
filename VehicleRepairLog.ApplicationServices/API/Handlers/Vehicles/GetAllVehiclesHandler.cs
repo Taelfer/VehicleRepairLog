@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Vehicles;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Vehicles;
 using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.Entites;
+using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
 {

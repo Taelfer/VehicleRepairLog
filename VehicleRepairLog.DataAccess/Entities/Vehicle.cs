@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VehicleRepairLog.DataAccess.Entites
+namespace VehicleRepairLog.DataAccess.Entities
 {
     public class Vehicle : EntityBase 
     {

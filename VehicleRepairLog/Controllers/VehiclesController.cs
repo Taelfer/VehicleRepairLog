@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Vehicles;
 using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.Entites;
+using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.Controllers
 {
