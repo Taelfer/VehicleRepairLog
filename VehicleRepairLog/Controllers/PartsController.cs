@@ -17,6 +17,14 @@ namespace VehicleRepairLog.Controllers
             this.mediator = mediator;
         }
 
+        [HttpPost]
+        [Route("")]
+        public async Task<IActionResult> AddPart([FromBody] AddPartRequest request)
+        {
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        }
+
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetAllParts([FromQuery] GetAllPartsRequest request)
@@ -37,11 +45,13 @@ namespace VehicleRepairLog.Controllers
             var response = await this.mediator.Send(request);
             return this.Ok(response);
         }
-
-        [HttpPost]
-        [Route("")]
-        public async Task<IActionResult> AddPart([FromBody] AddPartRequest request)
+        
+        [HttpPut]
+        [Route("partId")]
+        public async Task<IActionResult> UpdatePart([FromBody] UpdatePartRequest request, int partId)
         {
+            request.PartId = partId;
+
             var response = await this.mediator.Send(request);
             return this.Ok(response);
         }

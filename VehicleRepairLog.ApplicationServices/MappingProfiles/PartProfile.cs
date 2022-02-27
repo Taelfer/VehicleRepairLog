@@ -22,6 +22,11 @@ namespace VehicleRepairLog.ApplicationServices.MappingProfiles
                 .ForMember(x => x.Name, y => y.MapFrom(z => z.Name))
                 .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
                 .ForMember(x => x.Price, y => y.MapFrom(z => z.Price));
+
+            CreateMap<UpdatePartRequest, DataAccess.Entities.Part>()
+                .ForMember(x => x.Name, y => y.MapFrom(z => z.Name))
+                .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
+                .ForMember(x => x.Price, y => y.MapFrom(z => z.Price));
         }
     }
 }
