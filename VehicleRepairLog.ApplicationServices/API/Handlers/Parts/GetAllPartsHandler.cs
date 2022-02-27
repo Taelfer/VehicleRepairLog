@@ -27,7 +27,10 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
 
         public async Task<GetAllPartsResponse> Handle(GetAllPartsRequest request, CancellationToken cancellationToken)
         {
-            var query = new GetAllPartsQuery();
+            var query = new GetAllPartsQuery()
+            {
+                Name = request.Name
+            };
             var parts = await this.queryExecutor.Execute(query);
             var mappedParts = this.mapper.Map<List<Domain.Models.Part>>(parts);
 

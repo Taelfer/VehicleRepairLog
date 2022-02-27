@@ -25,6 +25,19 @@ namespace VehicleRepairLog.Controllers
             return this.Ok(response);
         }
 
+        [HttpGet]
+        [Route("{partId}")]
+        public async Task<IActionResult> GetPartById([FromRoute] int partId)
+        {
+            var request = new GetPartByIdRequest()
+            {
+                PartId = partId
+            };
+
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        }
+
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> AddPart([FromBody] AddPartRequest request)

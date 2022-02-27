@@ -8,8 +8,8 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Parts;
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Requests.Parts
 {
-    public class GetAllPartsRequest : IRequest<GetAllPartsResponse>
+    public class GetPartByIdRequest : IRequest<GetPartByIdResponse>
     {
-        public string Name { get; set; }
+        public int PartId { get; set; }
     }
 }
