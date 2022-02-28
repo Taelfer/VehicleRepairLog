@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleRepairLog", "VehicleRepairLog.csproj", "{4F3B1438-ED24-49B6-8157-09F108C357E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleRepairLog", "VehicleRepairLog\VehicleRepairLog.csproj", "{4F3B1438-ED24-49B6-8157-09F108C357E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleRepairLog.ApplicationServices", "..\VehicleRepairLog.ApplicationServices\VehicleRepairLog.ApplicationServices.csproj", "{FE243B16-C6FE-4113-9D66-B0E875BED0A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleRepairLog.ApplicationServices", "VehicleRepairLog.ApplicationServices\VehicleRepairLog.ApplicationServices.csproj", "{FE243B16-C6FE-4113-9D66-B0E875BED0A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleRepairLog.DataAccess", "..\VehicleRepairLog.DataAccess\VehicleRepairLog.DataAccess.csproj", "{7C6F61FE-CD98-47A6-8F57-70EFCEB8D1E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleRepairLog.DataAccess", "VehicleRepairLog.DataAccess\VehicleRepairLog.DataAccess.csproj", "{7C6F61FE-CD98-47A6-8F57-70EFCEB8D1E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
