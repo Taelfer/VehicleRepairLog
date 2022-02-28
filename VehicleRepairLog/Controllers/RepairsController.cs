@@ -16,6 +16,14 @@ namespace VehicleRepairLog.Controllers
             this.mediator = mediator;
         }
 
+        [HttpPost]
+        [Route("")]
+        public async Task<IActionResult> AddRepair([FromBody] AddRepairRequest request)
+        {
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        }
+
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetAllRepairs([FromQuery] GetAllRepairsRequest request)

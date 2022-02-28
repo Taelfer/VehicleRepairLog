@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <Folder Include="CQRS\Commands\Vehicles\" />
-    <Folder Include="CQRS\Commands\Repairs\" />
     <Folder Include="CQRS\Queries\Vehicles\" />
     <Folder Include="CQRS\Queries\Repairs\" />
   </ItemGroup>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Repairs;
 
 namespace VehicleRepairLog.ApplicationServices.MappingProfiles
 {
@@ -13,6 +14,11 @@ namespace VehicleRepairLog.ApplicationServices.MappingProfiles
         {
             CreateMap<DataAccess.Entities.Repair, API.Domain.Models.Repair>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
+                .ForMember(x => x.Date, y => y.MapFrom(z => z.Date))
+                .ForMember(x => x.Description, y => y.MapFrom(z => z.Description))
+                .ForMember(x => x.CarWorkshopName, y => y.MapFrom(z => z.CarWorkshopName));
+
+            CreateMap<AddRepairRequest, DataAccess.Entities.Repair>()
                 .ForMember(x => x.Date, y => y.MapFrom(z => z.Date))
                 .ForMember(x => x.Description, y => y.MapFrom(z => z.Description))
                 .ForMember(x => x.CarWorkshopName, y => y.MapFrom(z => z.CarWorkshopName));
