@@ -10,5 +10,6 @@ namespace VehicleRepairLog.ApplicationServices.API.Domain.Requests.Repairs
 {
     public class GetAllRepairsRequest : IRequest<GetAllRepairsResponse>
     {
+
     }
 }
