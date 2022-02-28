@@ -47,10 +47,23 @@ namespace VehicleRepairLog.Controllers
         }
         
         [HttpPut]
-        [Route("partId")]
+        [Route("{partId}")]
         public async Task<IActionResult> UpdatePart([FromBody] UpdatePartRequest request, int partId)
         {
             request.PartId = partId;
+
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("{partId}")]
+        public async Task<IActionResult> DeletePart([FromRoute] int partId)
+        {
+            var request = new DeletePartRequest()
+            {
+                PartId = partId
+            };
 
             var response = await this.mediator.Send(request);
             return this.Ok(response);
