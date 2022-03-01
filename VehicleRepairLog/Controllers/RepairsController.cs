@@ -46,10 +46,23 @@ namespace VehicleRepairLog.Controllers
         }
 
         [HttpPut]
-        [Route("{vehicleId}/{repairId}")]
+        [Route("{repairId}")]
         public async Task<IActionResult> UpdateRepair([FromBody] UpdateRepairRequest request, int repairId)
         {
             request.RepairId = repairId;
+
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("{repairId}")]
+        public async Task<IActionResult> DeleteRepair([FromRoute] int repairId)
+        {
+            var request = new DeleteRepairRequest()
+            {
+                RepairId = repairId
+            };
 
             var response = await this.mediator.Send(request);
             return this.Ok(response);
