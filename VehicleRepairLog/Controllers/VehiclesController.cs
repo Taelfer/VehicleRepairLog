@@ -1,10 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Vehicles;
-using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.Controllers
 {
@@ -17,6 +14,14 @@ namespace VehicleRepairLog.Controllers
         public VehiclesController(IMediator mediator)
         {
             this.mediator = mediator;
+        }
+
+        [HttpPost]
+        [Route("")]
+        public async Task<IActionResult> AddVehicle([FromBody] AddVehicleRequest request)
+        {
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
         }
 
         [HttpGet]
