@@ -1,40 +1,35 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Vehicles;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Vehicles;
 using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.Entities;
+using VehicleRepairLog.DataAccess.CQRS.Queries.Vehicles;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
 {
     public class GetAllVehiclesHandler : IRequestHandler<GetAllVehiclesRequest, GetAllVehiclesResponse>
     {
-        private readonly IRepository<Vehicle> vehicleRepository;
         private readonly IMapper mapper;
+        private readonly IQueryExecutor queryExecutor;
 
-        public GetAllVehiclesHandler(IRepository<Vehicle> vehicleRepository, IMapper mapper)
+        public GetAllVehiclesHandler(IMapper mapper, IQueryExecutor queryExecutor)
         {
-            this.vehicleRepository = vehicleRepository;
             this.mapper = mapper;
+            this.queryExecutor = queryExecutor;
         }
 
         public async Task<GetAllVehiclesResponse> Handle(GetAllVehiclesRequest request, CancellationToken cancellationToken)
         {
-            var vehicles = await this.vehicleRepository.GetAll();
-            var mappedVehicles = this.mapper.Map<List<Domain.Models.Vehicle>>(vehicles);
+            var query = new GetAllVehiclesQuery() { };
+            var vehicles = await this.queryExecutor.Execute(query);
 
-            var response = new GetAllVehiclesResponse()
+            return new GetAllVehiclesResponse()
             {
-                Data = mappedVehicles
+                Data = this.mapper.Map<List<Domain.Models.Vehicle>>(vehicles)
             };
-
-            return response;
         }
     }
 }
