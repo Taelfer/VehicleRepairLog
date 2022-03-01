@@ -31,5 +31,18 @@ namespace VehicleRepairLog.Controllers
             var response = await this.mediator.Send(request);
             return this.Ok(response);
         }
+
+        [HttpGet]
+        [Route("{vehicleId}")]
+        public async Task<IActionResult> GetVehicleById([FromRoute] int vehicleId)
+        {
+            var request = new GetVehicleByIdRequest()
+            {
+                VehicleId = vehicleId
+            };
+
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        }
     }
 }
