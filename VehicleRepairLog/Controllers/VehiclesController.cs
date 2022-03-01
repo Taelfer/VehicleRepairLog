@@ -54,5 +54,18 @@ namespace VehicleRepairLog.Controllers
             var response = await this.mediator.Send(request);
             return this.Ok(response);
         }
+
+        [HttpDelete]
+        [Route("{vehicleId}")]
+        public async Task<IActionResult> DeleteVehicle([FromRoute] int vehicleId)
+        {
+            var request = new DeleteVehicleRequest()
+            {
+                VehicleId = vehicleId
+            };
+
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        }
     }
 }
