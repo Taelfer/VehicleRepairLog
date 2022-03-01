@@ -44,5 +44,15 @@ namespace VehicleRepairLog.Controllers
             var response = await this.mediator.Send(request);
             return this.Ok(response);
         }
+
+        [HttpPut]
+        [Route("{vehicleId}/{repairId}")]
+        public async Task<IActionResult> UpdateRepair([FromBody] UpdateRepairRequest request, int repairId)
+        {
+            request.RepairId = repairId;
+
+            var response = await this.mediator.Send(request);
+            return this.Ok(response);
+        }
     }
 }

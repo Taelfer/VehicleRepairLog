@@ -14,5 +14,6 @@ namespace VehicleRepairLog.ApplicationServices.API.Domain.Models
         public string PaintColor { get; set; }
         public string FuelType { get; set; }
         public int Mileage { get; set; }
+        public int UserId { get; set; }
     }
 }

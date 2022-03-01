@@ -12,5 +12,6 @@ namespace VehicleRepairLog.ApplicationServices.API.Domain.Models
         public DateTime Date { get; set; }
         public string Description { get; set; }
         public string CarWorkshopName { get; set; }
+        public int VehicleId { get; set; }
     }
 }
