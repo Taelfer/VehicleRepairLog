@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace VehicleRepairLog.DataAccess.Entities
 {
     public class Vehicle : EntityBase 
     {
+        [MaxLength(100)]
         public string BrandName { get; set; }
-        public int VinNumber { get; set; }
+
+        [MaxLength(100)]
+        public string VinNumber { get; set; }
+
+        [MaxLength(100)]
         public string PaintColor { get; set; }
+
+        [MaxLength(100)]
         public string FuelType { get; set; }
+
+        [Range(0,10000000)]
         public int Mileage { get; set; }
         public User User { get; set; }
         public int UserId { get; set; }

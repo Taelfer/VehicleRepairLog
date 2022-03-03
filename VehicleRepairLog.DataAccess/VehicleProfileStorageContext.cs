@@ -8,6 +8,9 @@ using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.DataAccess
 {
+    /// <summary>
+    /// Creates database context with given <see cref="DbSet{TEntity}" /> by inheriting <see cref="DbContext" /> class.
+    /// </summary>
     public class VehicleProfileStorageContext : DbContext
     {
         public VehicleProfileStorageContext(DbContextOptions<VehicleProfileStorageContext> options) : base(options)
