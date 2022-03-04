@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VehicleRepairLog.ApplicationServices.API.Domain.Responses
+﻿namespace VehicleRepairLog.ApplicationServices.API.Domain.Responses
 {
-    public abstract class ResponseBase<T>
+    public abstract class ResponseBase<T> : ErrorResponseBase
     {
         public T Data { get; set; }
     }

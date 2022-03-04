@@ -3,26 +3,26 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Parts;
+using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Parts;
 
 namespace VehicleRepairLog.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class PartsController : ControllerBase
+    public class PartsController : ApiControllerBase
     {
         private readonly IMediator mediator;
 
-        public PartsController(IMediator mediator)
+        public PartsController(IMediator mediator) : base(mediator)
         {
             this.mediator = mediator;
         }
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> AddPart([FromBody] AddPartRequest request)
+        public Task<IActionResult> AddPart([FromBody] AddPartRequest request)
         {
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<AddPartRequest, AddPartResponse>(request);
         }
 
         [HttpGet]
@@ -35,15 +35,14 @@ namespace VehicleRepairLog.Controllers
 
         [HttpGet]
         [Route("{partId}")]
-        public async Task<IActionResult> GetPartById([FromRoute] int partId)
+        public Task<IActionResult> GetPartById([FromRoute] int partId)
         {
             var request = new GetPartByIdRequest()
             {
                 PartId = partId
             };
 
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<GetPartByIdRequest, GetPartByIdResponse>(request);
         }
         
         [HttpPut]

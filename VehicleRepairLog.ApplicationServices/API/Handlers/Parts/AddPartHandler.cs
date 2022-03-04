@@ -16,12 +16,10 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
 {
     public class AddPartHandler : IRequestHandler<AddPartRequest, AddPartResponse>
     {
-        private readonly IMediator mediator;
         private readonly IMapper mapper;
         private readonly ICommandExecutor commandExecutor;
-        public AddPartHandler(IMediator mediator, ICommandExecutor commandExecutor, IMapper mapper)
+        public AddPartHandler(IMapper mapper, ICommandExecutor commandExecutor)
         {
-            this.mediator = mediator;
             this.commandExecutor = commandExecutor;
             this.mapper = mapper;
         }
@@ -33,7 +31,6 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
             {
                 Parameter = part
             };
-
             var commandFromDb = await this.commandExecutor.Execute(command);
 
             var response = new AddPartResponse()
