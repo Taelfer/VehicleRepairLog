@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "tyZ4YYJoqCkK5sHDonTmWY8j92TS7mUXUf0xG5tDRBdMaB7dqmUuMgHIsy0tuzzkX3Y2eb6r6579hwlWzV3pTg==",
+  "dgSpecHash": "qn70USk7kmspBR++3xsatFebHizvBwA47vIykK3tT5ElNxb0G9csPBWm/rTlrj7KG3xzIUZMf9GimSSYVd3QpQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\skajl\\OneDrive\\Pulpit\\VehicleRepairLog\\VehicleRepairLog.ApplicationServices\\VehicleRepairLog.ApplicationServices.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\skajl\\.nuget\\packages\\automapper\\11.0.1\\automapper.11.0.1.nupkg.sha512",
     "C:\\Users\\skajl\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\11.0.0\\automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",
+    "C:\\Users\\skajl\\.nuget\\packages\\fluentvalidation\\10.3.6\\fluentvalidation.10.3.6.nupkg.sha512",
     "C:\\Users\\skajl\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\skajl\\.nuget\\packages\\mediatr\\10.0.1\\mediatr.10.0.1.nupkg.sha512",
     "C:\\Users\\skajl\\.nuget\\packages\\mediatr.contracts\\1.0.1\\mediatr.contracts.1.0.1.nupkg.sha512",

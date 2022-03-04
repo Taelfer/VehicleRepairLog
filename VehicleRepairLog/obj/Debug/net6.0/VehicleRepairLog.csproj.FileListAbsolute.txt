@@ -136,3 +136,6 @@ C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog - Copy\VehicleRepairLog\obj\Debu
 C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog - Copy\VehicleRepairLog\obj\Debug\net6.0\VehicleRepairLog.pdb
 C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog - Copy\VehicleRepairLog\obj\Debug\net6.0\VehicleRepairLog.genruntimeconfig.cache
 C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog - Copy\VehicleRepairLog\obj\Debug\net6.0\ref\VehicleRepairLog.dll
+C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog\VehicleRepairLog\bin\Debug\net6.0\FluentValidation.dll
+C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog\VehicleRepairLog\bin\Debug\net6.0\FluentValidation.AspNetCore.dll
+C:\Users\skajl\OneDrive\Pulpit\VehicleRepairLog\VehicleRepairLog\bin\Debug\net6.0\FluentValidation.DependencyInjectionExtensions.dll
