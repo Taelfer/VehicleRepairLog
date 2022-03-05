@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses;
-using VehicleRepairLog.ApplicationServices.API.Validators;
+using VehicleRepairLog.ApplicationServices.API.Validators.Parts;
 using VehicleRepairLog.ApplicationServices.MappingProfiles;
 using VehicleRepairLog.DataAccess;
 

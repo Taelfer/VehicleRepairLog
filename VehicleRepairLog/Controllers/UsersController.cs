@@ -13,7 +13,5 @@ namespace VehicleRepairLog.Controllers
         {
             this.mediator = mediator;
         }
-
-
     }
 }

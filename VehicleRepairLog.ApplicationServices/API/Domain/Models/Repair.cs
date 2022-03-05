@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Models
 {
@@ -13,5 +10,6 @@ namespace VehicleRepairLog.ApplicationServices.API.Domain.Models
         public string Description { get; set; }
         public string CarWorkshopName { get; set; }
         public int VehicleId { get; set; }
+        public List<string> PartNames { get; set; }
     }
 }
