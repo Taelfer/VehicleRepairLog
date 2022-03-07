@@ -2,26 +2,26 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Vehicles;
+using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Vehicles;
 
 namespace VehicleRepairLog.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class VehiclesController : ControllerBase
+    public class VehiclesController : ApiControllerBase
     {
         private readonly IMediator mediator;
 
-        public VehiclesController(IMediator mediator)
+        public VehiclesController(IMediator mediator) : base(mediator)
         {
             this.mediator = mediator;
         }
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> AddVehicle([FromBody] AddVehicleRequest request)
+        public Task<IActionResult> AddVehicle([FromBody] AddVehicleRequest request)
         {
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<AddVehicleRequest, AddVehicleResponse>(request);
         }
 
         [HttpGet]
@@ -47,12 +47,11 @@ namespace VehicleRepairLog.Controllers
 
         [HttpPut]
         [Route("{vehicleId}")]
-        public async Task<IActionResult> UpdateVehicle([FromBody] UpdateVehicleRequest request, int vehicleId)
+        public Task<IActionResult> UpdateVehicle([FromBody] UpdateVehicleRequest request, int vehicleId)
         {
             request.VehicleId = vehicleId;
 
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<UpdateVehicleRequest, UpdateVehicleResponse>(request);
         }
 
         [HttpDelete]

@@ -9,6 +9,7 @@ namespace VehicleRepairLog.DataAccess.Entities
         [MaxLength(100)]
         public string BrandName { get; set; }
 
+        [Required]
         [MaxLength(100)]
         public string VinNumber { get; set; }
 

@@ -7,7 +7,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Validators.Parts
     {
         public GetAllPartsRequestValidator()
         {
-            RuleFor(part => part.Name).Length(1, 100);
+            RuleFor(part => part.Name).MaximumLength(100);
         }
     }
 }
