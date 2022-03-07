@@ -2,26 +2,26 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Repairs;
+using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Repairs;
 
 namespace VehicleRepairLog.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class RepairsController : ControllerBase
+    public class RepairsController : ApiControllerBase
     {
         private readonly IMediator mediator;
 
-        public RepairsController(IMediator mediator)
+        public RepairsController(IMediator mediator) : base(mediator)
         {
             this.mediator = mediator;
         }
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> AddRepair([FromBody] AddRepairRequest request)
+        public Task<IActionResult> AddRepair([FromBody] AddRepairRequest request)
         {
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<AddRepairRequest, AddRepairResponse>(request);
         }
 
         [HttpGet]
@@ -47,12 +47,11 @@ namespace VehicleRepairLog.Controllers
 
         [HttpPut]
         [Route("{repairId}")]
-        public async Task<IActionResult> UpdateRepair([FromBody] UpdateRepairRequest request, int repairId)
+        public Task<IActionResult> UpdateRepair([FromBody] UpdateRepairRequest request, int repairId)
         {
             request.RepairId = repairId;
 
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<UpdateRepairRequest, UpdateRepairResponse>(request);
         }
 
         [HttpDelete]
