@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleRepairLog.ApplicationServices.API.Domain;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Parts;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Parts;
+using VehicleRepairLog.ApplicationServices.API.ErrorHandling;
 using VehicleRepairLog.DataAccess;
 using VehicleRepairLog.DataAccess.CQRS.Queries.Parts;
-using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
 {
@@ -32,14 +30,19 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
                 Name = request.Name
             };
             var parts = await this.queryExecutor.Execute(query);
-            var mappedParts = this.mapper.Map<List<Domain.Models.Part>>(parts);
 
-            var response = new GetAllPartsResponse()
+            if (parts is null)
             {
-                Data = mappedParts.ToList()
-            };
+                return new GetAllPartsResponse()
+                {
+                    Error = new ErrorModel(ErrorType.NotFound)
+                };
+            }
 
-            return response;
+            return new GetAllPartsResponse()
+            {
+                Data = this.mapper.Map<List<Domain.Models.Part>>(parts)
+            };
         }
     }
 }

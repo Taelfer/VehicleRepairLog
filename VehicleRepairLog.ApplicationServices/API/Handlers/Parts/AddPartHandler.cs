@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Parts;
@@ -33,12 +29,10 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
             };
             var commandFromDb = await this.commandExecutor.Execute(command);
 
-            var response = new AddPartResponse()
+            return new AddPartResponse()
             {
                 Data = this.mapper.Map<Domain.Models.Part>(commandFromDb)
             };
-
-            return response;
         }
     }
 }

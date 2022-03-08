@@ -31,7 +31,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
 
             var part = await this.queryExecutor.Execute(query);
 
-            if (part == null)
+            if (part is null)
             {
                 return new GetPartByIdResponse()
                 {
@@ -39,12 +39,10 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
                 };
             }
 
-            var response = new GetPartByIdResponse()
+            return new GetPartByIdResponse()
             {
                 Data = this.mapper.Map<Domain.Models.Part>(part)
             };
-
-            return response;
         }
     }
 }

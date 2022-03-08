@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleRepairLog.ApplicationServices.API.Domain;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Repairs;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Repairs;
+using VehicleRepairLog.ApplicationServices.API.ErrorHandling;
 using VehicleRepairLog.DataAccess;
 using VehicleRepairLog.DataAccess.CQRS.Commands.Repairs;
 using VehicleRepairLog.DataAccess.CQRS.Queries.Repairs;
@@ -34,6 +32,14 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
                 Id = request.RepairId
             };
             var repair = await this.queryExecutor.Execute(query);
+
+            if (repair is null)
+            {
+                return new UpdateRepairResponse()
+                {
+                    Error = new ErrorModel(ErrorType.NotFound)
+                };
+            }
 
             var command = new UpdateRepairCommand()
             {
