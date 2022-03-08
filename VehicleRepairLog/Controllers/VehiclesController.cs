@@ -10,11 +10,8 @@ namespace VehicleRepairLog.Controllers
     [ApiController]
     public class VehiclesController : ApiControllerBase
     {
-        private readonly IMediator mediator;
-
         public VehiclesController(IMediator mediator) : base(mediator)
         {
-            this.mediator = mediator;
         }
 
         [HttpPost]
@@ -26,23 +23,21 @@ namespace VehicleRepairLog.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetAllVehicles([FromQuery] GetAllVehiclesRequest request)
+        public Task<IActionResult> GetAllVehicles([FromQuery] GetAllVehiclesRequest request)
         {
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<GetAllVehiclesRequest, GetAllVehiclesResponse>(request);
         }
 
         [HttpGet]
         [Route("{vehicleId}")]
-        public async Task<IActionResult> GetVehicleById([FromRoute] int vehicleId)
+        public Task<IActionResult> GetVehicleById([FromRoute] int vehicleId)
         {
             var request = new GetVehicleByIdRequest()
             {
                 VehicleId = vehicleId
             };
 
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<GetVehicleByIdRequest, GetVehicleByIdResponse>(request);
         }
 
         [HttpPut]
@@ -56,15 +51,14 @@ namespace VehicleRepairLog.Controllers
 
         [HttpDelete]
         [Route("{vehicleId}")]
-        public async Task<IActionResult> DeleteVehicle([FromRoute] int vehicleId)
+        public Task<IActionResult> DeleteVehicle([FromRoute] int vehicleId)
         {
             var request = new DeleteVehicleRequest()
             {
                 VehicleId = vehicleId
             };
 
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<DeleteVehicleRequest, DeleteVehicleResponse>(request);
         }
     }
 }

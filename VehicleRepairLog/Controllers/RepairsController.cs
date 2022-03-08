@@ -10,11 +10,8 @@ namespace VehicleRepairLog.Controllers
     [ApiController]
     public class RepairsController : ApiControllerBase
     {
-        private readonly IMediator mediator;
-
         public RepairsController(IMediator mediator) : base(mediator)
         {
-            this.mediator = mediator;
         }
 
         [HttpPost]
@@ -26,23 +23,21 @@ namespace VehicleRepairLog.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetAllRepairs([FromQuery] GetAllRepairsRequest request)
+        public Task<IActionResult> GetAllRepairs([FromQuery] GetAllRepairsRequest request)
         {
-            var response = await this.mediator.Send(request);
-            return Ok(response);
+            return this.HandleRequest<GetAllRepairsRequest, GetAllRepairsResponse>(request);
         }
 
         [HttpGet]
         [Route("{repairId}")]
-        public async Task<IActionResult> GetRepairById([FromRoute] int repairId)
+        public Task<IActionResult> GetRepairById([FromRoute] int repairId)
         {
             var request = new GetRepairByIdRequest()
             {
                 RepairId = repairId
             };
 
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<GetRepairByIdRequest, GetRepairByIdResponse>(request);
         }
 
         [HttpPut]
@@ -56,15 +51,14 @@ namespace VehicleRepairLog.Controllers
 
         [HttpDelete]
         [Route("{repairId}")]
-        public async Task<IActionResult> DeleteRepair([FromRoute] int repairId)
+        public Task<IActionResult> DeleteRepair([FromRoute] int repairId)
         {
             var request = new DeleteRepairRequest()
             {
                 RepairId = repairId
             };
 
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<DeleteRepairRequest, DeleteRepairResponse>(request);
         }
     }
 }

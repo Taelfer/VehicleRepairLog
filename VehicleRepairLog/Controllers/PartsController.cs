@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Parts;
@@ -11,11 +10,8 @@ namespace VehicleRepairLog.Controllers
     [ApiController]
     public class PartsController : ApiControllerBase
     {
-        private readonly IMediator mediator;
-
         public PartsController(IMediator mediator) : base(mediator)
         {
-            this.mediator = mediator;
         }
 
         [HttpPost]
@@ -27,10 +23,9 @@ namespace VehicleRepairLog.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetAllParts([FromQuery] GetAllPartsRequest request)
+        public Task<IActionResult> GetAllParts([FromQuery] GetAllPartsRequest request)
         {
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<GetAllPartsRequest, GetAllPartsResponse>(request);
         }
 
         [HttpGet]
@@ -47,25 +42,23 @@ namespace VehicleRepairLog.Controllers
         
         [HttpPut]
         [Route("{partId}")]
-        public async Task<IActionResult> UpdatePart([FromBody] UpdatePartRequest request, int partId)
+        public Task<IActionResult> UpdatePart([FromBody] UpdatePartRequest request, int partId)
         {
             request.PartId = partId;
 
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<UpdatePartRequest, UpdatePartResponse>(request);
         }
 
         [HttpDelete]
         [Route("{partId}")]
-        public async Task<IActionResult> DeletePart([FromRoute] int partId)
+        public Task<IActionResult> DeletePart([FromRoute] int partId)
         {
             var request = new DeletePartRequest()
             {
                 PartId = partId
             };
 
-            var response = await this.mediator.Send(request);
-            return this.Ok(response);
+            return this.HandleRequest<DeletePartRequest, DeletePartResponse>(request);
         }
     }
 }
