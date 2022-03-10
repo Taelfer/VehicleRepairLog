@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace VehicleRepairLog.DataAccess.Entities
@@ -10,6 +11,10 @@ namespace VehicleRepairLog.DataAccess.Entities
 
         [MaxLength(100)]
         public string LastName { get; set; }
+
+        //MAKE EMAIL REQUIRED AND USE IT AS LOGIN??????
+        public string Email { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         [Required]
         [MaxLength (100)]

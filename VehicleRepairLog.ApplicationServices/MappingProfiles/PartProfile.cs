@@ -12,7 +12,7 @@ namespace VehicleRepairLog.ApplicationServices.MappingProfiles
     {
         public PartProfile()
         {
-            CreateMap<DataAccess.Entities.Part, API.Domain.Models.Part>()
+            CreateMap<DataAccess.Entities.Part, API.Domain.Models.PartDto>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
                 .ForMember(x => x.Name, y => y.MapFrom(z => z.Name))
                 .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))

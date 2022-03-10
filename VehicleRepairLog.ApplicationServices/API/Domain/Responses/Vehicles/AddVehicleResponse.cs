@@ -2,7 +2,7 @@
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Responses.Vehicles
 {
-    public class AddVehicleResponse : ResponseBase<Vehicle>
+    public class AddVehicleResponse : ResponseBase<VehicleDto>
     {
     }
 }

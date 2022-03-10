@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Models
 {
-    public class Repair
+    public class RepairDto
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }

@@ -49,7 +49,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
 
             return new UpdateRepairResponse()
             {
-                Data = this.mapper.Map<Domain.Models.Repair>(updatedRepair)
+                Data = this.mapper.Map<Domain.Models.RepairDto>(updatedRepair)
             };
         }
     }

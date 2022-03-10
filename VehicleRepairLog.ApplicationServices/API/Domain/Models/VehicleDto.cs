@@ -2,7 +2,7 @@
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Models
 {
-    public class Vehicle
+    public class VehicleDto
     {
         public int Id { get; set; }
         public string BrandName { get; set; }

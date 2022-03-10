@@ -9,7 +9,7 @@ namespace VehicleRepairLog.ApplicationServices.MappingProfiles
     {
         public RepairProfile()
         {
-            CreateMap<DataAccess.Entities.Repair, API.Domain.Models.Repair>()
+            CreateMap<DataAccess.Entities.Repair, API.Domain.Models.RepairDto>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
                 .ForMember(x => x.Date, y => y.MapFrom(z => z.Date))
                 .ForMember(x => x.Description, y => y.MapFrom(z => z.Description))

@@ -7,7 +7,7 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Models;
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Responses.Parts
 {
-    public class DeletePartResponse : ResponseBase<Part>
+    public class DeletePartResponse : ResponseBase<PartDto>
     {
     }
 }

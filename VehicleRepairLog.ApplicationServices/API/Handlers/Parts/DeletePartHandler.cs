@@ -49,7 +49,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
 
             return new DeletePartResponse()
             {
-                Data = this.mapper.Map<Domain.Models.Part>(deletedPart)
+                Data = this.mapper.Map<Domain.Models.PartDto>(deletedPart)
             };
         }
     }

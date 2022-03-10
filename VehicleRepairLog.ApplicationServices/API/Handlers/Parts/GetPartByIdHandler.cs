@@ -41,7 +41,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
 
             return new GetPartByIdResponse()
             {
-                Data = this.mapper.Map<Domain.Models.Part>(part)
+                Data = this.mapper.Map<Domain.Models.PartDto>(part)
             };
         }
     }

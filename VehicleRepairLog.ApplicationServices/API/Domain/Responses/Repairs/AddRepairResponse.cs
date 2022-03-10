@@ -7,7 +7,7 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Models;
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Responses.Repairs
 {
-    public class AddRepairResponse : ResponseBase<Repair>
+    public class AddRepairResponse : ResponseBase<RepairDto>
     {
     }
 }

@@ -49,7 +49,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
 
             return new DeleteRepairResponse()
             {
-                Data = this.mapper.Map<Domain.Models.Repair>(deletedRepair)
+                Data = this.mapper.Map<Domain.Models.RepairDto>(deletedRepair)
             };
         }
     }

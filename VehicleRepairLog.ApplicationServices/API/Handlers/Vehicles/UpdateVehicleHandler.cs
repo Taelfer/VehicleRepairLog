@@ -39,7 +39,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
 
             return new UpdateVehicleResponse()
             {
-                Data = this.mapper.Map<Domain.Models.Vehicle>(updatedVehicle)
+                Data = this.mapper.Map<Domain.Models.VehicleDto>(updatedVehicle)
             };
         }
     }

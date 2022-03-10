@@ -40,7 +40,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
 
             return new GetRepairByIdResponse()
             {
-                Data = this.mapper.Map<Domain.Models.Repair>(repair)
+                Data = this.mapper.Map<Domain.Models.RepairDto>(repair)
             };
         }
     }

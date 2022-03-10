@@ -31,7 +31,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
 
             return new AddPartResponse()
             {
-                Data = this.mapper.Map<Domain.Models.Part>(commandFromDb)
+                Data = this.mapper.Map<Domain.Models.PartDto>(commandFromDb)
             };
         }
     }

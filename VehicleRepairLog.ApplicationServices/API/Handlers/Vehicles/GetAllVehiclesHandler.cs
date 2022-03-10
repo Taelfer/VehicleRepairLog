@@ -28,7 +28,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
 
             return new GetAllVehiclesResponse()
             {
-                Data = this.mapper.Map<List<Domain.Models.Vehicle>>(vehicles)
+                Data = this.mapper.Map<List<Domain.Models.VehicleDto>>(vehicles)
             };
         }
     }

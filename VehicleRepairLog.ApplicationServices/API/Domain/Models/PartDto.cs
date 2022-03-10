@@ -1,6 +1,6 @@
 ﻿namespace VehicleRepairLog.ApplicationServices.API.Domain.Models
 {
-    public class Part
+    public class PartDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

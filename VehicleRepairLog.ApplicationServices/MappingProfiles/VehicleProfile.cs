@@ -7,7 +7,7 @@ namespace VehicleRepairLog.ApplicationServices.MappingProfiles
     {
         public VehicleProfile()
         {
-            CreateMap<DataAccess.Entities.Vehicle, API.Domain.Models.Vehicle>()
+            CreateMap<DataAccess.Entities.Vehicle, API.Domain.Models.VehicleDto>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
                 .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
                 .ForMember(x => x.VinNumber, y => y.MapFrom(z => z.VinNumber))

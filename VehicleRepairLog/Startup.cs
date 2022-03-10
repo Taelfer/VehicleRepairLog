@@ -1,7 +1,9 @@
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +13,9 @@ using Microsoft.OpenApi.Models;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses;
 using VehicleRepairLog.ApplicationServices.API.Validators.Parts;
 using VehicleRepairLog.ApplicationServices.MappingProfiles;
+using VehicleRepairLog.Authentication;
 using VehicleRepairLog.DataAccess;
+using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog
 {
@@ -27,6 +31,9 @@ namespace VehicleRepairLog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
@@ -34,6 +41,8 @@ namespace VehicleRepairLog
 
             services.AddMvcCore()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddPartRequestValidator>());
+
+            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
             services.AddTransient<ICommandExecutor, CommandExecutor>();
 
@@ -68,6 +77,8 @@ namespace VehicleRepairLog
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
