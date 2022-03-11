@@ -16,6 +16,9 @@ namespace VehicleRepairLog.DataAccess.Entities
         public string Email { get; set; }
         public DateTime? DateOfBirth { get; set; }
 
+        [MaxLength(20)]
+        public string Role { get; set; }
+
         [Required]
         [MaxLength (100)]
         public string Username { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -18,16 +19,19 @@ namespace VehicleRepairLog.Authentication
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
         private readonly IQueryExecutor queryExecutor;
+        private readonly IPasswordHasher<User> passwordHasher;
 
         public BasicAuthenticationHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            IQueryExecutor queryExecutor): 
+            IQueryExecutor queryExecutor,
+            IPasswordHasher<User> passwordHasher): 
             base(options, logger, encoder, clock)
         {
             this.queryExecutor = queryExecutor;
+            this.passwordHasher = passwordHasher;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -55,14 +59,15 @@ namespace VehicleRepairLog.Authentication
                 var password = credentials[1];
 
                 //THINK ABOUT WAY TO USE EMAIL AS LOGIN INSTEAD OF USERNAME
-                var query = new LogInUserQuery()
+                var query = new LoginUserQuery()
                 {
                     Username = username
                 };
                 user = await this.queryExecutor.Execute(query);
 
-                //USE PASSWORD HASHER AND HASH PASSWORD
-                if (user is null || user.Password != password)
+                var hashedPasswordVerification = this.passwordHasher.VerifyHashedPassword(user, user.Password, password);
+
+                if (user is null || hashedPasswordVerification == PasswordVerificationResult.Failed)
                 {
                     return AuthenticateResult.Fail("Invalid Authorization Header");
                 }

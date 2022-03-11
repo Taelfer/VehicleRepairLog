@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Users;
@@ -27,10 +26,10 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
 
         public async Task<RegisterUserResponse> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
         {
-            // CREATE MAPPING FROM RegisterUserQuery TO USER ENTITY
             var user = this.mapper.Map<User>(request);
 
-            this.passwordHasher.HashPassword(user, request.Password);
+            var hashedPassword = this.passwordHasher.HashPassword(user, request.Password);
+            user.Password = hashedPassword;
 
             var command = new RegisterUserCommand()
             {
@@ -40,7 +39,6 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
 
             return new RegisterUserResponse()
             {
-                //CREATE MAPPING FROM USER ENTITY TO USER DTO WITHOUT PASSWORD
                 Data = this.mapper.Map<Domain.Models.UserDto>(commandFromDb)
             };
         }

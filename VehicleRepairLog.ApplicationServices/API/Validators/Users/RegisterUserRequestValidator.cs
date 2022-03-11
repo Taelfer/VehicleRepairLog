@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using System.Linq;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Users;
 using VehicleRepairLog.DataAccess;
 
@@ -14,31 +13,39 @@ namespace VehicleRepairLog.ApplicationServices.API.Validators.Users
             //Maybe add NotEmpty()
             RuleFor(x => x.Email).EmailAddress();
 
-            RuleFor(x => x.Password).NotEmpty().MinimumLength(8);
+            RuleFor(x => x.Password).NotEmpty().MinimumLength(8).MaximumLength(100);
 
             RuleFor(x => x.ConfirmPassword).Equal(e => e.Password);
 
-            RuleFor(x => x.Email)
-                .Custom((value, context) =>
-                {
-                    var emailInUse = this.context.Users.Any(x => x.Email == value);
+            RuleFor(x => x.FirstName).MaximumLength(100);
 
-                    if (emailInUse)
-                    {
-                        context.AddFailure("Try other email address.");
-                    }
-                });
+            RuleFor(x => x.LastName).MaximumLength(100);
 
-            RuleFor(x => x.Username)
-                .Custom((value, context) =>
-                {
-                    var usernameInUse = this.context.Users.Any(x => x.Username == value);
+            RuleFor(x => x.Username).MaximumLength(100).NotEmpty();
 
-                    if (usernameInUse)
-                    {
-                        context.AddFailure("This username is taken.");
-                    }
-                });
+            RuleFor(x => x.Role).MaximumLength(20);
+
+            //RuleFor(x => x.Email)
+            //    .Custom((value, context) =>
+            //    {
+            //        var emailInUse = this.context.Users.Any(x => x.Email == value);
+
+            //        if (emailInUse)
+            //        {
+            //            context.AddFailure("Try other email address.");
+            //        }
+            //    });
+
+            //RuleFor(x => x.Username)
+            //    .Custom((value, context) =>
+            //    {
+            //        var usernameInUse = this.context.Users.Any(x => x.Username == value);
+
+            //        if (usernameInUse)
+            //        {
+            //            context.AddFailure("This username is taken.");
+            //        }
+            //    });
         }
     }
 }

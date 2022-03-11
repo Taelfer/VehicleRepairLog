@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using VehicleRepairLog.ApplicationServices.API.Domain.Models;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Users;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Users;
 
@@ -24,7 +25,7 @@ namespace VehicleRepairLog.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("register")]
         [Route("")]
         public Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest request)
         {
