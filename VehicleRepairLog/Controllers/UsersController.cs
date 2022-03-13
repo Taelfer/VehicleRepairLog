@@ -25,8 +25,8 @@ namespace VehicleRepairLog.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
-        [Route("")]
+        [HttpPost]
+        [Route("register")]
         public Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest request)
         {
             return this.HandleRequest<RegisterUserRequest, RegisterUserResponse>(request);

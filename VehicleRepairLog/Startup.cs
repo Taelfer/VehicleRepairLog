@@ -1,6 +1,5 @@
 using FluentValidation.AspNetCore;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,10 +12,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using VehicleRepairLog.ApplicationServices;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses;
 using VehicleRepairLog.ApplicationServices.API.Validators.Parts;
 using VehicleRepairLog.ApplicationServices.MappingProfiles;
-using VehicleRepairLog.Authentication;
 using VehicleRepairLog.DataAccess;
 using VehicleRepairLog.DataAccess.Entities;
 
@@ -34,6 +33,10 @@ namespace VehicleRepairLog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IUserService, UserService>();
+
+            services.AddHttpContextAccessor();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -92,9 +95,9 @@ namespace VehicleRepairLog
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
-
             app.UseAuthentication();
+
+            app.UseRouting();
 
             app.UseAuthorization();
 

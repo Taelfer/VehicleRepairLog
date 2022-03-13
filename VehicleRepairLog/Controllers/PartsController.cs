@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Parts;
@@ -6,6 +7,7 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Parts;
 
 namespace VehicleRepairLog.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class PartsController : ApiControllerBase
@@ -39,7 +41,7 @@ namespace VehicleRepairLog.Controllers
 
             return this.HandleRequest<GetPartByIdRequest, GetPartByIdResponse>(request);
         }
-        
+
         [HttpPut]
         [Route("{partId}")]
         public Task<IActionResult> UpdatePart([FromBody] UpdatePartRequest request, int partId)

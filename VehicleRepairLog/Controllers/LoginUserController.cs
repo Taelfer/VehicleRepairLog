@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain.Models;
@@ -16,8 +15,8 @@ namespace VehicleRepairLog.Controllers
         public LoginUserController(IMediator mediator) : base(mediator) { }
 
         [AllowAnonymous]
-        [HttpPost("login")]
-        [Route("")]
+        [HttpPost]
+        [Route("login")]
         public Task<IActionResult> LoginUser([FromBody] LoginUserDto loginUserDto)
         {
             var request = new LoginUserRequest()
