@@ -28,6 +28,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
 
             var command = new AddRepairCommand()
             {
+                PartNames = request.PartNames,
                 Parameter = repair
             };
             var addedRepair = await this.commandExecutor.Execute(command);
