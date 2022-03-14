@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
+using VehicleRepairLog.ApplicationServices.API.Domain.Models;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Vehicles;
+using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.MappingProfiles
 {
@@ -9,7 +11,7 @@ namespace VehicleRepairLog.ApplicationServices.MappingProfiles
     {
         public VehicleProfile()
         {
-            CreateMap<DataAccess.Entities.Vehicle, API.Domain.Models.VehicleDto>()
+            CreateMap<Vehicle, VehicleDto>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
                 .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
                 .ForMember(x => x.VinNumber, y => y.MapFrom(z => z.VinNumber))
@@ -19,7 +21,7 @@ namespace VehicleRepairLog.ApplicationServices.MappingProfiles
                 .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserId))
                 .ForMember(x => x.RepairDescriptions, y => y.MapFrom(z => z.Repairs != null ? z.Repairs.Select(x => x.Description) : new List<string>()));
 
-            CreateMap<AddVehicleRequest, DataAccess.Entities.Vehicle>()
+            CreateMap<AddVehicleRequest, Vehicle>()
                 .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
                 .ForMember(x => x.VinNumber, y => y.MapFrom(z => z.VinNumber))
                 .ForMember(x => x.PaintColor, y => y.MapFrom(z => z.PaintColor))
@@ -27,7 +29,7 @@ namespace VehicleRepairLog.ApplicationServices.MappingProfiles
                 .ForMember(x => x.Mileage, y => y.MapFrom(z => z.Mileage))
                 .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserId));
 
-            CreateMap<UpdateVehicleRequest, DataAccess.Entities.Vehicle>()
+            CreateMap<UpdateVehicleRequest, Vehicle>()
                 .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
                 .ForMember(x => x.VinNumber, y => y.MapFrom(z => z.VinNumber))
                 .ForMember(x => x.PaintColor, y => y.MapFrom(z => z.PaintColor))

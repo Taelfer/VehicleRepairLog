@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain;
+using VehicleRepairLog.ApplicationServices.API.Domain.Models;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Repairs;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Repairs;
 using VehicleRepairLog.ApplicationServices.API.ErrorHandling;
@@ -38,7 +39,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
 
             return new GetAllRepairsResponse()
             {
-                Data = this.mapper.Map<List<Domain.Models.RepairDto>>(repairs)
+                Data = this.mapper.Map<List<RepairDto>>(repairs)
             };
         }
     }

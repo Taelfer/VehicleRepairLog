@@ -2,10 +2,12 @@
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleRepairLog.ApplicationServices.API.Domain.Models;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Vehicles;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Vehicles;
 using VehicleRepairLog.DataAccess;
 using VehicleRepairLog.DataAccess.CQRS.Commands.Vehicles;
+using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
 {
@@ -22,7 +24,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
 
         public async Task<AddVehicleResponse> Handle(AddVehicleRequest request, CancellationToken cancellationToken)
         {
-            var vehicle = this.mapper.Map<DataAccess.Entities.Vehicle>(request);
+            var vehicle = this.mapper.Map<Vehicle>(request);
 
             var command = new AddVehicleCommand()
             {
@@ -32,7 +34,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
 
             return new AddVehicleResponse()
             {
-                Data = this.mapper.Map<Domain.Models.VehicleDto>(addedVehicle)
+                Data = this.mapper.Map<VehicleDto>(addedVehicle)
             };
         }
     }

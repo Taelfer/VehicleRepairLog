@@ -3,6 +3,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain;
+using VehicleRepairLog.ApplicationServices.API.Domain.Models;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Parts;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Parts;
 using VehicleRepairLog.ApplicationServices.API.ErrorHandling;
@@ -41,7 +42,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
 
             return new GetPartByIdResponse()
             {
-                Data = this.mapper.Map<Domain.Models.PartDto>(part)
+                Data = this.mapper.Map<PartDto>(part)
             };
         }
     }

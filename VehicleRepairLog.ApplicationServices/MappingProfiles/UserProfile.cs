@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
+using System.Collections.Generic;
+using System.Linq;
+using VehicleRepairLog.ApplicationServices.API.Domain.Models;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Users;
+using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.MappingProfiles
 {
@@ -7,15 +11,16 @@ namespace VehicleRepairLog.ApplicationServices.MappingProfiles
     {
         public UserProfile()
         {
-            CreateMap<DataAccess.Entities.User, API.Domain.Models.UserDto>()
+            CreateMap<User, UserDto>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
                 .ForMember(x => x.FirstName, y => y.MapFrom(z => z.FirstName))
                 .ForMember(x => x.LastName, y => y.MapFrom(z => z.LastName))
                 .ForMember(x => x.Username, y => y.MapFrom(z => z.Username))
                 .ForMember(x => x.DateOfBirth, y => y.MapFrom(z => z.DateOfBirth))
-                .ForMember(x => x.Email, y => y.MapFrom(z => z.Email));
+                .ForMember(x => x.Email, y => y.MapFrom(z => z.Email))
+                .ForMember(x => x.VehiclesBrandName, y => y.MapFrom(z => z.Vehicles != null ? z.Vehicles.Select(x => x.BrandName) : new List<string>()));
 
-            CreateMap<RegisterUserRequest, DataAccess.Entities.User>()
+            CreateMap<RegisterUserRequest, User>()
                 .ForMember(x => x.FirstName, y => y.MapFrom(z => z.FirstName))
                 .ForMember(x => x.LastName, y => y.MapFrom(z => z.LastName))
                 .ForMember(x => x.Username, y => y.MapFrom(z => z.Username))

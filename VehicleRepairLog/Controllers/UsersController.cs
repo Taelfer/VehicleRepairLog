@@ -22,5 +22,18 @@ namespace VehicleRepairLog.Controllers
         {
             return this.HandleRequest<RegisterUserRequest, RegisterUserResponse>(request);
         }
+
+        [Authorize(Roles = "User,Admin")]
+        [HttpGet]
+        [Route("{userId}")]
+        public Task<IActionResult> GetUserById([FromRoute] int userId)
+        {
+            var request = new GetUserByIdRequest()
+            {
+                UserId = userId
+            };
+
+            return this.HandleRequest<GetUserByIdRequest, GetUserByIdResponse>(request);
+        }
     }
 }

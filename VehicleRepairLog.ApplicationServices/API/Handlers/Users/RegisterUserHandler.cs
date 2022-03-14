@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleRepairLog.ApplicationServices.API.Domain.Models;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Users;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Users;
 using VehicleRepairLog.DataAccess;
@@ -39,7 +40,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
 
             return new RegisterUserResponse()
             {
-                Data = this.mapper.Map<Domain.Models.UserDto>(commandFromDb)
+                Data = this.mapper.Map<UserDto>(commandFromDb)
             };
         }
     }

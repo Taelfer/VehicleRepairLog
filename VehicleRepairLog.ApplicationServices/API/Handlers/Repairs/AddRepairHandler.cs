@@ -1,15 +1,13 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleRepairLog.ApplicationServices.API.Domain.Models;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Repairs;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Repairs;
 using VehicleRepairLog.DataAccess;
 using VehicleRepairLog.DataAccess.CQRS.Commands.Repairs;
+using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
 {
@@ -26,7 +24,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
 
         public async Task<AddRepairResponse> Handle(AddRepairRequest request, CancellationToken cancellationToken)
         {
-            var repair = this.mapper.Map<DataAccess.Entities.Repair>(request);
+            var repair = this.mapper.Map<Repair>(request);
 
             var command = new AddRepairCommand()
             {
@@ -36,7 +34,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
 
             return new AddRepairResponse()
             {
-                Data = this.mapper.Map<Domain.Models.RepairDto>(addedRepair)
+                Data = this.mapper.Map<RepairDto>(addedRepair)
             };
         }
     }

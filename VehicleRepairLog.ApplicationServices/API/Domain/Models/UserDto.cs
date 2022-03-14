@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using VehicleRepairLog.DataAccess;
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Models
@@ -12,5 +13,6 @@ namespace VehicleRepairLog.ApplicationServices.API.Domain.Models
         public DateTime? DateOfBirth { get; set; }
         public string Username { get; set; }
         public string Role { get; set; }
+        public List<string> VehiclesBrandName { get; set; }
     }
 }
