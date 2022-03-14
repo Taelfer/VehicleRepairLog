@@ -25,5 +25,14 @@ namespace VehicleRepairLog.DataAccess
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Repair> Repairs { get; set; }
         public DbSet<Part> Parts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .Property(x => x.Role)
+                .HasConversion<string>()
+                .HasMaxLength(50)
+                .IsRequired();
+        }
     }
 }

@@ -10,9 +10,7 @@ namespace VehicleRepairLog.Controllers
     [ApiController]
     public class VehiclesController : ApiControllerBase
     {
-        public VehiclesController(IMediator mediator) : base(mediator)
-        {
-        }
+        public VehiclesController(IMediator mediator) : base(mediator) { }
 
         [HttpPost]
         [Route("")]

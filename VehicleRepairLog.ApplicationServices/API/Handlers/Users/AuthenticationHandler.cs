@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -20,32 +19,31 @@ using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
 {
-    public class LoginUserHandler : IRequestHandler<LoginUserRequest, LoginUserResponse>
+    public class AuthenticationHandler : IRequestHandler<AuthenticationRequest, AuthenticationResponse>
     {
-        private readonly IMapper mapper;
         private readonly IQueryExecutor queryExecutor;
         private readonly IPasswordHasher<User> passwordHasher;
         private readonly IConfiguration configuration;
 
-        public LoginUserHandler(IMapper mapper, IQueryExecutor queryExecutor, IPasswordHasher<User> passwordHasher, IConfiguration configuration)
+        public AuthenticationHandler(IQueryExecutor queryExecutor, IPasswordHasher<User> passwordHasher, IConfiguration configuration)
         {
-            this.mapper = mapper;
             this.queryExecutor = queryExecutor;
             this.passwordHasher = passwordHasher;
             this.configuration = configuration;
         }
 
-        public async Task<LoginUserResponse> Handle(LoginUserRequest request, CancellationToken cancellationToken)
+        public async Task<AuthenticationResponse> Handle(AuthenticationRequest request, CancellationToken cancellationToken)
         {
-            var query = new LoginUserQuery()
+            var query = new AuthenticationQuery()
             {
-                Username = request.Username
+                Username = request.Username,
+                Email = request.Email
             };
             var user = await this.queryExecutor.Execute(query);
 
             if (user is null)
             {
-                return new LoginUserResponse()
+                return new AuthenticationResponse()
                 {
                     Error = new ErrorModel(ErrorType.NotFound)
                 };
@@ -56,7 +54,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
 
             if (verifiedPassword is PasswordVerificationResult.Failed)
             {
-                return new LoginUserResponse()
+                return new AuthenticationResponse()
                 {
                     Error = new ErrorModel(ErrorType.NotAuthenticated)
                 };
@@ -69,7 +67,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
                 token = GenerateToken(user);
             }
 
-            return new LoginUserResponse()
+            return new AuthenticationResponse()
             {
                 Token = token
             };
@@ -86,7 +84,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
                 new Claim("DateOfBirth", user.DateOfBirth.Value.ToString("yyyy-MM-dd")),
-                new Claim(ClaimTypes.Role, user.Role),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
             };
 
             var token = new JwtSecurityToken(configuration["Jwt:Issuer"],

@@ -13,6 +13,7 @@ namespace VehicleRepairLog.DataAccess.CQRS.Queries.Repairs
             var repair = await context.Repairs
                 .Include(x => x.Parts)
                 .FirstOrDefaultAsync(x => x.Id == this.Id);
+
             return repair;
         }
     }

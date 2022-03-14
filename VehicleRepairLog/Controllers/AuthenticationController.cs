@@ -8,24 +8,25 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Users;
 
 namespace VehicleRepairLog.Controllers
 {
-    [Route("[controller]")]
+    [Route("")]
     [ApiController]
-    public class LoginUserController : ApiControllerBase
+    public class AuthenticationController : ApiControllerBase
     {
-        public LoginUserController(IMediator mediator) : base(mediator) { }
+        public AuthenticationController(IMediator mediator) : base(mediator) { }
 
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
-        public Task<IActionResult> LoginUser([FromBody] LoginUserDto loginUserDto)
+        public Task<IActionResult> AuthenticateUser([FromBody] AuthenticationDto loginUserDto)
         {
-            var request = new LoginUserRequest()
+            var request = new AuthenticationRequest()
             {
                 Username = loginUserDto.Username,
-                Password = loginUserDto.Password
+                Password = loginUserDto.Password,
+                Email = loginUserDto.Email
             };
 
-            return this.HandleRequest<LoginUserRequest, LoginUserResponse>(request);
+            return this.HandleRequest<AuthenticationRequest, AuthenticationResponse>(request);
         }
     }
 }

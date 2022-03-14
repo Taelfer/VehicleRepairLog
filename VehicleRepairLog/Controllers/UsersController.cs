@@ -13,16 +13,7 @@ namespace VehicleRepairLog.Controllers
     [ApiController]
     public class UsersController : ApiControllerBase
     {
-        public UsersController(IMediator mediator) : base(mediator)
-        {
-        }
-
-        [HttpGet]
-        [Route("")]
-        public Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersRequest request)
-        {
-            return this.HandleRequest<GetAllUsersRequest, GetAllUsersResponse>(request);
-        }
+        public UsersController(IMediator mediator) : base(mediator) { }
 
         [AllowAnonymous]
         [HttpPost]

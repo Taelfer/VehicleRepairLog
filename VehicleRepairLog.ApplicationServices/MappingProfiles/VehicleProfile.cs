@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using System.Collections.Generic;
+using System.Linq;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Vehicles;
 
 namespace VehicleRepairLog.ApplicationServices.MappingProfiles
@@ -14,7 +16,8 @@ namespace VehicleRepairLog.ApplicationServices.MappingProfiles
                 .ForMember(x => x.PaintColor, y => y.MapFrom(z => z.PaintColor))
                 .ForMember(x => x.FuelType, y => y.MapFrom(z => z.FuelType))
                 .ForMember(x => x.Mileage, y => y.MapFrom(z => z.Mileage))
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserId));
+                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserId))
+                .ForMember(x => x.RepairDescriptions, y => y.MapFrom(z => z.Repairs != null ? z.Repairs.Select(x => x.Description) : new List<string>()));
 
             CreateMap<AddVehicleRequest, DataAccess.Entities.Vehicle>()
                 .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))

@@ -10,8 +10,10 @@ namespace VehicleRepairLog.DataAccess.CQRS.Queries.Vehicles
 
         public override async Task<Vehicle> Execute(VehicleProfileStorageContext context)
         {
-            var vehicle = await context.Vehicles.FirstOrDefaultAsync(x => x.Id == this.Id);
-            await context.SaveChangesAsync();
+            var vehicle = await context.Vehicles
+                .Include(x => x.Repairs)
+                .FirstOrDefaultAsync(x => x.Id == this.Id);
+
             return vehicle;
         }
     }

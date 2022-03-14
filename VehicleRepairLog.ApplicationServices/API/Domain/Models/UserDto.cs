@@ -1,4 +1,5 @@
 ﻿using System;
+using VehicleRepairLog.DataAccess;
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Models
 {

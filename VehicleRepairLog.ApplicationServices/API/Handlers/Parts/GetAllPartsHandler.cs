@@ -36,7 +36,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
                 Name = request.Name
             };
 
-            if (claims.Role == "Admin")
+            if (claims.Role is "Admin")
             {
                 parts = await this.queryExecutor.Execute(query);
             }

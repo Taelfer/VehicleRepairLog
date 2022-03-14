@@ -2,7 +2,7 @@
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Responses.Users
 {
-    public class LoginUserResponse : ResponseBase<LoginUserDto>
+    public class AuthenticationResponse : ResponseBase<AuthenticationDto>
     {
         public string Token { get; set; }
     }

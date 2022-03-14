@@ -6,18 +6,22 @@ namespace VehicleRepairLog.DataAccess.Entities
 {
     public class User : EntityBase 
     {
+        [Required]
         [MaxLength(100)]
         public string FirstName { get; set; }
 
+        [Required]
         [MaxLength(100)]
         public string LastName { get; set; }
 
-        //MAKE EMAIL REQUIRED AND USE IT AS LOGIN??????
+        [Required]
+        [MaxLength(100)]
+        [EmailAddress]
         public string Email { get; set; }
+
         public DateTime? DateOfBirth { get; set; }
 
-        [MaxLength(20)]
-        public string Role { get; set; }
+        public UserRole Role { get; set; }
 
         [Required]
         [MaxLength (100)]

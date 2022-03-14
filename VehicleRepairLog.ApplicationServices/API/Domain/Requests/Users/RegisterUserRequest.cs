@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using System;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Users;
+using VehicleRepairLog.DataAccess;
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Requests.Users
 {
@@ -11,7 +12,6 @@ namespace VehicleRepairLog.ApplicationServices.API.Domain.Requests.Users
         public string Email { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string Username { get; set; }
-        public string Role { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
     }

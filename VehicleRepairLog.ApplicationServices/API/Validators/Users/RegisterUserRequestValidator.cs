@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using System.Linq;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Users;
 using VehicleRepairLog.DataAccess;
 
@@ -6,12 +7,9 @@ namespace VehicleRepairLog.ApplicationServices.API.Validators.Users
 {
     public class RegisterUserRequestValidator : AbstractValidator<RegisterUserRequest>
     {
-        private readonly VehicleProfileStorageContext context;
-
-        public RegisterUserRequestValidator(VehicleProfileStorageContext context)
+        public RegisterUserRequestValidator(VehicleProfileStorageContext dbContext)
         {
-            //Maybe add NotEmpty()
-            RuleFor(x => x.Email).EmailAddress();
+            RuleFor(x => x.Email).EmailAddress().NotEmpty();
 
             RuleFor(x => x.Password).NotEmpty().MinimumLength(8).MaximumLength(100);
 
@@ -23,29 +21,27 @@ namespace VehicleRepairLog.ApplicationServices.API.Validators.Users
 
             RuleFor(x => x.Username).MaximumLength(100).NotEmpty();
 
-            RuleFor(x => x.Role).MaximumLength(20);
+            RuleFor(x => x.Email)
+                .Custom((value, context) =>
+                {
+                    var emailInUse = dbContext.Users.Any(x => x.Email == value);
 
-            //RuleFor(x => x.Email)
-            //    .Custom((value, context) =>
-            //    {
-            //        var emailInUse = this.context.Users.Any(x => x.Email == value);
+                    if (emailInUse)
+                    {
+                        context.AddFailure("Try other email address.");
+                    }
+                });
 
-            //        if (emailInUse)
-            //        {
-            //            context.AddFailure("Try other email address.");
-            //        }
-            //    });
+            RuleFor(x => x.Username)
+                .Custom((value, context) =>
+                {
+                    var usernameInUse = dbContext.Users.Any(x => x.Username == value);
 
-            //RuleFor(x => x.Username)
-            //    .Custom((value, context) =>
-            //    {
-            //        var usernameInUse = this.context.Users.Any(x => x.Username == value);
-
-            //        if (usernameInUse)
-            //        {
-            //            context.AddFailure("This username is taken.");
-            //        }
-            //    });
+                    if (usernameInUse)
+                    {
+                        context.AddFailure("This username is taken.");
+                    }
+                });
         }
     }
 }

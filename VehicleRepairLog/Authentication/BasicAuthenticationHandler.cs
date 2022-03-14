@@ -59,7 +59,7 @@ namespace VehicleRepairLog.Authentication
                 var password = credentials[1];
 
                 //THINK ABOUT WAY TO USE EMAIL AS LOGIN INSTEAD OF USERNAME
-                var query = new LoginUserQuery()
+                var query = new AuthenticationQuery()
                 {
                     Username = username
                 };
