@@ -19,22 +19,22 @@ using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
 {
-    public class AuthenticationHandler : IRequestHandler<AuthenticationRequest, AuthenticationResponse>
+    public class ValidateUserHandler : IRequestHandler<ValidateUserRequest, ValidateUserResponse>
     {
         private readonly IQueryExecutor queryExecutor;
         private readonly IPasswordHasher<User> passwordHasher;
         private readonly IConfiguration configuration;
 
-        public AuthenticationHandler(IQueryExecutor queryExecutor, IPasswordHasher<User> passwordHasher, IConfiguration configuration)
+        public ValidateUserHandler(IQueryExecutor queryExecutor, IPasswordHasher<User> passwordHasher, IConfiguration configuration)
         {
             this.queryExecutor = queryExecutor;
             this.passwordHasher = passwordHasher;
             this.configuration = configuration;
         }
 
-        public async Task<AuthenticationResponse> Handle(AuthenticationRequest request, CancellationToken cancellationToken)
+        public async Task<ValidateUserResponse> Handle(ValidateUserRequest request, CancellationToken cancellationToken)
         {
-            var query = new AuthenticationQuery()
+            var query = new ValidateUserQuery()
             {
                 Username = request.Username,
                 Email = request.Email
@@ -43,7 +43,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
 
             if (user is null)
             {
-                return new AuthenticationResponse()
+                return new ValidateUserResponse()
                 {
                     Error = new ErrorModel(ErrorType.NotFound)
                 };
@@ -54,7 +54,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
 
             if (verifiedPassword is PasswordVerificationResult.Failed)
             {
-                return new AuthenticationResponse()
+                return new ValidateUserResponse()
                 {
                     Error = new ErrorModel(ErrorType.NotAuthenticated)
                 };
@@ -67,7 +67,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
                 token = GenerateToken(user);
             }
 
-            return new AuthenticationResponse()
+            return new ValidateUserResponse()
             {
                 Token = token
             };

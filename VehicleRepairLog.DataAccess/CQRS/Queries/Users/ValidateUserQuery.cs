@@ -4,7 +4,7 @@ using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.DataAccess.CQRS.Queries.Users
 {
-    public class AuthenticationQuery : QueryBase<User>
+    public class ValidateUserQuery : QueryBase<User>
     {
         public string Username { get; set; }
         public string Email { get; set; }

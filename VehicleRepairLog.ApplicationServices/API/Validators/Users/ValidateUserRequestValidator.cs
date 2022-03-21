@@ -3,9 +3,9 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Users;
 
 namespace VehicleRepairLog.ApplicationServices.API.Validators.Users
 {
-    public class AuthenticationRequestValidator : AbstractValidator<AuthenticationRequest>
+    public class ValidateUserRequestValidator : AbstractValidator<ValidateUserRequest>
     {
-        public AuthenticationRequestValidator()
+        public ValidateUserRequestValidator()
         {
             //RuleFor(x => x.Username).NotEmpty();
 
