@@ -86,8 +86,6 @@ namespace VehicleRepairLog
             services.AddDbContext<VehicleProfileStorageContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("VehicleProfileStorageContext")));
 
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
