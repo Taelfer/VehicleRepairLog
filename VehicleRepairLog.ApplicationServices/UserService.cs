@@ -18,7 +18,7 @@ namespace VehicleRepairLog.ApplicationServices
         {
             var identity = httpContextAccessor.HttpContext.User as ClaimsPrincipal;
 
-            if (identity != null)
+            if (identity is not null)
             {
                 var userClaims = identity.Claims;
 

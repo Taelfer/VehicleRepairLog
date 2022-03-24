@@ -33,6 +33,18 @@ namespace VehicleRepairLog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //same-origin policy
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    });
+            });
+
             services.AddTransient<IUserService, UserService>();
 
             services.AddHttpContextAccessor();
@@ -98,6 +110,8 @@ namespace VehicleRepairLog
             app.UseAuthentication();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
