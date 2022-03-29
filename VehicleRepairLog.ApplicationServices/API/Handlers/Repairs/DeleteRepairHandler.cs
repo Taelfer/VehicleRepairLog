@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain;
@@ -8,31 +9,23 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Repairs;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Repairs;
 using VehicleRepairLog.ApplicationServices.API.ErrorHandling;
 using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.CQRS.Commands.Repairs;
-using VehicleRepairLog.DataAccess.CQRS.Queries.Repairs;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
 {
     public class DeleteRepairHandler : IRequestHandler<DeleteRepairRequest, DeleteRepairResponse>
     {
         private readonly IMapper mapper;
-        private readonly IQueryExecutor queryExecutor;
-        private readonly ICommandExecutor commandExecutor;
+        private readonly VehicleProfileStorageContext context;
 
-        public DeleteRepairHandler(IMapper mapper, IQueryExecutor queryExecutor, ICommandExecutor commandExecutor)
+        public DeleteRepairHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
             this.mapper = mapper;
-            this.queryExecutor = queryExecutor;
-            this.commandExecutor = commandExecutor;
+            this.context = context;
         }
 
         public async Task<DeleteRepairResponse> Handle(DeleteRepairRequest request, CancellationToken cancellationToken)
         {
-            var query = new GetRepairByIdQuery()
-            {
-                Id = request.RepairId
-            };
-            var repair = await this.queryExecutor.Execute(query);
+            var repair = await this.context.Repairs.FirstOrDefaultAsync(x => x.Id == request.RepairId);
 
             if (repair is null)
             {
@@ -42,15 +35,12 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
                 };
             }
 
-            var command = new DeleteRepairCommand()
-            {
-                Parameter = repair
-            };
-            var deletedRepair = await this.commandExecutor.Execute(command);
+            this.context.Repairs.Remove(repair);
+            await this.context.SaveChangesAsync();
 
             return new DeleteRepairResponse()
             {
-                Data = this.mapper.Map<RepairDto>(deletedRepair)
+                Data = this.mapper.Map<RepairDto>(repair)
             };
         }
     }

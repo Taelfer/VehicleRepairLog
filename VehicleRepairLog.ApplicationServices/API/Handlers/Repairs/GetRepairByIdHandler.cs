@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain;
@@ -8,28 +9,25 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Repairs;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Repairs;
 using VehicleRepairLog.ApplicationServices.API.ErrorHandling;
 using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.CQRS.Queries.Repairs;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
 {
     public class GetRepairByIdHandler : IRequestHandler<GetRepairByIdRequest, GetRepairByIdResponse>
     {
         private readonly IMapper mapper;
-        private readonly IQueryExecutor queryExecutor;
+        private readonly VehicleProfileStorageContext context;
 
-        public GetRepairByIdHandler(IMapper mapper, IQueryExecutor queryExecutor)
+        public GetRepairByIdHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
             this.mapper = mapper;
-            this.queryExecutor = queryExecutor;
+            this.context = context;
         }
 
         public async Task<GetRepairByIdResponse> Handle(GetRepairByIdRequest request, CancellationToken cancellationToken)
         {
-            var query = new GetRepairByIdQuery()
-            {
-                Id = request.RepairId
-            };
-            var repair = await this.queryExecutor.Execute(query);
+            var repair = await this.context.Repairs
+                .Include(x => x.Parts)
+                .FirstOrDefaultAsync(x => x.Id == request.RepairId);
 
             if (repair is null)
             {

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain;
@@ -8,31 +9,23 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Repairs;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Repairs;
 using VehicleRepairLog.ApplicationServices.API.ErrorHandling;
 using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.CQRS.Commands.Repairs;
-using VehicleRepairLog.DataAccess.CQRS.Queries.Repairs;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
 {
     public class UpdateRepairHandler : IRequestHandler<UpdateRepairRequest, UpdateRepairResponse>
     {
         private readonly IMapper mapper;
-        private readonly IQueryExecutor queryExecutor;
-        private readonly ICommandExecutor commandExecutor;
+        private readonly VehicleProfileStorageContext context;
 
-        public UpdateRepairHandler(IMapper mapper, IQueryExecutor queryExecutor, ICommandExecutor commandExecutor)
+        public UpdateRepairHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
             this.mapper = mapper;
-            this.queryExecutor = queryExecutor;
-            this.commandExecutor = commandExecutor;
+            this.context = context;
         }
 
         public async Task<UpdateRepairResponse> Handle(UpdateRepairRequest request, CancellationToken cancellationToken)
         {
-            var query = new GetRepairByIdQuery() 
-            {
-                Id = request.RepairId
-            };
-            var repair = await this.queryExecutor.Execute(query);
+            var repair = await this.context.Repairs.FirstOrDefaultAsync(x => x.Id == request.RepairId);
 
             if (repair is null)
             {
@@ -42,11 +35,9 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
                 };
             }
 
-            var command = new UpdateRepairCommand()
-            {
-                Parameter = this.mapper.Map(request, repair)
-            };
-            var updatedRepair = await this.commandExecutor.Execute(command);
+            var updatedRepair = this.mapper.Map(request, repair);
+            this.context.Repairs.Update(updatedRepair);
+            await this.context.SaveChangesAsync();
 
             return new UpdateRepairResponse()
             {

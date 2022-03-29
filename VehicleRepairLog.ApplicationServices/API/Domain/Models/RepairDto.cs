@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.API.Domain.Models
 {
