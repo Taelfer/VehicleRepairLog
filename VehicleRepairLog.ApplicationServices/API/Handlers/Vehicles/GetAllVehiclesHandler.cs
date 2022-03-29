@@ -11,7 +11,6 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Repairs;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Vehicles;
 using VehicleRepairLog.ApplicationServices.API.ErrorHandling;
 using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.CQRS.Queries.Vehicles;
 using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
@@ -31,7 +30,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
 
         public async Task<GetAllVehiclesResponse> Handle(GetAllVehiclesRequest request, CancellationToken cancellationToken)
         {
-            var vehicles = await context.Vehicles.ToListAsync();
+            var vehicles = await this.context.Vehicles.ToListAsync();
 
             if (vehicles is null)
             {

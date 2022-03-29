@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain;
@@ -8,31 +9,23 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Vehicles;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Vehicles;
 using VehicleRepairLog.ApplicationServices.API.ErrorHandling;
 using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.CQRS.Commands.Vehicles;
-using VehicleRepairLog.DataAccess.CQRS.Queries.Vehicles;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
 {
     public class UpdateVehicleHandler : IRequestHandler<UpdateVehicleRequest, UpdateVehicleResponse>
     {
         private readonly IMapper mapper;
-        private readonly IQueryExecutor queryExecutor;
-        private readonly ICommandExecutor commandExecutor;
+        private readonly VehicleProfileStorageContext context;
 
-        public UpdateVehicleHandler(IMapper mapper, IQueryExecutor queryExecutor, ICommandExecutor commandExecutor)
+        public UpdateVehicleHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
             this.mapper = mapper;
-            this.queryExecutor = queryExecutor;
-            this.commandExecutor = commandExecutor;
+            this.context = context;
         }
 
         public async Task<UpdateVehicleResponse> Handle(UpdateVehicleRequest request, CancellationToken cancellationToken)
         {
-            var query = new GetVehicleByIdQuery()
-            {
-                Id = request.VehicleId
-            };
-            var vehicle = await this.queryExecutor.Execute(query);
+            var vehicle = await this.context.Vehicles.FirstOrDefaultAsync(x => x.Id == request.VehicleId);
 
             if (vehicle is null)
             {
@@ -42,15 +35,13 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
                 };
             }
 
-            var command = new UpdateVehicleCommand()
-            {
-                Parameter = this.mapper.Map(request, vehicle)
-            };
-            var updatedVehicle = await this.commandExecutor.Execute(command);
+            var updatedVehicle = this.mapper.Map(request, vehicle);
+            this.context.Vehicles.Update(updatedVehicle);
+            await this.context.SaveChangesAsync();
 
             return new UpdateVehicleResponse()
             {
-                Data = this.mapper.Map<VehicleDto>(updatedVehicle)
+                Data = this.mapper.Map<VehicleDto>(vehicle)
             };
         }
     }

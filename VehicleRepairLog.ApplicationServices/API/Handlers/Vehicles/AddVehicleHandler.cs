@@ -6,7 +6,6 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Models;
 using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Vehicles;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Vehicles;
 using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.CQRS.Commands.Vehicles;
 using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
@@ -14,27 +13,24 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
     public class AddVehicleHandler : IRequestHandler<AddVehicleRequest, AddVehicleResponse>
     {
         private readonly IMapper mapper;
-        private readonly ICommandExecutor commandExecutor;
+        private readonly VehicleProfileStorageContext context;
 
-        public AddVehicleHandler(IMapper mapper, ICommandExecutor commandExecutor)
+        public AddVehicleHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
             this.mapper = mapper;
-            this.commandExecutor = commandExecutor;
+            this.context = context;
         }
 
         public async Task<AddVehicleResponse> Handle(AddVehicleRequest request, CancellationToken cancellationToken)
         {
             var vehicle = this.mapper.Map<Vehicle>(request);
 
-            var command = new AddVehicleCommand()
-            {
-                Parameter = vehicle
-            };
-            var addedVehicle = await this.commandExecutor.Execute(command);
+            this.context.Vehicles.Add(vehicle);
+            await context.SaveChangesAsync();
 
             return new AddVehicleResponse()
             {
-                Data = this.mapper.Map<VehicleDto>(addedVehicle)
+                Data = this.mapper.Map<VehicleDto>(vehicle)
             };
         }
     }

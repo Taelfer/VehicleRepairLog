@@ -25,7 +25,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
 
         public async Task<GetVehicleByIdResponse> Handle(GetVehicleByIdRequest request, CancellationToken cancellationToken)
         {
-            var vehicle = await context.Vehicles
+            var vehicle = await this.context.Vehicles
                             .Include(x => x.Repairs)
                             .FirstOrDefaultAsync(x => x.Id == request.VehicleId);
 
