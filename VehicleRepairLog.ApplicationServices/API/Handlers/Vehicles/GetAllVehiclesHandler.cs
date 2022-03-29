@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,17 +20,18 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
     {
         private readonly IMapper mapper;
         private readonly IQueryExecutor queryExecutor;
+        private readonly VehicleProfileStorageContext context;
 
-        public GetAllVehiclesHandler(IMapper mapper, IQueryExecutor queryExecutor)
+        public GetAllVehiclesHandler(IMapper mapper, IQueryExecutor queryExecutor, VehicleProfileStorageContext context)
         {
             this.mapper = mapper;
             this.queryExecutor = queryExecutor;
+            this.context = context;
         }
 
         public async Task<GetAllVehiclesResponse> Handle(GetAllVehiclesRequest request, CancellationToken cancellationToken)
         {
-            var query = new GetAllVehiclesQuery() { };
-            var vehicles = await this.queryExecutor.Execute(query);
+            var vehicles = await context.Vehicles.ToListAsync();
 
             if (vehicles is null)
             {

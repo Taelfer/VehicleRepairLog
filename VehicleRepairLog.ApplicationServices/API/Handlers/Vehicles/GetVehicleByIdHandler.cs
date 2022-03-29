@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain;
@@ -8,28 +9,25 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Vehicles;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Vehicles;
 using VehicleRepairLog.ApplicationServices.API.ErrorHandling;
 using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.CQRS.Queries.Vehicles;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Vehicles
 {
     public class GetVehicleByIdHandler : IRequestHandler<GetVehicleByIdRequest, GetVehicleByIdResponse>
     {
         private readonly IMapper mapper;
-        private readonly IQueryExecutor queryExecutor;
+        private readonly VehicleProfileStorageContext context;
 
-        public GetVehicleByIdHandler(IMapper mapper, IQueryExecutor queryExecutor)
+        public GetVehicleByIdHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
             this.mapper = mapper;
-            this.queryExecutor = queryExecutor;
+            this.context = context;
         }
 
         public async Task<GetVehicleByIdResponse> Handle(GetVehicleByIdRequest request, CancellationToken cancellationToken)
         {
-            var query = new GetVehicleByIdQuery()
-            {
-                Id = request.VehicleId
-            };
-            var vehicle = await this.queryExecutor.Execute(query);
+            var vehicle = await context.Vehicles
+                            .Include(x => x.Repairs)
+                            .FirstOrDefaultAsync(x => x.Id == request.VehicleId);
 
             if (vehicle is null)
             {
