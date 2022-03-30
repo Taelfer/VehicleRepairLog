@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +26,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Repairs
         public async Task<AddRepairResponse> Handle(AddRepairRequest request, CancellationToken cancellationToken)
         {
             var repair = this.mapper.Map<Repair>(request);
+
             var parts = await this.context.Parts.Where(x => request.PartNames.Contains(x.Name)).ToListAsync();
             repair.Parts = parts;
             

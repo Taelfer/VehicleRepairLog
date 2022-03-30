@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.ApplicationServices.API.Domain;
@@ -9,22 +11,21 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Parts;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Parts;
 using VehicleRepairLog.ApplicationServices.API.ErrorHandling;
 using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.CQRS.Queries.Parts;
 using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
 {
     public class GetAllPartsHandler : IRequestHandler<GetAllPartsRequest, GetAllPartsResponse>
     {
-        private readonly IQueryExecutor queryExecutor;
         private readonly IMapper mapper;
         private readonly IUserService userClaims;
+        private readonly VehicleProfileStorageContext context;
 
-        public GetAllPartsHandler(IQueryExecutor queryExecutor, IMapper mapper, IUserService userClaims)
+        public GetAllPartsHandler(IMapper mapper, IUserService userClaims, VehicleProfileStorageContext context)
         {
-            this.queryExecutor = queryExecutor;
             this.mapper = mapper;
             this.userClaims = userClaims;
+            this.context = context;
         }
 
         public async Task<GetAllPartsResponse> Handle(GetAllPartsRequest request, CancellationToken cancellationToken)
@@ -32,14 +33,9 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Parts
             var claims = userClaims.GetCurrentUser();
             List<Part> parts = null;
 
-            var query = new GetAllPartsQuery()
+            if (claims.Role == "Admin")
             {
-                Name = request.Name
-            };
-
-            if (claims.Role is "Admin")
-            {
-                parts = await this.queryExecutor.Execute(query);
+                parts = await this.context.Parts.ToListAsync();
             }
             else
             {
