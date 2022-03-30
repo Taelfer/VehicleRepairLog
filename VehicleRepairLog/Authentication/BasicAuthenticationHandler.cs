@@ -10,15 +10,12 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.CQRS.Queries.Users;
 using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.Authentication
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        private readonly IQueryExecutor queryExecutor;
         private readonly IPasswordHasher<User> passwordHasher;
 
         public BasicAuthenticationHandler(
@@ -26,11 +23,9 @@ namespace VehicleRepairLog.Authentication
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            IQueryExecutor queryExecutor,
             IPasswordHasher<User> passwordHasher): 
             base(options, logger, encoder, clock)
         {
-            this.queryExecutor = queryExecutor;
             this.passwordHasher = passwordHasher;
         }
 
@@ -57,13 +52,6 @@ namespace VehicleRepairLog.Authentication
                 var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
                 var username = credentials[0];
                 var password = credentials[1];
-
-                //THINK ABOUT WAY TO USE EMAIL AS LOGIN INSTEAD OF USERNAME
-                var query = new ValidateUserQuery()
-                {
-                    Username = username
-                };
-                user = await this.queryExecutor.Execute(query);
 
                 var hashedPasswordVerification = this.passwordHasher.VerifyHashedPassword(user, user.Password, password);
 

@@ -75,10 +75,6 @@ namespace VehicleRepairLog
 
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
-            services.AddTransient<ICommandExecutor, CommandExecutor>();
-
-            services.AddTransient<IQueryExecutor, QueryExecutor>();
-
             services.AddAutoMapper(typeof(PartProfile).Assembly);
 
             services.AddMediatR(typeof(ResponseBase<>));

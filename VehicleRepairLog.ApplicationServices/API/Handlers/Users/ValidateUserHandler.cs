@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -14,32 +15,35 @@ using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Users;
 using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Users;
 using VehicleRepairLog.ApplicationServices.API.ErrorHandling;
 using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.CQRS.Queries.Users;
 using VehicleRepairLog.DataAccess.Entities;
 
 namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
 {
     public class ValidateUserHandler : IRequestHandler<ValidateUserRequest, ValidateUserResponse>
     {
-        private readonly IQueryExecutor queryExecutor;
         private readonly IPasswordHasher<User> passwordHasher;
         private readonly IConfiguration configuration;
+        private readonly VehicleProfileStorageContext context;
 
-        public ValidateUserHandler(IQueryExecutor queryExecutor, IPasswordHasher<User> passwordHasher, IConfiguration configuration)
+        public ValidateUserHandler(IPasswordHasher<User> passwordHasher, IConfiguration configuration, VehicleProfileStorageContext context)
         {
-            this.queryExecutor = queryExecutor;
             this.passwordHasher = passwordHasher;
             this.configuration = configuration;
+            this.context = context;
         }
 
         public async Task<ValidateUserResponse> Handle(ValidateUserRequest request, CancellationToken cancellationToken)
         {
-            var query = new ValidateUserQuery()
+            User user = null;
+
+            if (request.Username is not null)
             {
-                Username = request.Username,
-                Email = request.Email
-            };
-            var user = await this.queryExecutor.Execute(query);
+                user = await this.context.Users.FirstOrDefaultAsync(x => x.Username == request.Username);
+            }
+            else if(request.Email is not null)
+            {
+                user = await this.context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
+            }
 
             if (user is null)
             {
@@ -52,7 +56,7 @@ namespace VehicleRepairLog.ApplicationServices.API.Handlers.Users
             var verifiedPassword = this.passwordHasher
                 .VerifyHashedPassword(user, user.Password, request.Password);
 
-            if (verifiedPassword is PasswordVerificationResult.Failed)
+            if (verifiedPassword == PasswordVerificationResult.Failed)
             {
                 return new ValidateUserResponse()
                 {
