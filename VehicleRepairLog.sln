@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleRepairLog", "VehicleRepairLog\VehicleRepairLog.csproj", "{4F3B1438-ED24-49B6-8157-09F108C357E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleRepairLog", "src\VehicleRepairLog\VehicleRepairLog.csproj", "{4F3B1438-ED24-49B6-8157-09F108C357E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleRepairLog.Application", "VehicleRepairLog.Application\VehicleRepairLog.Application.csproj", "{FE243B16-C6FE-4113-9D66-B0E875BED0A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleRepairLog.Application", "src\VehicleRepairLog.Application\VehicleRepairLog.Application.csproj", "{FE243B16-C6FE-4113-9D66-B0E875BED0A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleRepairLog.Infrastructure", "VehicleRepairLog.Infrastructure\VehicleRepairLog.Infrastructure.csproj", "{7C6F61FE-CD98-47A6-8F57-70EFCEB8D1E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleRepairLog.Infrastructure", "src\VehicleRepairLog.Infrastructure\VehicleRepairLog.Infrastructure.csproj", "{7C6F61FE-CD98-47A6-8F57-70EFCEB8D1E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleRepairLog.Application.Tests", "VehicleRepairLog.Application.Tests\VehicleRepairLog.Application.Tests.csproj", "{AC36CF92-D342-435B-817F-21CF67AF4D13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleRepairLog.Application.Tests", "tests\VehicleRepairLog.Application.Tests\VehicleRepairLog.Application.Tests.csproj", "{AC36CF92-D342-435B-817F-21CF67AF4D13}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{88E6BA6F-8CBC-4C65-BDB6-D54EE849704B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7FBD5492-810F-4459-9947-6D239FCC3D2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleRepairLog.Domain", "VehicleRepairLog.Domain\VehicleRepairLog.Domain.csproj", "{8962A00D-B2B4-4AB6-9B3C-D7878531450C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleRepairLog.Domain", "src\VehicleRepairLog.Domain\VehicleRepairLog.Domain.csproj", "{8962A00D-B2B4-4AB6-9B3C-D7878531450C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
