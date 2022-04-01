@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System;
 
 namespace VehicleRepairLog.Application.Models
 {
-    public class UserDto
+    public class UserViewDto
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

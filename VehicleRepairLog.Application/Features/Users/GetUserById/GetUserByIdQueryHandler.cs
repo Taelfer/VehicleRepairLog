@@ -5,16 +5,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Domain.Entities;
+using VehicleRepairLog.Domain.Exceptions;
 using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Application.Features.Users
 {
-    public class GetUserByIdQuery : IRequest<UserDto>
+    public class GetUserByIdQuery : IRequest<UserViewDto>
     {
         public int UserId;
     }
 
-    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
+    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserViewDto>
     {
         private readonly IMapper mapper;
         private readonly IUserService userService;
@@ -27,26 +28,26 @@ namespace VehicleRepairLog.Application.Features.Users
             this.context = context;
         }
 
-        public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        public async Task<UserViewDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             var claim = userService.GetCurrentUser();
             User user = null;
 
-            if (claim.Role == "User" || claim.Role == "Admin")
+            if (claim.Role == "Admin" || claim.Role == "User")
             {
                 user = await this.context.Users.FirstOrDefaultAsync(x => x.Id == request.UserId);
             }
             else
             {
-                return null;
+                throw new UnauthorizedException("You have no access to this resource.");
             }
             
             if (user is null)
             {
-                return null;
+                throw new NotFoundException("User not found.");
             }
 
-            return this.mapper.Map<UserDto>(user);
+            return this.mapper.Map<UserViewDto>(user);
         }
     }
 }

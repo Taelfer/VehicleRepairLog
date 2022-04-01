@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Domain.Entities;
+using VehicleRepairLog.Domain.Exceptions;
 using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Application.Features.Parts
@@ -39,12 +40,12 @@ namespace VehicleRepairLog.Application.Features.Parts
             }
             else
             {
-                return null;
+                throw new UnauthorizedException("You have no access to this resource.");
             }
 
             if (parts is null)
             {
-                return null;
+                throw new NotFoundException("Parts not found.");
             }
 
             return this.mapper.Map<List<PartDto>>(parts);

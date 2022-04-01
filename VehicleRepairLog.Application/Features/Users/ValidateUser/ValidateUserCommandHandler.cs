@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Domain.Entities;
+using VehicleRepairLog.Domain.Exceptions;
 using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Application.Features.Users
@@ -51,7 +52,7 @@ namespace VehicleRepairLog.Application.Features.Users
 
             if (user is null)
             {
-                return null;
+                throw new NotAuthenticatedException("User with such login and password does not exist.");
             }
 
             var verifiedPassword = this.passwordHasher
@@ -59,7 +60,7 @@ namespace VehicleRepairLog.Application.Features.Users
 
             if (verifiedPassword == PasswordVerificationResult.Failed)
             {
-                return null;
+                throw new NotAuthenticatedException("Wrong login or password. Try again.");
             }
 
             string token = null;

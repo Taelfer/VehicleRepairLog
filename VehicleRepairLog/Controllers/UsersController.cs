@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Users;
 
@@ -24,15 +23,7 @@ namespace VehicleRepairLog.Controllers
         [Route("register")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserCommand command)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(
-                    this.ModelState
-                    .Where(x => x.Value.Errors.Any())
-                    .Select(x => new { property = x.Key, errors = x.Value.Errors }));
-            }
-
-            var response = await this.mediator.Send(command);
+            await this.mediator.Send(command);
             return NoContent();
         }
 
@@ -47,12 +38,6 @@ namespace VehicleRepairLog.Controllers
             };
 
             var response = await this.mediator.Send(query);
-
-            if (response is null)
-            {
-                return Unauthorized();
-            }
-
             return this.Ok(response);
         }
     }

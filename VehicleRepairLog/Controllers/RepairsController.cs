@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Repairs;
 
@@ -21,15 +20,7 @@ namespace VehicleRepairLog.Controllers
         [Route("")]
         public async Task<IActionResult> AddRepair([FromBody] AddRepairCommand command)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(
-                    this.ModelState
-                    .Where(x => x.Value.Errors.Any())
-                    .Select(x => new { property = x.Key, errors = x.Value.Errors }));
-            }
-
-            var response = await this.mediator.Send(command);
+            await this.mediator.Send(command);
             return NoContent();
         }
 
@@ -38,12 +29,6 @@ namespace VehicleRepairLog.Controllers
         public async Task<IActionResult> GetAllRepairs([FromQuery] GetAllRepairsQuery query)
         {
             var response = await this.mediator.Send(query);
-
-            if (response is null)
-            {
-                return NotFound();
-            }
-
             return this.Ok(response);
         }
 
@@ -57,12 +42,6 @@ namespace VehicleRepairLog.Controllers
             };
 
             var response = await this.mediator.Send(query);
-
-            if (response is null)
-            {
-                return NotFound();
-            }
-
             return this.Ok(response);
         }
 
@@ -71,14 +50,6 @@ namespace VehicleRepairLog.Controllers
         public async Task<IActionResult> UpdateRepair([FromBody] UpdateRepairCommand command, int repairId)
         {
             command.RepairId = repairId;
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(
-                    this.ModelState
-                    .Where(x => x.Value.Errors.Any())
-                    .Select(x => new { property = x.Key, errors = x.Value.Errors }));
-            }
 
             var response = await this.mediator.Send(command);
             return this.Ok(response);
@@ -93,13 +64,7 @@ namespace VehicleRepairLog.Controllers
                 RepairId = repairId
             };
 
-            var response = await this.mediator.Send(command);
-
-            if (response is null)
-            {
-                return NotFound();
-            }
-
+            await this.mediator.Send(command);
             return NoContent();
         }
     }

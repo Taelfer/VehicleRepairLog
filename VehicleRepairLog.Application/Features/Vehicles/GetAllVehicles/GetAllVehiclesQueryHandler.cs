@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Domain.Exceptions;
 using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Application.Features.Vehicles
@@ -30,7 +31,7 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 
             if (vehicles is null)
             {
-                return null;
+                throw new NotFoundException("Vehicles not found.");
             }
 
             return this.mapper.Map<List<VehicleDto>>(vehicles);

@@ -31,12 +31,6 @@ namespace VehicleRepairLog.Controllers
             };
 
             var response = await this.mediator.Send(command);
-
-            if (response is null)
-            {
-                return NotFound();
-            }
-
             return this.Ok(response);
         }
     }

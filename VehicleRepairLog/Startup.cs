@@ -18,6 +18,7 @@ using VehicleRepairLog.Application.Features.Users;
 using VehicleRepairLog.Application.MappingProfiles;
 using VehicleRepairLog.Domain.Entities;
 using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Middleware;
 
 namespace VehicleRepairLog
 {
@@ -65,10 +66,7 @@ namespace VehicleRepairLog
                     };
                 });
 
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.SuppressModelStateInvalidFilter = true;
-            });
+            services.AddScoped<ExceptionHandlingMiddleware>();
 
             services.AddMediatR(typeof(RegisterUserCommandHandler).Assembly);
 
@@ -98,6 +96,8 @@ namespace VehicleRepairLog
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "VehicleRepairLog v1"));
             }
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Domain.Exceptions;
 using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Application.Features.Vehicles
@@ -32,7 +33,7 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 
             if (vehicle is null)
             {
-                return null;
+                throw new NotFoundException("Vehicle not found.");
             }
 
             return this.mapper.Map<VehicleDto>(vehicle);

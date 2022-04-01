@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Domain.Exceptions;
 using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Application.Features.Parts
@@ -30,7 +31,7 @@ namespace VehicleRepairLog.Application.Features.Parts
 
             if (part is null)
             {
-                return null;
+                throw new NotFoundException("Part not found.");
             }
 
             return this.mapper.Map<PartDto>(part);

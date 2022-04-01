@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Domain.Exceptions;
 using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Application.Features.Repairs
@@ -30,7 +31,7 @@ namespace VehicleRepairLog.Application.Features.Repairs
 
             if (repair is null)
             {
-                return null;
+                throw new NotFoundException("Repair not found.");
             }
 
             this.context.Repairs.Remove(repair);

@@ -10,7 +10,7 @@ using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Application.Features.Users
 {
-    public class RegisterUserCommand : IRequest<UserDto>
+    public class RegisterUserCommand : IRequest<UserViewDto>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -21,7 +21,7 @@ namespace VehicleRepairLog.Application.Features.Users
         public string ConfirmPassword { get; set; }
     }
 
-    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, UserDto>
+    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, UserViewDto>
     {
         private readonly IMapper mapper;
         private readonly IPasswordHasher<User> passwordHasher;
@@ -34,7 +34,7 @@ namespace VehicleRepairLog.Application.Features.Users
             this.context = context;
         }
 
-        public async Task<UserDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task<UserViewDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             var user = this.mapper.Map<User>(request);
 
@@ -44,7 +44,7 @@ namespace VehicleRepairLog.Application.Features.Users
             this.context.Users.Add(user);
             await this.context.SaveChangesAsync();
 
-            return this.mapper.Map<UserDto>(user);
+            return this.mapper.Map<UserViewDto>(user);
         }
     }
 }

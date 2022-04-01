@@ -4,6 +4,6 @@ namespace VehicleRepairLog.Application
 {
     public interface IUserService
     {
-        UserDto GetCurrentUser();
+        UserViewDto GetCurrentUser();
     }
 }
