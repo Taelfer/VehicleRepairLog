@@ -1,39 +1,59 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
-using VehicleRepairLog.ApplicationServices.API.Domain.Models;
-using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Users;
-using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Users;
+using VehicleRepairLog.Application.Features.Users;
 
 namespace VehicleRepairLog.Controllers
 {
     [Authorize]
     [Route("[controller]")]
     [ApiController]
-    public class UsersController : ApiControllerBase
+    public class UsersController : ControllerBase
     {
-        public UsersController(IMediator mediator) : base(mediator) { }
+        private readonly IMediator mediator;
+
+        public UsersController(IMediator mediator)
+        {
+            this.mediator = mediator;
+        }
 
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]
-        public Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest request)
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserCommand command)
         {
-            return this.HandleRequest<RegisterUserRequest, RegisterUserResponse>(request);
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(
+                    this.ModelState
+                    .Where(x => x.Value.Errors.Any())
+                    .Select(x => new { property = x.Key, errors = x.Value.Errors }));
+            }
+
+            var response = await this.mediator.Send(command);
+            return NoContent();
         }
 
         [Authorize(Roles = "User,Admin")]
         [HttpGet]
         [Route("{userId}")]
-        public Task<IActionResult> GetUserById([FromRoute] int userId)
+        public async Task<IActionResult> GetUserById([FromRoute] int userId)
         {
-            var request = new GetUserByIdRequest()
+            var query = new GetUserByIdQuery()
             {
                 UserId = userId
             };
 
-            return this.HandleRequest<GetUserByIdRequest, GetUserByIdResponse>(request);
+            var response = await this.mediator.Send(query);
+
+            if (response is null)
+            {
+                return Unauthorized();
+            }
+
+            return this.Ok(response);
         }
     }
 }

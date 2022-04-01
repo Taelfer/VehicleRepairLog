@@ -1,62 +1,106 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
-using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Repairs;
-using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Repairs;
+using VehicleRepairLog.Application.Features.Repairs;
 
 namespace VehicleRepairLog.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class RepairsController : ApiControllerBase
+    public class RepairsController : ControllerBase
     {
-        public RepairsController(IMediator mediator) : base(mediator) { }
+        private readonly IMediator mediator;
+
+        public RepairsController(IMediator mediator)
+        {
+            this.mediator = mediator;
+        }
 
         [HttpPost]
         [Route("")]
-        public Task<IActionResult> AddRepair([FromBody] AddRepairRequest request)
+        public async Task<IActionResult> AddRepair([FromBody] AddRepairCommand command)
         {
-            return this.HandleRequest<AddRepairRequest, AddRepairResponse>(request);
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(
+                    this.ModelState
+                    .Where(x => x.Value.Errors.Any())
+                    .Select(x => new { property = x.Key, errors = x.Value.Errors }));
+            }
+
+            var response = await this.mediator.Send(command);
+            return NoContent();
         }
 
         [HttpGet]
         [Route("")]
-        public Task<IActionResult> GetAllRepairs([FromQuery] GetAllRepairsRequest request)
+        public async Task<IActionResult> GetAllRepairs([FromQuery] GetAllRepairsQuery query)
         {
-            return this.HandleRequest<GetAllRepairsRequest, GetAllRepairsResponse>(request);
+            var response = await this.mediator.Send(query);
+
+            if (response is null)
+            {
+                return NotFound();
+            }
+
+            return this.Ok(response);
         }
 
         [HttpGet]
         [Route("{repairId}")]
-        public Task<IActionResult> GetRepairById([FromRoute] int repairId)
+        public async Task<IActionResult> GetRepairById([FromRoute] int repairId)
         {
-            var request = new GetRepairByIdRequest()
+            var query = new GetRepairByIdQuery()
             {
                 RepairId = repairId
             };
 
-            return this.HandleRequest<GetRepairByIdRequest, GetRepairByIdResponse>(request);
+            var response = await this.mediator.Send(query);
+
+            if (response is null)
+            {
+                return NotFound();
+            }
+
+            return this.Ok(response);
         }
 
         [HttpPut]
         [Route("{repairId}")]
-        public Task<IActionResult> UpdateRepair([FromBody] UpdateRepairRequest request, int repairId)
+        public async Task<IActionResult> UpdateRepair([FromBody] UpdateRepairCommand command, int repairId)
         {
-            request.RepairId = repairId;
+            command.RepairId = repairId;
 
-            return this.HandleRequest<UpdateRepairRequest, UpdateRepairResponse>(request);
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(
+                    this.ModelState
+                    .Where(x => x.Value.Errors.Any())
+                    .Select(x => new { property = x.Key, errors = x.Value.Errors }));
+            }
+
+            var response = await this.mediator.Send(command);
+            return this.Ok(response);
         }
 
         [HttpDelete]
         [Route("{repairId}")]
-        public Task<IActionResult> DeleteRepair([FromRoute] int repairId)
+        public async Task<IActionResult> DeleteRepair([FromRoute] int repairId)
         {
-            var request = new DeleteRepairRequest()
+            var command = new DeleteRepairCommand()
             {
                 RepairId = repairId
             };
 
-            return this.HandleRequest<DeleteRepairRequest, DeleteRepairResponse>(request);
+            var response = await this.mediator.Send(command);
+
+            if (response is null)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }

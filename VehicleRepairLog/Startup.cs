@@ -12,12 +12,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using VehicleRepairLog.ApplicationServices;
-using VehicleRepairLog.ApplicationServices.API.Domain.Responses;
-using VehicleRepairLog.ApplicationServices.API.Validators.Parts;
-using VehicleRepairLog.ApplicationServices.MappingProfiles;
-using VehicleRepairLog.DataAccess;
-using VehicleRepairLog.DataAccess.Entities;
+using VehicleRepairLog.Application;
+using VehicleRepairLog.Application.Features.Parts;
+using VehicleRepairLog.Application.Features.Users;
+using VehicleRepairLog.Application.MappingProfiles;
+using VehicleRepairLog.Domain.Entities;
+using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog
 {
@@ -70,14 +70,14 @@ namespace VehicleRepairLog
                 options.SuppressModelStateInvalidFilter = true;
             });
 
+            services.AddMediatR(typeof(RegisterUserCommandHandler).Assembly);
+
             services.AddMvcCore()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddPartRequestValidator>());
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddPartCommandValidator>());
 
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
             services.AddAutoMapper(typeof(PartProfile).Assembly);
-
-            services.AddMediatR(typeof(ResponseBase<>));
 
             services.AddDbContext<VehicleProfileStorageContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("VehicleProfileStorageContext")));

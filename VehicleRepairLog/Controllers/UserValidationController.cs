@@ -2,31 +2,42 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using VehicleRepairLog.ApplicationServices.API.Domain.Models;
-using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Users;
-using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Users;
+using VehicleRepairLog.Application.Features.Users;
+using VehicleRepairLog.Application.Models;
 
 namespace VehicleRepairLog.Controllers
 {
     [Route("")]
     [ApiController]
-    public class UserValidationController : ApiControllerBase
+    public class UserValidationController : ControllerBase
     {
-        public UserValidationController(IMediator mediator) : base(mediator) { }
+        private readonly IMediator mediator;
+
+        public UserValidationController(IMediator mediator)
+        {
+            this.mediator = mediator;
+        }
 
         [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]
-        public Task<IActionResult> AuthenticateUser([FromBody] UserValidationDto loginUserDto)
+        public async Task<IActionResult> AuthenticateUser([FromBody] UserValidationDto loginUserDto)
         {
-            var request = new ValidateUserRequest()
+            var command = new ValidateUserCommand()
             {
                 Username = loginUserDto.Username,
                 Password = loginUserDto.Password,
                 Email = loginUserDto.Email
             };
 
-            return this.HandleRequest<ValidateUserRequest, ValidateUserResponse>(request);
+            var response = await this.mediator.Send(command);
+
+            if (response is null)
+            {
+                return NotFound();
+            }
+
+            return this.Ok(response);
         }
     }
 }

@@ -1,64 +1,108 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
-using VehicleRepairLog.ApplicationServices.API.Domain.Requests.Parts;
-using VehicleRepairLog.ApplicationServices.API.Domain.Responses.Parts;
+using VehicleRepairLog.Application.Features.Parts;
 
 namespace VehicleRepairLog.Controllers
 {
     [Authorize]
     [Route("[controller]")]
     [ApiController]
-    public class PartsController : ApiControllerBase
+    public class PartsController : ControllerBase
     {
-        public PartsController(IMediator mediator) : base(mediator) { }
+        private readonly IMediator mediator;
+
+        public PartsController(IMediator mediator)
+        {
+            this.mediator = mediator;
+        }
 
         [HttpPost]
         [Route("")]
-        public Task<IActionResult> AddPart([FromBody] AddPartRequest request)
+        public async Task<IActionResult> AddPart([FromBody] AddPartCommand command)
         {
-            return this.HandleRequest<AddPartRequest, AddPartResponse>(request);
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(
+                    this.ModelState
+                    .Where(x => x.Value.Errors.Any())
+                    .Select(x => new { property = x.Key, errors = x.Value.Errors }));
+            }
+
+            var response = await this.mediator.Send(command);
+            return NoContent();
         }
 
         [HttpGet]
         [Route("")]
-        public Task<IActionResult> GetAllParts([FromQuery] GetAllPartsRequest request)
+        public async Task<IActionResult> GetAllParts([FromQuery] GetAllPartsQuery query)
         {
-            return this.HandleRequest<GetAllPartsRequest, GetAllPartsResponse>(request);
+            var response = await this.mediator.Send(query);
+
+            if (response is null)
+            {
+                return Unauthorized();
+            }
+
+            return this.Ok(response);
         }
 
         [HttpGet]
         [Route("{partId}")]
-        public Task<IActionResult> GetPartById([FromRoute] int partId)
+        public async Task<IActionResult> GetPartById([FromRoute] int partId)
         {
-            var request = new GetPartByIdRequest()
+            var query = new GetPartByIdQuery()
             {
                 PartId = partId
             };
 
-            return this.HandleRequest<GetPartByIdRequest, GetPartByIdResponse>(request);
+            var response = await this.mediator.Send(query);
+
+            if (response is null)
+            {
+                return NotFound();
+            }
+
+            return this.Ok(response);
         }
 
         [HttpPut]
         [Route("{partId}")]
-        public Task<IActionResult> UpdatePart([FromBody] UpdatePartRequest request, int partId)
+        public async Task<IActionResult> UpdatePart([FromBody] UpdatePartCommand command, int partId)
         {
-            request.PartId = partId;
+            command.PartId = partId;
 
-            return this.HandleRequest<UpdatePartRequest, UpdatePartResponse>(request);
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(
+                    this.ModelState
+                    .Where(x => x.Value.Errors.Any())
+                    .Select(x => new { property = x.Key, errors = x.Value.Errors }));
+            }
+
+            var response = await this.mediator.Send(command);
+            return this.Ok(response);
         }
 
         [HttpDelete]
         [Route("{partId}")]
-        public Task<IActionResult> DeletePart([FromRoute] int partId)
+        public async Task<IActionResult> DeletePart([FromRoute] int partId)
         {
-            var request = new DeletePartRequest()
+            var command = new DeletePartCommand()
             {
                 PartId = partId
             };
 
-            return this.HandleRequest<DeletePartRequest, DeletePartResponse>(request);
+            var response = await this.mediator.Send(command);
+
+            if (response is null)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }
