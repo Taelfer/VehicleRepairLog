@@ -10,10 +10,10 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Application.Models;
-using VehicleRepairLog.Domain.Entities;
-using VehicleRepairLog.Domain.Exceptions;
 using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.Features.Users
 {

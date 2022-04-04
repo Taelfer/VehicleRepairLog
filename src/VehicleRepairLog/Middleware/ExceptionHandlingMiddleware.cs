@@ -2,7 +2,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using VehicleRepairLog.Domain.Exceptions;
+using VehicleRepairLog.Application.Exceptions;
 
 namespace VehicleRepairLog.Middleware
 {

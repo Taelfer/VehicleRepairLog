@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Features.Parts;
-using VehicleRepairLog.Domain.Entities;
+using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.MappingProfiles
 {

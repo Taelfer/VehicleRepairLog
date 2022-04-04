@@ -16,7 +16,7 @@ using VehicleRepairLog.Application;
 using VehicleRepairLog.Application.Features.Parts;
 using VehicleRepairLog.Application.Features.Users;
 using VehicleRepairLog.Application.MappingProfiles;
-using VehicleRepairLog.Domain.Entities;
+using VehicleRepairLog.Infrastructure.Entities;
 using VehicleRepairLog.Infrastructure;
 using VehicleRepairLog.Middleware;
 

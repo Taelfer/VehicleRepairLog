@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Features.Repairs;
-using VehicleRepairLog.Domain.Entities;
+using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.MappingProfiles
 {

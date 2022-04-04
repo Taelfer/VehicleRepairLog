@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using VehicleRepairLog.Domain.Entities;
+using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Infrastructure
 {

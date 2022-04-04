@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Features.Users;
-using VehicleRepairLog.Domain.Entities;
+using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.MappingProfiles
 {

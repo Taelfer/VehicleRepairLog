@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
-using VehicleRepairLog.Domain.Exceptions;
+using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Application.Features.Vehicles

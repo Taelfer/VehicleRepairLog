@@ -17,8 +17,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\VehicleRepairLog.Domain\VehicleRepairLog.Domain.csproj" />
-  </ItemGroup>
-
 </Project>
