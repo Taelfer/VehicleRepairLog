@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Infrastructure.Entities;
-using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Infrastructure.Repositories;
 
 namespace VehicleRepairLog.Application.Features.Parts
 {
@@ -18,20 +18,19 @@ namespace VehicleRepairLog.Application.Features.Parts
     public class AddPartCommandHandler : IRequestHandler<AddPartCommand, PartDto>
     {
         private readonly IMapper mapper;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IPartRepository partRepository;
 
-        public AddPartCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public AddPartCommandHandler(IMapper mapper, IPartRepository partRepository)
         {
-            this.context = context;
             this.mapper = mapper;
+            this.partRepository = partRepository;
         }
 
         public async Task<PartDto> Handle(AddPartCommand request, CancellationToken cancellationToken)
         {
             var part = this.mapper.Map<Part>(request);
 
-            this.context.Parts.Add(part);
-            await this.context.SaveChangesAsync();
+            await this.partRepository.AddAsync(part);
 
             return this.mapper.Map<PartDto>(part);
         }

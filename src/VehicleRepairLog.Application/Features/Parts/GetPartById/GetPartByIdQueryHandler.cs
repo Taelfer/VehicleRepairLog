@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Exceptions;
-using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Infrastructure.Repositories;
 
 namespace VehicleRepairLog.Application.Features.Parts
 {
@@ -17,17 +16,17 @@ namespace VehicleRepairLog.Application.Features.Parts
     public class GetPartByIdQueryHandler : IRequestHandler<GetPartByIdQuery, PartDto>
     {
         private readonly IMapper mapper;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IPartRepository partRepository;
 
-        public GetPartByIdQueryHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public GetPartByIdQueryHandler(IMapper mapper, IPartRepository partRepository)
         {
             this.mapper = mapper;
-            this.context = context;
+            this.partRepository = partRepository;
         }
 
         public async Task<PartDto> Handle(GetPartByIdQuery request, CancellationToken cancellationToken)
         {
-            var part = await this.context.Parts.FirstOrDefaultAsync(x => x.Id == request.PartId);
+            var part = await this.partRepository.GetByIdAsync(request.PartId);
 
             if (part is null)
             {

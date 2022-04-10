@@ -3,8 +3,8 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
-using VehicleRepairLog.Infrastructure.Entities;
 using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.Features.Vehicles
 {
@@ -33,8 +33,8 @@ namespace VehicleRepairLog.Application.Features.Vehicles
         {
             var vehicle = this.mapper.Map<Vehicle>(request);
 
-            this.context.Vehicles.Add(vehicle);
-            await context.SaveChangesAsync();
+            this.context.Add(vehicle);
+            await this.context.SaveChangesAsync();
 
             return this.mapper.Map<VehicleDto>(vehicle);
         }

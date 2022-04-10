@@ -1,0 +1,73 @@
+﻿using AutoMapper;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using VehicleRepairLog.Application.Features.Repairs;
+using VehicleRepairLog.Application.MappingProfiles;
+using VehicleRepairLog.Infrastructure.Entities;
+using VehicleRepairLog.Infrastructure.Repositories;
+using Xunit;
+using FluentAssertions;
+using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Application.Exceptions;
+
+namespace VehicleRepairLog.Application.Tests.Repairs
+{
+    public class GetAllRepairsQueryHandlerTests
+    {
+        private readonly IMapper mapper;
+
+        public GetAllRepairsQueryHandlerTests()
+        {
+            var mapperConfig = new MapperConfiguration(c =>
+            {
+                c.AddProfile<RepairProfile>();
+            });
+
+            this.mapper = mapperConfig.CreateMapper();
+        }
+
+        [Fact]
+        public async Task Handle_GivenCorrectQuery_ReturnsListOfRepairDto()
+        {
+            //arrange
+            var repositoryMock = new Mock<IRepairRepository>();
+            repositoryMock
+                .Setup(x => x.GetAllAsync())
+                .ReturnsAsync(new List<Repair>
+                {
+                    new Repair{Id = 1, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop"},
+                    new Repair{Id = 2, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop2"}
+                });
+
+            var queryHandler = new GetAllRepairsQueryHandler(mapper, repositoryMock.Object);
+
+            //act
+            var result = await queryHandler.Handle(new GetAllRepairsQuery(), CancellationToken.None);
+
+            //assert
+            result.Should().BeOfType<List<RepairDto>>();
+        }
+
+        [Fact]
+        public async void Handle_ForNullRepairs_ThrowsNotFoundException()
+        {
+            //arrange
+            var repositoryMock = new Mock<IRepairRepository>();
+            repositoryMock
+                .Setup(x => x.GetAllAsync())
+                .ReturnsAsync(() => null);
+
+            var queryHandler = new GetAllRepairsQueryHandler(mapper, repositoryMock.Object);
+
+            //act
+            Func<Task> action = async () => await queryHandler.Handle(new GetAllRepairsQuery(), CancellationToken.None);
+
+
+            //assert
+            await action.Should().ThrowAsync<NotFoundException>();
+        }
+    }
+}

@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Exceptions;
-using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Infrastructure.Repositories;
 
 namespace VehicleRepairLog.Application.Features.Repairs
 {
@@ -17,19 +16,17 @@ namespace VehicleRepairLog.Application.Features.Repairs
     public class GetRepairByIdQueryHandler : IRequestHandler<GetRepairByIdQuery, RepairDto>
     {
         private readonly IMapper mapper;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IRepairRepository repairRepository;
 
-        public GetRepairByIdQueryHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public GetRepairByIdQueryHandler(IMapper mapper, IRepairRepository repairRepository)
         {
             this.mapper = mapper;
-            this.context = context;
+            this.repairRepository = repairRepository;
         }
 
         public async Task<RepairDto> Handle(GetRepairByIdQuery request, CancellationToken cancellationToken)
         {
-            var repair = await this.context.Repairs
-                .Include(x => x.Parts)
-                .FirstOrDefaultAsync(x => x.Id == request.RepairId);
+            var repair = await this.repairRepository.GetByIdAsync(request.RepairId);
 
             if (repair is null)
             {

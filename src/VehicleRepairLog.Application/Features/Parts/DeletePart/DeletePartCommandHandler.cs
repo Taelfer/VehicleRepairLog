@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Exceptions;
-using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Infrastructure.Repositories;
 
 namespace VehicleRepairLog.Application.Features.Parts
 {
@@ -17,25 +16,24 @@ namespace VehicleRepairLog.Application.Features.Parts
     public class DeletePartCommandHandler : IRequestHandler<DeletePartCommand, PartDto>
     {
         private readonly IMapper mapper;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IPartRepository partRepository;
 
-        public DeletePartCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public DeletePartCommandHandler(IMapper mapper, IPartRepository partRepository)
         {
             this.mapper = mapper;
-            this.context = context;
+            this.partRepository = partRepository;
         }
 
         public async Task<PartDto> Handle(DeletePartCommand request, CancellationToken cancellationToken)
         {
-            var part = await this.context.Parts.FirstOrDefaultAsync(x => x.Id == request.PartId);
+            var part = await this.partRepository.GetByIdAsync(request.PartId);
 
             if (part is null)
             {
                 throw new NotFoundException("Part not found.");
             }
 
-            this.context.Parts.Remove(part);
-            await this.context.SaveChangesAsync();
+            await this.partRepository.RemoveAsync(part);
 
             return this.mapper.Map<PartDto>(part);
         }

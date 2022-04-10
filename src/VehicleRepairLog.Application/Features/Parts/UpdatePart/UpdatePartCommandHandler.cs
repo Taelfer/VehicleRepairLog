@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Exceptions;
-using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Infrastructure.Repositories;
 
 namespace VehicleRepairLog.Application.Features.Parts
 {
@@ -20,17 +19,17 @@ namespace VehicleRepairLog.Application.Features.Parts
     public class UpdatePartCommandHandler : IRequestHandler<UpdatePartCommand, PartDto>
     {
         private readonly IMapper mapper;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IPartRepository partRepository;
 
-        public UpdatePartCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public UpdatePartCommandHandler(IMapper mapper, IPartRepository partRepository)
         {
             this.mapper = mapper;
-            this.context = context;
+            this.partRepository = partRepository;
         }
 
         public async Task<PartDto> Handle(UpdatePartCommand request, CancellationToken cancellationToken)
         {
-            var part = await this.context.Parts.FirstOrDefaultAsync(x => x.Id == request.PartId);
+            var part = await this.partRepository.GetByIdAsync(request.PartId);
 
             if (part is null)
             {
@@ -38,8 +37,8 @@ namespace VehicleRepairLog.Application.Features.Parts
             }
 
             this.mapper.Map(request, part);
-            this.context.Parts.Update(part);
-            await this.context.SaveChangesAsync();
+
+            await this.partRepository.UpdateAsync(part);
 
             return this.mapper.Map<PartDto>(part);
         }

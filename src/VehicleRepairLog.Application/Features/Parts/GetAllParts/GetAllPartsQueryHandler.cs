@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Infrastructure.Entities;
-using VehicleRepairLog.Application.Exceptions;
-using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Infrastructure.Repositories;
 
 namespace VehicleRepairLog.Application.Features.Parts
 {
@@ -20,13 +19,13 @@ namespace VehicleRepairLog.Application.Features.Parts
     {
         private readonly IMapper mapper;
         private readonly IUserService userClaims;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IPartRepository partRepository;
 
-        public GetAllPartsQueryHandler(IMapper mapper, IUserService userClaims, VehicleProfileStorageContext context)
+        public GetAllPartsQueryHandler(IMapper mapper, IUserService userClaims, IPartRepository partRepository)
         {
             this.mapper = mapper;
             this.userClaims = userClaims;
-            this.context = context;
+            this.partRepository = partRepository;
         }
 
         public async Task<List<PartDto>> Handle(GetAllPartsQuery request, CancellationToken cancellationToken)
@@ -36,7 +35,7 @@ namespace VehicleRepairLog.Application.Features.Parts
 
             if (claims.Role == "Admin")
             {
-                parts = await this.context.Parts.ToListAsync();
+                parts = await this.partRepository.GetAllAsync();
             }
             else
             {

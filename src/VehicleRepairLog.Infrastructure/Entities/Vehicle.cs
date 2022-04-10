@@ -8,17 +8,17 @@ namespace VehicleRepairLog.Infrastructure.Entities
         [Key]
         public int Id { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(25)]
         public string BrandName { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [StringLength(30)]
         public string VinNumber { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(20)]
         public string PaintColor { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(20)]
         public string FuelType { get; set; }
 
         [Range(0,10000000)]

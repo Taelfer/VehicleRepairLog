@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +15,9 @@ using VehicleRepairLog.Application;
 using VehicleRepairLog.Application.Features.Parts;
 using VehicleRepairLog.Application.Features.Users;
 using VehicleRepairLog.Application.MappingProfiles;
-using VehicleRepairLog.Infrastructure.Entities;
 using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Infrastructure.Entities;
+using VehicleRepairLog.Infrastructure.Repositories;
 using VehicleRepairLog.Middleware;
 
 namespace VehicleRepairLog
@@ -76,6 +76,9 @@ namespace VehicleRepairLog
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
             services.AddAutoMapper(typeof(PartProfile).Assembly);
+
+            services.AddScoped<IPartRepository, PartRepository>();
+            services.AddScoped<IRepairRepository, RepairRepository>();
 
             services.AddDbContext<VehicleProfileStorageContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("VehicleProfileStorageContext")));

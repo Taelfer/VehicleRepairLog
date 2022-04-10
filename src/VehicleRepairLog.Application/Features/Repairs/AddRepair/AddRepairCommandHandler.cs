@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
-using VehicleRepairLog.Infrastructure;
 using VehicleRepairLog.Infrastructure.Entities;
+using VehicleRepairLog.Infrastructure.Repositories;
 
 namespace VehicleRepairLog.Application.Features.Repairs
 {
@@ -24,23 +22,19 @@ namespace VehicleRepairLog.Application.Features.Repairs
     public class AddRepairCommandHandler : IRequestHandler<AddRepairCommand, RepairDto>
     {
         private readonly IMapper mapper;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IRepairRepository repairRepository;
 
-        public AddRepairCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public AddRepairCommandHandler(IMapper mapper, IRepairRepository repairRepository)
         {
             this.mapper = mapper;
-            this.context = context;
+            this.repairRepository = repairRepository;
         }
 
         public async Task<RepairDto> Handle(AddRepairCommand request, CancellationToken cancellationToken)
         {
             var repair = this.mapper.Map<Repair>(request);
 
-            var parts = await this.context.Parts.Where(x => request.PartNames.Contains(x.Name)).ToListAsync();
-            repair.Parts = parts;
-            
-            this.context.Repairs.Add(repair);
-            await this.context.SaveChangesAsync();
+            await this.repairRepository.AddAsync(repair, request.PartNames);
 
             return this.mapper.Map<RepairDto>(repair);
         }
