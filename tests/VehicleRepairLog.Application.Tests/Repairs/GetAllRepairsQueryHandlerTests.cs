@@ -18,6 +18,7 @@ namespace VehicleRepairLog.Application.Tests.Repairs
     public class GetAllRepairsQueryHandlerTests
     {
         private readonly IMapper mapper;
+        //Mock<IRepairRepository> repositoryMock = new Mock<IRepairRepository>();
 
         public GetAllRepairsQueryHandlerTests()
         {
@@ -30,29 +31,7 @@ namespace VehicleRepairLog.Application.Tests.Repairs
         }
 
         [Fact]
-        public async Task Handle_GivenCorrectQuery_ReturnsListOfRepairDto()
-        {
-            //arrange
-            var repositoryMock = new Mock<IRepairRepository>();
-            repositoryMock
-                .Setup(x => x.GetAllAsync())
-                .ReturnsAsync(new List<Repair>
-                {
-                    new Repair{Id = 1, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop"},
-                    new Repair{Id = 2, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop2"}
-                });
-
-            var queryHandler = new GetAllRepairsQueryHandler(mapper, repositoryMock.Object);
-
-            //act
-            var result = await queryHandler.Handle(new GetAllRepairsQuery(), CancellationToken.None);
-
-            //assert
-            result.Should().BeOfType<List<RepairDto>>();
-        }
-
-        [Fact]
-        public async void Handle_ForNullRepairs_ThrowsNotFoundException()
+        private async void Handle_ForNullRepairs_ThrowsNotFoundException()
         {
             //arrange
             var repositoryMock = new Mock<IRepairRepository>();
@@ -68,6 +47,30 @@ namespace VehicleRepairLog.Application.Tests.Repairs
 
             //assert
             await action.Should().ThrowAsync<NotFoundException>();
+        }
+
+        [Fact]
+        private async Task Handle_GivenCorrectQuery_ReturnsListOfRepairDto()
+        {
+            //arrange
+            var repositoryMock = new Mock<IRepairRepository>();
+            repositoryMock
+                .Setup(x => x.GetAllAsync())
+                .ReturnsAsync(new List<Repair>
+                {
+                    new Repair{Id = 1, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop"},
+                    new Repair{Id = 2, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop2"}
+                });
+
+            var queryHandler = new GetAllRepairsQueryHandler(this.mapper, repositoryMock.Object);
+
+            //act
+            var result = await queryHandler.Handle(new GetAllRepairsQuery(), CancellationToken.None);
+
+            //assert
+            result.Should().NotBeNull();
+            result.Count.Should().Be(2);
+            result.Should().BeOfType<List<RepairDto>>();
         }
     }
 }

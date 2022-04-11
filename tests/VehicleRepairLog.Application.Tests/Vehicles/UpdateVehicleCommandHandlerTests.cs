@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using Moq;
-using System;
-using VehicleRepairLog.Application.Features.Vehicles;
-using Xunit;
+﻿using Xunit;
 
 namespace VehicleRepairLog.Application.Tests
 {
