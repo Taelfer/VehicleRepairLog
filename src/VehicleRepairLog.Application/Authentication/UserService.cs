@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using VehicleRepairLog.Application.Models;
 
-namespace VehicleRepairLog.Application
+namespace VehicleRepairLog.Application.Authentication
 {
     public class UserService : IUserService
     {

@@ -53,14 +53,16 @@ namespace VehicleRepairLog.Application.Tests.Repairs
         private async Task Handle_GivenCorrectQuery_ReturnsListOfRepairDto()
         {
             //arrange
+            var repairs = new List<Repair>
+            {
+                new Repair{Id = 1, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop"},
+                new Repair{Id = 2, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop2"}
+            };
+
             var repositoryMock = new Mock<IRepairRepository>();
             repositoryMock
                 .Setup(x => x.GetAllAsync())
-                .ReturnsAsync(new List<Repair>
-                {
-                    new Repair{Id = 1, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop"},
-                    new Repair{Id = 2, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop2"}
-                });
+                .ReturnsAsync(repairs);
 
             var queryHandler = new GetAllRepairsQueryHandler(this.mapper, repositoryMock.Object);
 

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using VehicleRepairLog.Application;
+using VehicleRepairLog.Application.Authentication;
 using VehicleRepairLog.Application.Features.Parts;
 using VehicleRepairLog.Application.Features.Users;
 using VehicleRepairLog.Application.MappingProfiles;
@@ -45,6 +45,8 @@ namespace VehicleRepairLog
                         .AllowAnyMethod();
                     });
             });
+
+            services.AddTransient<IJwtAuth, JwtAuth>();
 
             services.AddTransient<IUserService, UserService>();
 

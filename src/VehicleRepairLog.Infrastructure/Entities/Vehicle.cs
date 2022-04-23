@@ -25,6 +25,6 @@ namespace VehicleRepairLog.Infrastructure.Entities
         public int Mileage { get; set; }
         public User User { get; set; }
         public int UserId { get; set; }
-        public List<Repair> Repairs { get; set; }
+        public ICollection<Repair> Repairs { get; set; } = new List<Repair>();
     }
 }

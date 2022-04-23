@@ -1,6 +1,6 @@
 ﻿using VehicleRepairLog.Application.Models;
 
-namespace VehicleRepairLog.Application
+namespace VehicleRepairLog.Application.Authentication
 {
     public interface IUserService
     {

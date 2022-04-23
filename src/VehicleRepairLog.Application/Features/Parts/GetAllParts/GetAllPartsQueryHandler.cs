@@ -3,6 +3,7 @@ using MediatR;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleRepairLog.Application.Authentication;
 using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Infrastructure.Entities;

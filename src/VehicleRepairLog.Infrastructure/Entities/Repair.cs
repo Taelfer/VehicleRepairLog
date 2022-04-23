@@ -20,6 +20,6 @@ namespace VehicleRepairLog.Infrastructure.Entities
         public string CarWorkshopName { get; set; }
         public Vehicle Vehicle { get; set; }
         public int VehicleId { get; set; }
-        public List<Part> Parts { get; set; }
+        public ICollection<Part> Parts { get; set; } = new List<Part>();
     }
 }

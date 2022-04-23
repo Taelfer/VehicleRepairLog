@@ -2,9 +2,9 @@
 
 namespace VehicleRepairLog.Application.Features.Users
 {
-    public class ValidateUserCommandValidator : AbstractValidator<ValidateUserCommand>
+    public class AuthenticateUserCommandValidator : AbstractValidator<AuthenticateUserCommand>
     {
-        public ValidateUserCommandValidator()
+        public AuthenticateUserCommandValidator()
         {
             //RuleFor(x => x.Username).NotEmpty();
 

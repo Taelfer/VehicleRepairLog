@@ -9,11 +9,11 @@ namespace VehicleRepairLog.Controllers
 {
     [Route("")]
     [ApiController]
-    public class UserValidationController : ControllerBase
+    public class UserAuthenticationController : ControllerBase
     {
         private readonly IMediator mediator;
 
-        public UserValidationController(IMediator mediator)
+        public UserAuthenticationController(IMediator mediator)
         {
             this.mediator = mediator;
         }
@@ -21,13 +21,13 @@ namespace VehicleRepairLog.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]
-        public async Task<IActionResult> AuthenticateUser([FromBody] UserValidationDto loginUserDto)
+        public async Task<IActionResult> AuthenticateUser([FromBody] UserAuthenticationDto userAuthenticationDto)
         {
-            var command = new ValidateUserCommand()
+            var command = new AuthenticateUserCommand()
             {
-                Username = loginUserDto.Username,
-                Password = loginUserDto.Password,
-                Email = loginUserDto.Email
+                Username = userAuthenticationDto.Username,
+                Password = userAuthenticationDto.Password,
+                Email = userAuthenticationDto.Email
             };
 
             var response = await this.mediator.Send(command);

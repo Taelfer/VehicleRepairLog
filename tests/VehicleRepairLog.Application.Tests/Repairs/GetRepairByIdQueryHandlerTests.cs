@@ -50,19 +50,28 @@ namespace VehicleRepairLog.Application.Tests.Repairs
         private async Task Handle_GivenExistingRepairId_ReturnsCorrectRepairDto()
         {
             //arrange
+            Repair repair = new Repair()
+            {
+                Id = 1, 
+                Date = new DateTime(2022, 4, 9), 
+                CarWorkshopName = "testWorkshop"
+            };
+
             var repositoryMock = new Mock<IRepairRepository>();
             repositoryMock
-                .Setup(r => r.GetByIdAsync(1))
-                .ReturnsAsync(new Repair { Id = 1, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop" });
+                .Setup(r => r.GetByIdAsync(repair.Id))
+                .ReturnsAsync(repair);
 
             var queryHandler = new GetRepairByIdQueryHandler(this.mapper, repositoryMock.Object);
 
             //act
-            var result = await queryHandler.Handle(new GetRepairByIdQuery() { RepairId = 1 }, CancellationToken.None);
+            var result = await queryHandler.Handle(new GetRepairByIdQuery() { RepairId = repair.Id }, CancellationToken.None);
 
             //assert
             result.Should().NotBeNull();
-            result.Id.Should().Be(1);
+            result.Id.Should().Be(repair.Id);
+            result.Date.Should().Be(repair.Date);
+            result.CarWorkshopName.Should().Be(repair.CarWorkshopName);
             result.Should().BeOfType<RepairDto>();
         }
     }

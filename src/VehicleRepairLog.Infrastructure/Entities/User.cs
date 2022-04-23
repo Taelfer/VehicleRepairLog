@@ -33,6 +33,6 @@ namespace VehicleRepairLog.Infrastructure.Entities
         [Required]
         [MaxLength(100)]
         public string Password { get; set; }
-        public List<Vehicle> Vehicles { get; set; }
+        public ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
     }
 }

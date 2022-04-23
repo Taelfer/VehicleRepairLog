@@ -16,6 +16,6 @@ namespace VehicleRepairLog.Infrastructure.Entities
         [MaxLength(100)]
         public string BrandName { get; set; }
         public decimal Price { get; set; }
-        public List<Repair> Repairs { get; set; }
+        public ICollection<Repair> Repairs { get; set; } = new List<Repair>();
     }
 }
