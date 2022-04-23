@@ -5,7 +5,7 @@ using VehicleRepairLog.Application.Features.Repairs;
 
 namespace VehicleRepairLog.Controllers
 {
-    [Route("[controller]")]
+    [Route("repairs")]
     [ApiController]
     public class RepairsController : ControllerBase
     {
@@ -17,7 +17,6 @@ namespace VehicleRepairLog.Controllers
         }
 
         [HttpPost]
-        [Route("")]
         public async Task<IActionResult> AddRepair([FromBody] AddRepairCommand command)
         {
             await this.mediator.Send(command);
@@ -25,7 +24,6 @@ namespace VehicleRepairLog.Controllers
         }
 
         [HttpGet]
-        [Route("")]
         public async Task<IActionResult> GetAllRepairs([FromQuery] GetAllRepairsQuery query)
         {
             var response = await this.mediator.Send(query);

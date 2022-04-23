@@ -7,7 +7,6 @@ using VehicleRepairLog.Application.Models;
 
 namespace VehicleRepairLog.Controllers
 {
-    [Route("")]
     [ApiController]
     public class UserAuthenticationController : ControllerBase
     {

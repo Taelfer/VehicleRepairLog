@@ -9,6 +9,6 @@ namespace VehicleRepairLog.Application.Authentication
 {
     public interface IJwtAuth
     {
-        string Authenticate(User user);
+        string GenerateToken(User user);
     }
 }

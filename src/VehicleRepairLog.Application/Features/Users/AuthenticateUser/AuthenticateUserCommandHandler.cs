@@ -56,7 +56,7 @@ namespace VehicleRepairLog.Application.Features.Users
                 throw new NotAuthenticatedException("Wrong login or password. Try again.");
             }
 
-            string token = jwtAuth.Authenticate(user);
+            string token = jwtAuth.GenerateToken(user);
 
             if (token is null)
             {

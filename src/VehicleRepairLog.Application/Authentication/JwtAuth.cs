@@ -18,7 +18,7 @@ namespace VehicleRepairLog.Application.Authentication
             this.configuration = configuration;
         }
 
-        public string Authenticate(User user)
+        public string GenerateToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

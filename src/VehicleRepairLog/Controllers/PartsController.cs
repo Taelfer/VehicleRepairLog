@@ -7,7 +7,7 @@ using VehicleRepairLog.Application.Features.Parts;
 namespace VehicleRepairLog.Controllers
 {
     [Authorize]
-    [Route("[controller]")]
+    [Route("parts")]
     [ApiController]
     public class PartsController : ControllerBase
     {
@@ -19,7 +19,6 @@ namespace VehicleRepairLog.Controllers
         }
 
         [HttpPost]
-        [Route("")]
         public async Task<IActionResult> AddPart([FromBody] AddPartCommand command)
         {
             await this.mediator.Send(command);
@@ -27,7 +26,6 @@ namespace VehicleRepairLog.Controllers
         }
 
         [HttpGet]
-        [Route("")]
         public async Task<IActionResult> GetAllParts([FromQuery] GetAllPartsQuery query)
         {
             var response = await this.mediator.Send(query);
