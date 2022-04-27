@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using VehicleRepairLog.Infrastructure.Entities;
 
@@ -12,6 +13,11 @@ namespace VehicleRepairLog.Infrastructure.Repositories
         public PartRepository(VehicleProfileStorageContext context)
         {
             this.context = context;
+        }
+
+        public Task<List<Part>> GetByNameAsync(List<string> partNames)
+        {
+            return this.context.Parts.Where(x => partNames.Contains(x.Name)).ToListAsync();
         }
 
         public Task AddAsync(Part part)

@@ -37,10 +37,11 @@ namespace VehicleRepairLog
             //same-origin policy
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(
+                options.AddPolicy(name: "AllowBlazorOrigin",
                     builder =>
                     {
-                        builder.AllowAnyOrigin()
+                        builder.WithOrigins("http://localhost:5151",
+                            "https://localhost:7151")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                     });
@@ -110,7 +111,7 @@ namespace VehicleRepairLog
 
             app.UseRouting();
 
-            app.UseCors();
+            app.UseCors("AllowBlazorOrigin");
 
             app.UseAuthorization();
 

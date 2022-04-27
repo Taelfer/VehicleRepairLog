@@ -7,7 +7,7 @@ using VehicleRepairLog.Application.Features.Parts;
 namespace VehicleRepairLog.Controllers
 {
     [Authorize]
-    [Route("parts")]
+    [Route("api/{controller}")]
     [ApiController]
     public class PartsController : ControllerBase
     {

@@ -6,6 +6,7 @@ namespace VehicleRepairLog.Infrastructure.Repositories
 {
     public interface IPartRepository
     {
+        Task<List<Part>> GetByNameAsync(List<string> partNames);
         Task AddAsync(Part part);
         Task<Part> GetByIdAsync(int id);
         Task<List<Part>> GetAllAsync();

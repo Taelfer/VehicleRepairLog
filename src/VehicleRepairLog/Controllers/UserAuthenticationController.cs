@@ -8,6 +8,7 @@ using VehicleRepairLog.Application.Models;
 namespace VehicleRepairLog.Controllers
 {
     [ApiController]
+    [Route("api/{controller}")]
     public class UserAuthenticationController : ControllerBase
     {
         private readonly IMediator mediator;

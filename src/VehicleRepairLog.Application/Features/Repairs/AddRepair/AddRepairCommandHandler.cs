@@ -23,16 +23,21 @@ namespace VehicleRepairLog.Application.Features.Repairs
     {
         private readonly IMapper mapper;
         private readonly IRepairRepository repairRepository;
+        private readonly IPartRepository partRepository;
 
-        public AddRepairCommandHandler(IMapper mapper, IRepairRepository repairRepository)
+        public AddRepairCommandHandler(IMapper mapper, IRepairRepository repairRepository, IPartRepository partRepository)
         {
             this.mapper = mapper;
             this.repairRepository = repairRepository;
+            this.partRepository = partRepository;
         }
 
         public async Task<RepairDto> Handle(AddRepairCommand request, CancellationToken cancellationToken)
         {
             var repair = this.mapper.Map<Repair>(request);
+
+            var parts = await this.partRepository.GetByNameAsync(request.PartNames);
+            repair.Parts = parts;
 
             await this.repairRepository.AddAsync(repair, request.PartNames);
 

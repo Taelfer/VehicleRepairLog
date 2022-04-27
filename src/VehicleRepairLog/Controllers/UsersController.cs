@@ -6,7 +6,7 @@ using VehicleRepairLog.Application.Features.Users;
 
 namespace VehicleRepairLog.Controllers
 {
-    [Authorize]
+    [Route("api/{controller}")]
     [ApiController]
     public class UsersController : ControllerBase
     {

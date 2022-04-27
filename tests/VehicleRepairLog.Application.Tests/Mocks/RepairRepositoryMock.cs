@@ -52,13 +52,13 @@ namespace VehicleRepairLog.Application.Tests.Mocks
                 .Setup(r => r.GetByIdAsync(repairs[0].Id))
                 .ReturnsAsync(repairs[0]);
 
-            repositoryMock
-                .Setup(r => r.AddAsync(It.IsAny<Repair>(), It.IsAny<List<string>>()))
-                .ReturnsAsync((Repair repair) =>
-                {
-                    repairs.Add(repair);
-                    return repair;
-                });
+            //repositoryMock
+            //    .Setup(r => r.AddAsync(It.IsAny<Repair>(), It.IsAny<List<string>>()))
+            //    .ReturnsAsync((Repair repair) =>
+            //    {
+            //        repairs.Add(repair);
+            //        return repair;
+            //    });
 
             return repositoryMock;
         }
