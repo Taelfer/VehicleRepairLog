@@ -5,19 +5,20 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Authentication;
 using VehicleRepairLog.Application.Exceptions;
+using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Infrastructure;
 using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.Features.Users
 {
-    public class AuthenticateUserCommand : IRequest<string>
+    public class AuthenticateUserCommand : IRequest<TokenDto>
     {
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
     }
 
-    public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCommand, string>
+    public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCommand, TokenDto>
     {
         private readonly IPasswordHasher<User> passwordHasher;
         private readonly IJwtAuth jwtAuth;
@@ -30,7 +31,7 @@ namespace VehicleRepairLog.Application.Features.Users
             this.context = context;
         }
 
-        public async Task<string> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
+        public async Task<TokenDto> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
         {
             User user = null;
 
@@ -45,7 +46,7 @@ namespace VehicleRepairLog.Application.Features.Users
 
             if (user is null)
             {
-                throw new NotAuthenticatedException("User with such login and password does not exist.");
+                throw new NotAuthenticatedException("User with such username and password does not exist.");
             }
 
             var verifiedPassword = this.passwordHasher
@@ -53,7 +54,7 @@ namespace VehicleRepairLog.Application.Features.Users
 
             if (verifiedPassword == PasswordVerificationResult.Failed)
             {
-                throw new NotAuthenticatedException("Wrong login or password. Try again.");
+                throw new NotAuthenticatedException("Wrong username or password. Try again.");
             }
 
             string token = jwtAuth.GenerateToken(user);
@@ -63,7 +64,10 @@ namespace VehicleRepairLog.Application.Features.Users
                 throw new UnauthorizedException("You have to log in.");
             }
 
-            return token;
+            return new TokenDto()
+            {
+                Token = token
+            };
         }
     }
 }

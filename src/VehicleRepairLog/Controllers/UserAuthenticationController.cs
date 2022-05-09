@@ -8,7 +8,7 @@ using VehicleRepairLog.Application.Models;
 namespace VehicleRepairLog.Controllers
 {
     [ApiController]
-    [Route("api/{controller}")]
+    [Route("api/[controller]")]
     public class UserAuthenticationController : ControllerBase
     {
         private readonly IMediator mediator;
@@ -27,7 +27,7 @@ namespace VehicleRepairLog.Controllers
             {
                 Username = userAuthenticationDto.Username,
                 Password = userAuthenticationDto.Password,
-                Email = userAuthenticationDto.Email
+                //Email = userAuthenticationDto.Email
             };
 
             var response = await this.mediator.Send(command);

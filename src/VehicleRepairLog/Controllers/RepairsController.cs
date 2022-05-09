@@ -5,7 +5,7 @@ using VehicleRepairLog.Application.Features.Repairs;
 
 namespace VehicleRepairLog.Controllers
 {
-    [Route("api/{controller}")]
+    [Route("api/[controller]")]
     [ApiController]
     public class RepairsController : ControllerBase
     {
