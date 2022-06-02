@@ -12,7 +12,7 @@ namespace VehicleRepairLog.Application.MappingProfiles
         public VehicleProfile()
         {
             CreateMap<Vehicle, VehicleDto>()
-                .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
+                .ForMember(vehicleDto => vehicleDto.Id, y => y.MapFrom(vehicle => vehicle.Id))
                 .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
                 .ForMember(x => x.VinNumber, y => y.MapFrom(z => z.VinNumber))
                 .ForMember(x => x.PaintColor, y => y.MapFrom(z => z.PaintColor))

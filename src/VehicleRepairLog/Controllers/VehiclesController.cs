@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Vehicles;
 
@@ -24,14 +25,13 @@ namespace VehicleRepairLog.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllVehicles([FromQuery] GetAllVehiclesQuery query)
+        public async Task<IActionResult> GetAllVehicles([FromQuery] GetAllVehiclesQuery query, CancellationToken cancellationToken)
         {
-            var response = await this.mediator.Send(query);
+            var response = await this.mediator.Send(query, cancellationToken:cancellationToken);
             return this.Ok(response);
         }
 
-        [HttpGet]
-        [Route("{vehicleId}")]
+        [HttpGet("{vehicleId}")]
         public async Task<IActionResult> GetVehicleById([FromRoute] int vehicleId)
         {
             var query = new GetVehicleByIdQuery()
@@ -43,8 +43,7 @@ namespace VehicleRepairLog.Controllers
             return this.Ok(response);
         }
 
-        [HttpPut]
-        [Route("{vehicleId}")]
+        [HttpPut("{vehicleId}")]
         public async Task<IActionResult> UpdateVehicle([FromBody] UpdateVehicleCommand command, int vehicleId)
         {
             command.VehicleId = vehicleId;
@@ -53,8 +52,7 @@ namespace VehicleRepairLog.Controllers
             return this.Ok(response);
         }
 
-        [HttpDelete]
-        [Route("{vehicleId}")]
+        [HttpDelete("{vehicleId}")]
         public async Task<IActionResult> DeleteVehicle([FromRoute] int vehicleId)
         {
             var command = new DeleteVehicleCommand()

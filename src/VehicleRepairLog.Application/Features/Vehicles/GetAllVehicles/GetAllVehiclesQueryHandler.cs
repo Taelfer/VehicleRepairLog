@@ -27,7 +27,12 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 
         public async Task<List<VehicleDto>> Handle(GetAllVehiclesQuery request, CancellationToken cancellationToken)
         {
-            var vehicles = await this.context.Vehicles.ToListAsync();
+            //if (cancellationToken != null)
+            //{
+            //    throw new TaskCanceledException("Task canceled");
+            //}
+
+            var vehicles = await this.context.Vehicles.ToListAsync(cancellationToken);
 
             if (vehicles is null)
             {

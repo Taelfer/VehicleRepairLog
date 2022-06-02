@@ -11,7 +11,7 @@ namespace VehicleRepairLog.Application.MappingProfiles
     {
         public UserProfile()
         {
-            CreateMap<User, UserViewDto>()
+            CreateMap<User, UserDto>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
                 .ForMember(x => x.FirstName, y => y.MapFrom(z => z.FirstName))
                 .ForMember(x => x.LastName, y => y.MapFrom(z => z.LastName))

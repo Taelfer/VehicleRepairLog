@@ -11,12 +11,12 @@ using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.Features.Users
 {
-    public class GetUserByIdQuery : IRequest<UserViewDto>
+    public class GetUserByIdQuery : IRequest<UserDto>
     {
         public int UserId;
     }
 
-    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserViewDto>
+    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
     {
         private readonly IMapper mapper;
         private readonly IUserService userService;
@@ -29,7 +29,7 @@ namespace VehicleRepairLog.Application.Features.Users
             this.context = context;
         }
 
-        public async Task<UserViewDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             var claim = userService.GetCurrentUser();
             User user = null;
@@ -48,7 +48,7 @@ namespace VehicleRepairLog.Application.Features.Users
                 throw new NotFoundException("User not found.");
             }
 
-            return this.mapper.Map<UserViewDto>(user);
+            return this.mapper.Map<UserDto>(user);
         }
     }
 }

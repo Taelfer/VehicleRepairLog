@@ -32,8 +32,7 @@ namespace VehicleRepairLog.Controllers
             return this.Ok(response);
         }
 
-        [HttpGet]
-        [Route("{partId}")]
+        [HttpGet("{partId}")]
         public async Task<IActionResult> GetPartById([FromRoute] int partId)
         {
             var query = new GetPartByIdQuery()
@@ -45,8 +44,7 @@ namespace VehicleRepairLog.Controllers
             return this.Ok(response);
         }
 
-        [HttpPut]
-        [Route("{partId}")]
+        [HttpPut("{partId}")]
         public async Task<IActionResult> UpdatePart([FromBody] UpdatePartCommand command, int partId)
         {
             command.PartId = partId;
@@ -55,8 +53,7 @@ namespace VehicleRepairLog.Controllers
             return this.Ok(response);
         }
 
-        [HttpDelete]
-        [Route("{partId}")]
+        [HttpDelete("{partId}")]
         public async Task<IActionResult> DeletePart([FromRoute] int partId)
         {
             var command = new DeletePartCommand()

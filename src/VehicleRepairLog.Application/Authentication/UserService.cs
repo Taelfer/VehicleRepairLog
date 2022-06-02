@@ -14,7 +14,7 @@ namespace VehicleRepairLog.Application.Authentication
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public UserViewDto GetCurrentUser()
+        public UserDto GetCurrentUser()
         {
             var identity = httpContextAccessor.HttpContext.User as ClaimsPrincipal;
 
@@ -22,7 +22,7 @@ namespace VehicleRepairLog.Application.Authentication
             {
                 var userClaims = identity.Claims;
 
-                return new UserViewDto
+                return new UserDto
                 {
                     Role = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value
                 };

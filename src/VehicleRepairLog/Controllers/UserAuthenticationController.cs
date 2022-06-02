@@ -19,8 +19,7 @@ namespace VehicleRepairLog.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost]
-        [Route("authenticate")]
+        [HttpPost("authenticate")]
         public async Task<IActionResult> AuthenticateUser([FromBody] UserAuthenticationDto userAuthenticationDto)
         {
             var command = new AuthenticateUserCommand()

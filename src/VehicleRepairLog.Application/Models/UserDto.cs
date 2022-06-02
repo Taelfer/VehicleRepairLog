@@ -3,7 +3,7 @@ using System;
 
 namespace VehicleRepairLog.Application.Models
 {
-    public class UserViewDto
+    public class UserDto
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

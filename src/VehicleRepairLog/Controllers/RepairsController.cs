@@ -30,8 +30,7 @@ namespace VehicleRepairLog.Controllers
             return this.Ok(response);
         }
 
-        [HttpGet]
-        [Route("{repairId}")]
+        [HttpGet("{repairId}")]
         public async Task<IActionResult> GetRepairById([FromRoute] int repairId)
         {
             var query = new GetRepairByIdQuery()
@@ -43,8 +42,7 @@ namespace VehicleRepairLog.Controllers
             return this.Ok(response);
         }
 
-        [HttpPut]
-        [Route("{repairId}")]
+        [HttpPut("{repairId}")]
         public async Task<IActionResult> UpdateRepair([FromBody] UpdateRepairCommand command, int repairId)
         {
             command.RepairId = repairId;
@@ -53,8 +51,7 @@ namespace VehicleRepairLog.Controllers
             return this.Ok(response);
         }
 
-        [HttpDelete]
-        [Route("{repairId}")]
+        [HttpDelete("{repairId}")]
         public async Task<IActionResult> DeleteRepair([FromRoute] int repairId)
         {
             var command = new DeleteRepairCommand()
