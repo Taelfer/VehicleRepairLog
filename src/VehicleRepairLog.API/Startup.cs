@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Text;
 using VehicleRepairLog.Application.Authentication;
 using VehicleRepairLog.Application.Features.Parts;
@@ -20,7 +21,7 @@ using VehicleRepairLog.Infrastructure.Entities;
 using VehicleRepairLog.Infrastructure.Repositories;
 using VehicleRepairLog.Middleware;
 
-namespace VehicleRepairLog
+namespace VehicleRepairLog.API
 {
     public class Startup
     {
@@ -48,7 +49,6 @@ namespace VehicleRepairLog
             });
 
             services.AddTransient<IJwtAuth, JwtAuth>();
-
             services.AddTransient<IUserService, UserService>();
 
             services.AddHttpContextAccessor();
@@ -59,14 +59,15 @@ namespace VehicleRepairLog
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                            Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromMinutes(5)
+                        //ValidIssuer = Configuration["Jwt:Issuer"],
+                        //ValidAudience = Configuration["Jwt:Audience"],
                     };
                 });
 

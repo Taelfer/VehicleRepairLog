@@ -1,0 +1,59 @@
+﻿@page "/vehicles"
+
+@inject HttpClient httpClient
+@inject IVehicleService vehicleService 
+@inject NavigationManager navigatorManager
+
+<h3>Vehicles List</h3>
+
+@if(vehicles == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Brand Name</th>
+                <th>VIN number</th>
+                <th>Paint Color</th>
+                <th>Fuel Type</th>
+                <th>Mileage</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var vehicle in vehicles)
+            {
+                <tr>
+                    <td>@vehicle.BrandName</td>
+                    <td>@vehicle.VinNumber</td>
+                    <td>@vehicle.PaintColor</td>
+                    <td>@vehicle.FuelType</td>
+                    <td>@vehicle.Mileage</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Vehicle> vehicles;
+
+    [CascadingParameter]
+    public Task<AuthenticationState> authenticationState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authenticationState;
+
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            vehicles = await vehicleService.GetAllVehiclesAsync();
+        }
+        else
+        {
+            navigatorManager.NavigateTo("/");
+        }
+    }
+}

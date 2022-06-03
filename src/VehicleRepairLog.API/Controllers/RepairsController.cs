@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Repairs;
 
-namespace VehicleRepairLog.Controllers
+namespace VehicleRepairLog.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

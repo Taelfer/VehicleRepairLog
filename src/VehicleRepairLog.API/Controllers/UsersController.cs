@@ -12,7 +12,7 @@ using VehicleRepairLog.Application.Features.Users;
 using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Infrastructure.Entities;
 
-namespace VehicleRepairLog.Controllers
+namespace VehicleRepairLog.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

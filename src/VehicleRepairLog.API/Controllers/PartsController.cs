@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Parts;
 
-namespace VehicleRepairLog.Controllers
+namespace VehicleRepairLog.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]

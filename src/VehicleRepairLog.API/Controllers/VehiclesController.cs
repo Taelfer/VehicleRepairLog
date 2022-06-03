@@ -1,12 +1,14 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Vehicles;
 
-namespace VehicleRepairLog.Controllers
+namespace VehicleRepairLog.API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class VehiclesController : ControllerBase
     {

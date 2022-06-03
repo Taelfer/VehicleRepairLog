@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Users;
 using VehicleRepairLog.Application.Models;
 
-namespace VehicleRepairLog.Controllers
+namespace VehicleRepairLog.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
