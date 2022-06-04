@@ -14,10 +14,6 @@ namespace VehicleRepairLog.Application.Features.Users
 
             RuleFor(x => x.ConfirmPassword).Equal(e => e.Password);
 
-            RuleFor(x => x.FirstName).MaximumLength(100);
-
-            RuleFor(x => x.LastName).MaximumLength(100);
-
             RuleFor(x => x.Username).MaximumLength(100).NotEmpty();
 
             RuleFor(x => x.Email)

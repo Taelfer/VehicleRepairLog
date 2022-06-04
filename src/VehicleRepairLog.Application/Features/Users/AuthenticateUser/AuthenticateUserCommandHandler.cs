@@ -11,14 +11,13 @@ using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.Features.Users
 {
-    public class AuthenticateUserCommand : IRequest<TokenDto>
+    public class AuthenticateUserCommand : IRequest<LoginResultDto>
     {
-        public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
     }
 
-    public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCommand, TokenDto>
+    public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCommand, LoginResultDto>
     {
         private readonly IPasswordHasher<User> passwordHasher;
         private readonly IJwtAuth jwtAuth;
@@ -31,15 +30,11 @@ namespace VehicleRepairLog.Application.Features.Users
             this.context = context;
         }
 
-        public async Task<TokenDto> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
+        public async Task<LoginResultDto> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
         {
             User user = null;
 
-            if (request.Username is not null)
-            {
-                user = await this.context.Users.FirstOrDefaultAsync(x => x.Username == request.Username);
-            }
-            else if(request.Email is not null)
+            if(request.Email is not null)
             {
                 user = await this.context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
             }
@@ -64,9 +59,10 @@ namespace VehicleRepairLog.Application.Features.Users
                 throw new UnauthorizedException("You have to log in.");
             }
 
-            return new TokenDto()
+            return new LoginResultDto()
             {
-                Token = token
+                Token = token,
+                Successful = true
             };
         }
     }

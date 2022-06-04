@@ -1,45 +1,66 @@
 ﻿@page "/register"
 
-@inject IRegisterService registerService
+@inject IAuthenticationService authService
 @inject NavigationManager navigationManager
 
-<h2 class="white-text"><b>Create an account</b></h2>
-<hr class="white-horizontal-line">
+<h2>Register</h2>
 
-<div class="col-x1-6 col-md-8 col-12">
-    <input type="text" @bind="user.Username" placeholder="username" class="form-control dark-theme-textbox" autocomplete="new-username"/>
-</div>
-<div class="col-x1-6 col-md-8 col-12">
-    <input type="text" @bind="user.FirstName" placeholder="first name" class="form-control dark-theme-textbox" autocomplete="new-firstname"/>
-</div>
-<div class="col-x1-6 col-md-8 col-12">
-    <input type="text" @bind="user.LastName" placeholder="last name" class="form-control dark-theme-textbox" autocomplete="new-lastname"/>
-</div>
-<div class="col-x1-6 col-md-8 col-12">
-    <input type="email" @bind="user.EmailAddress" placeholder="email address" class="form-control dark-theme-textbox" autocomplete="new-emailaddress"/>
-</div>
-<div class="col-x1-6 col-md-8 col-12">
-    <input type="date" @bind="user.DateOfBirth" placeholder="date of birth" class="form-control dark-theme-textbox" autocomplete="new-dateofbirth"/>
-</div>
-<div class="col-x1-6 col-md-8 col-12">
-    <input type="password" @bind="user.Password" placeholder="password" class="form-control dark-theme-textbox" autocomplete="new-password"/>
-</div>
-<div class="col-x1-6 col-md-8 col-12">
-    <input type="password" @bind="user.ConfirmPassword" placeholder="confirm password" class="form-control dark-theme-textbox"/>
-</div>
-<br />
-<div class="col-x1-6 col-md-8 col-12">
-    <button class="btn btn-danger" @onclick="RegisterUser">Register</button>
-    &nbsp;
-    <a style="font-weight: bold;" href="/login">Already have an account?</a>
+@if (showRegistrationError)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>@registrationErrorMessage</p>
+    </div>
+}
+
+<div class="card col-2">
+    <div class="card-body">
+        <EditForm Model="registerRequest" OnValidSubmit="HandleRegistration">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <InputText id="username" class="form-control" @bind-Value="registerRequest.Username"/>
+                <ValidationMessage For="@(() => registerRequest.Username)" />
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <InputText id="email" class="form-control" @bind-Value="registerRequest.Email"/>
+                <ValidationMessage For="@(() => registerRequest.Email)" />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <InputText id="password" type="password" class="form-control" @bind-Value="registerRequest.Password" />
+                <ValidationMessage For="@(() => registerRequest.Password)" />
+            </div>
+            <div class="form-group">
+                <label for="password">Confirm Password</label>
+                <InputText id="confirmPassword" type="password" class="form-control" @bind-Value="registerRequest.ConfirmPassword" />
+                <ValidationMessage For="@(() => registerRequest.ConfirmPassword)" />
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Register</button>
+        </EditForm>
+    </div>
 </div>
 
 @code {
-    User user = new User();
+    RegisterRequest registerRequest = new();
+    private bool showRegistrationError;
+    private string registrationErrorMessage = "";
 
-    public async Task RegisterUser()
+    public async Task HandleRegistration()
     {
-        await registerService.RegisterUserAsync(user);
-        navigationManager.NavigateTo("/vehicles");
+        showRegistrationError = false;
+
+        var result = await authService.RegisterAsync(registerRequest);
+
+        if (result.Successful)
+        {
+            this.navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            registrationErrorMessage = "Something went wrong. Try again.";
+            showRegistrationError = true;
+        }
     }
 }

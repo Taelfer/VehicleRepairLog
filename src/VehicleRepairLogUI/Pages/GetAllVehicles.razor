@@ -41,11 +41,11 @@ else
     private IEnumerable<Vehicle> vehicles;
 
     [CascadingParameter]
-    public Task<AuthenticationState> authenticationState { get; set; }
+    public Task<AuthenticationState> AuthState { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await authenticationState;
+        var authState = await AuthState;
 
         if (authState.User.Identity.IsAuthenticated)
         {

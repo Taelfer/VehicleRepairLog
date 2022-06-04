@@ -1,7 +1,8 @@
 ﻿namespace VehicleRepairLogUI.Models
 {
-    public class AuthenticationResponse
+    public class LoginResult
     {
         public string Token { get; set; }
+        public bool Successful { get; set; }
     }
 }
