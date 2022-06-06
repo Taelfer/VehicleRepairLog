@@ -19,15 +19,15 @@ namespace VehicleRepairLog.Application.Features.Users
 
     public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCommand, LoginResultDto>
     {
-        private readonly IPasswordHasher<User> passwordHasher;
-        private readonly IJwtAuth jwtAuth;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IJwtAuth _jwtAuth;
+        private readonly VehicleProfileStorageContext _context;
 
         public AuthenticateUserCommandHandler(IPasswordHasher<User> passwordHasher, IJwtAuth jwtAuth, VehicleProfileStorageContext context)
         {
-            this.passwordHasher = passwordHasher;
-            this.jwtAuth = jwtAuth;
-            this.context = context;
+            _passwordHasher = passwordHasher;
+            _jwtAuth = jwtAuth;
+            _context = context;
         }
 
         public async Task<LoginResultDto> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
@@ -36,7 +36,7 @@ namespace VehicleRepairLog.Application.Features.Users
 
             if(request.Email is not null)
             {
-                user = await this.context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
+                user = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
             }
 
             if (user is null)
@@ -44,7 +44,7 @@ namespace VehicleRepairLog.Application.Features.Users
                 throw new NotAuthenticatedException("User with such username and password does not exist.");
             }
 
-            var verifiedPassword = this.passwordHasher
+            PasswordVerificationResult verifiedPassword = _passwordHasher
                 .VerifyHashedPassword(user, user.Password, request.Password);
 
             if (verifiedPassword == PasswordVerificationResult.Failed)
@@ -52,7 +52,7 @@ namespace VehicleRepairLog.Application.Features.Users
                 throw new NotAuthenticatedException("Wrong username or password. Try again.");
             }
 
-            string token = jwtAuth.GenerateToken(user);
+            string token = _jwtAuth.GenerateToken(user);
 
             if (token is null)
             {

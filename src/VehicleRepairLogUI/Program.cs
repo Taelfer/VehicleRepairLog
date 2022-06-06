@@ -17,7 +17,7 @@ namespace VehicleRepairLogUI
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            //Adding DI configuration for HttpClient implementation
+            // Adding DI configuration for HttpClient implementation.
             builder.Services
                 .AddScoped<IVehicleService, VehicleService>()
                 .AddScoped<IAuthenticationService, AuthenticationService>();
@@ -28,7 +28,7 @@ namespace VehicleRepairLogUI
 
             builder.Services.AddBlazoredLocalStorage();
 
-            //Creating 'typed' HttpClient instance for Services
+            // Creating 'typed' HttpClient instance for Services.
             builder.Services.AddHttpClient<IVehicleService, VehicleService>();
             builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>();
             builder.Services.AddHttpClient<CustomAuthenticationStateProvider>(httpClient =>
@@ -36,7 +36,7 @@ namespace VehicleRepairLogUI
                 httpClient.BaseAddress = new Uri(builder.Configuration["ApiUri"]);
             });
 
-            ////Example of 'named' HttpClient instance
+            //// Example of 'named' HttpClient instance.
             //builder.Services.AddHttpClient("MyWebApi", httpClient =>
             //{
             //    httpClient.BaseAddress = new Uri(builder.Configuration["ApiUri"]);

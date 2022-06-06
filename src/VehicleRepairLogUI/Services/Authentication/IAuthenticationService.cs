@@ -7,5 +7,6 @@ namespace VehicleRepairLogUI.Services.Authentication
         Task<RegisterResult> RegisterAsync(RegisterRequest registerRequest);
         Task<LoginResult> LoginAsync(LoginRequest loginRequest);
         Task LogoutAsync();
+        Task<LoginResult> ValidateJwt(string token);
     }
 }

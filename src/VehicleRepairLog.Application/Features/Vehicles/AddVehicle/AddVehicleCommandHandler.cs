@@ -20,23 +20,23 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 
     public class AddVehicleCommandHandler : IRequestHandler<AddVehicleCommand, VehicleDto>
     {
-        private readonly IMapper mapper;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IMapper _mapper;
+        private readonly VehicleProfileStorageContext _context;
 
         public AddVehicleCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
-            this.mapper = mapper;
-            this.context = context;
+            _mapper = mapper;
+            _context = context;
         }
 
         public async Task<VehicleDto> Handle(AddVehicleCommand request, CancellationToken cancellationToken)
         {
-            var vehicle = this.mapper.Map<Vehicle>(request);
+            var vehicle = _mapper.Map<Vehicle>(request);
 
-            this.context.Add(vehicle);
-            await this.context.SaveChangesAsync();
+            _context.Add(vehicle);
+            await _context.SaveChangesAsync();
 
-            return this.mapper.Map<VehicleDto>(vehicle);
+            return _mapper.Map<VehicleDto>(vehicle);
         }
     }
 }

@@ -11,20 +11,20 @@ namespace VehicleRepairLog.Application.Authentication
 {
     public class JwtAuth : IJwtAuth
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
 
         public JwtAuth(IConfiguration configuration)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
         }
 
         public string GenerateToken(User user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["Jwt:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var jwtExpire = DateTime.Now.AddDays(Convert.ToInt32(this.configuration["ExpiresInDays"]));
+            var jwtExpire = DateTime.Now.AddDays(Convert.ToInt32(_configuration["ExpiresInDays"]));
 
-            var claims = new List<Claim>()
+            List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
@@ -32,8 +32,8 @@ namespace VehicleRepairLog.Application.Authentication
                 new Claim(ClaimTypes.Role, user.Role.ToString()),
             };
 
-            var token = new JwtSecurityToken(configuration["Jwt:Issuer"],
-                configuration["Jwt:Audience"],
+            var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
+                _configuration["Jwt:Audience"],
                 claims,
                 expires: jwtExpire,
                 signingCredentials: credentials);

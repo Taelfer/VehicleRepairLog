@@ -7,16 +7,16 @@ namespace VehicleRepairLog.Application.Authentication
 {
     public class UserService : IUserService
     {
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserService(IHttpContextAccessor httpContextAccessor)
         {
-            this.httpContextAccessor = httpContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public UserDto GetCurrentUser()
         {
-            var identity = httpContextAccessor.HttpContext.User as ClaimsPrincipal;
+            ClaimsPrincipal identity = _httpContextAccessor.HttpContext.User;
 
             if (identity is not null)
             {

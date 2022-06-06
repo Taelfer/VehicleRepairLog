@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Repairs;
+using VehicleRepairLog.Application.Models;
 
 namespace VehicleRepairLog.API.Controllers
 {
@@ -9,37 +11,37 @@ namespace VehicleRepairLog.API.Controllers
     [ApiController]
     public class RepairsController : ControllerBase
     {
-        private readonly IMediator mediator;
+        private readonly IMediator _mediator;
 
         public RepairsController(IMediator mediator)
         {
-            this.mediator = mediator;
+            _mediator = mediator;
         }
 
         [HttpPost]
         public async Task<IActionResult> AddRepair([FromBody] AddRepairCommand command)
         {
-            await this.mediator.Send(command);
+            await _mediator.Send(command);
             return NoContent();
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllRepairs([FromQuery] GetAllRepairsQuery query)
         {
-            var response = await this.mediator.Send(query);
-            return this.Ok(response);
+            List<RepairDto> response = await _mediator.Send(query);
+            return Ok(response);
         }
 
         [HttpGet("{repairId}")]
         public async Task<IActionResult> GetRepairById([FromRoute] int repairId)
         {
-            var query = new GetRepairByIdQuery()
+            GetRepairByIdQuery query = new()
             {
                 RepairId = repairId
             };
 
-            var response = await this.mediator.Send(query);
-            return this.Ok(response);
+            RepairDto response = await _mediator.Send(query);
+            return Ok(response);
         }
 
         [HttpPut("{repairId}")]
@@ -47,19 +49,19 @@ namespace VehicleRepairLog.API.Controllers
         {
             command.RepairId = repairId;
 
-            var response = await this.mediator.Send(command);
-            return this.Ok(response);
+            RepairDto response = await _mediator.Send(command);
+            return Ok(response);
         }
 
         [HttpDelete("{repairId}")]
         public async Task<IActionResult> DeleteRepair([FromRoute] int repairId)
         {
-            var command = new DeleteRepairCommand()
+            DeleteRepairCommand command = new()
             {
                 RepairId = repairId
             };
 
-            await this.mediator.Send(command);
+            await _mediator.Send(command);
             return NoContent();
         }
     }

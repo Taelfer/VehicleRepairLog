@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Infrastructure.Entities;
 using VehicleRepairLog.Infrastructure.Repositories;
 
 namespace VehicleRepairLog.Application.Features.Parts
@@ -18,29 +19,29 @@ namespace VehicleRepairLog.Application.Features.Parts
 
     public class UpdatePartCommandHandler : IRequestHandler<UpdatePartCommand, PartDto>
     {
-        private readonly IMapper mapper;
-        private readonly IPartRepository partRepository;
+        private readonly IMapper _mapper;
+        private readonly IPartRepository _partRepository;
 
         public UpdatePartCommandHandler(IMapper mapper, IPartRepository partRepository)
         {
-            this.mapper = mapper;
-            this.partRepository = partRepository;
+            _mapper = mapper;
+            _partRepository = partRepository;
         }
 
         public async Task<PartDto> Handle(UpdatePartCommand request, CancellationToken cancellationToken)
         {
-            var part = await this.partRepository.GetByIdAsync(request.PartId);
+            Part part = await _partRepository.GetByIdAsync(request.PartId);
 
             if (part is null)
             {
                 throw new NotFoundException("Part not found.");
             }
 
-            this.mapper.Map(request, part);
+            _mapper.Map(request, part);
 
-            await this.partRepository.UpdateAsync(part);
+            await _partRepository.UpdateAsync(part);
 
-            return this.mapper.Map<PartDto>(part);
+            return _mapper.Map<PartDto>(part);
         }
     }
 }

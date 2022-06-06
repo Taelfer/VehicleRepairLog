@@ -10,20 +10,20 @@ namespace VehicleRepairLog.Application.MappingProfiles
         public PartProfile()
         {
             CreateMap<Part, PartDto>()
-                .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
-                .ForMember(x => x.Name, y => y.MapFrom(z => z.Name))
-                .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
-                .ForMember(x => x.Price, y => y.MapFrom(z => z.Price));
+                .ForMember(partDto => partDto.Id, y => y.MapFrom(part => part.Id))
+                .ForMember(partDto => partDto.Name, y => y.MapFrom(part => part.Name))
+                .ForMember(partDto => partDto.BrandName, y => y.MapFrom(part => part.BrandName))
+                .ForMember(partDto => partDto.Price, y => y.MapFrom(part => part.Price));
 
             CreateMap<AddPartCommand, Part>()
-                .ForMember(x => x.Name, y => y.MapFrom(z => z.Name))
-                .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
-                .ForMember(x => x.Price, y => y.MapFrom(z => z.Price));
+                .ForMember(part => part.Name, y => y.MapFrom(addPartCommand => addPartCommand.Name))
+                .ForMember(part => part.BrandName, y => y.MapFrom(addPartCommand => addPartCommand.BrandName))
+                .ForMember(part => part.Price, y => y.MapFrom(addPartCommand => addPartCommand.Price));
 
             CreateMap<UpdatePartCommand, Part>()
-                .ForMember(x => x.Name, y => y.MapFrom(z => z.Name))
-                .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
-                .ForMember(x => x.Price, y => y.MapFrom(z => z.Price));
+                .ForMember(part => part.Name, y => y.MapFrom(updatePartCommand => updatePartCommand.Name))
+                .ForMember(part => part.BrandName, y => y.MapFrom(updatePartCommand => updatePartCommand.BrandName))
+                .ForMember(part => part.Price, y => y.MapFrom(updatePartCommand => updatePartCommand.Price));
         }
     }
 }

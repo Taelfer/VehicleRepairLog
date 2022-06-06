@@ -13,28 +13,30 @@ namespace VehicleRepairLog.Application.MappingProfiles
         {
             CreateMap<Vehicle, VehicleDto>()
                 .ForMember(vehicleDto => vehicleDto.Id, y => y.MapFrom(vehicle => vehicle.Id))
-                .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
-                .ForMember(x => x.VinNumber, y => y.MapFrom(z => z.VinNumber))
-                .ForMember(x => x.PaintColor, y => y.MapFrom(z => z.PaintColor))
-                .ForMember(x => x.FuelType, y => y.MapFrom(z => z.FuelType))
-                .ForMember(x => x.Mileage, y => y.MapFrom(z => z.Mileage))
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserId))
-                .ForMember(x => x.RepairDescriptions, y => y.MapFrom(z => z.Repairs != null ? z.Repairs.Select(x => x.Description) : new List<string>()));
+                .ForMember(vehicleDto => vehicleDto.BrandName, y => y.MapFrom(vehicle => vehicle.BrandName))
+                .ForMember(vehicleDto => vehicleDto.VinNumber, y => y.MapFrom(vehicle => vehicle.VinNumber))
+                .ForMember(vehicleDto => vehicleDto.PaintColor, y => y.MapFrom(vehicle => vehicle.PaintColor))
+                .ForMember(vehicleDto => vehicleDto.FuelType, y => y.MapFrom(vehicle => vehicle.FuelType))
+                .ForMember(vehicleDto => vehicleDto.Mileage, y => y.MapFrom(vehicle => vehicle.Mileage))
+                .ForMember(vehicleDto => vehicleDto.UserId, y => y.MapFrom(vehicle => vehicle.UserId))
+                .ForMember(vehicleDto => vehicleDto.RepairDescriptions, 
+                                            y => y.MapFrom(vehicle => vehicle.Repairs != null ? 
+                                                vehicle.Repairs.Select(repair => repair.Description) : new List<string>()));
 
             CreateMap<AddVehicleCommand, Vehicle>()
-                .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
-                .ForMember(x => x.VinNumber, y => y.MapFrom(z => z.VinNumber))
-                .ForMember(x => x.PaintColor, y => y.MapFrom(z => z.PaintColor))
-                .ForMember(x => x.FuelType, y => y.MapFrom(z => z.FuelType))
-                .ForMember(x => x.Mileage, y => y.MapFrom(z => z.Mileage))
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserId));
+                .ForMember(vehicle => vehicle.BrandName, y => y.MapFrom(addVehicleCommand => addVehicleCommand.BrandName))
+                .ForMember(vehicle => vehicle.VinNumber, y => y.MapFrom(addVehicleCommand => addVehicleCommand.VinNumber))
+                .ForMember(vehicle => vehicle.PaintColor, y => y.MapFrom(addVehicleCommand => addVehicleCommand.PaintColor))
+                .ForMember(vehicle => vehicle.FuelType, y => y.MapFrom(addVehicleCommand => addVehicleCommand.FuelType))
+                .ForMember(vehicle => vehicle.Mileage, y => y.MapFrom(addVehicleCommand => addVehicleCommand.Mileage))
+                .ForMember(vehicle => vehicle.UserId, y => y.MapFrom(addVehicleCommand => addVehicleCommand.UserId));
 
             CreateMap<UpdateVehicleCommand, Vehicle>()
-                .ForMember(x => x.BrandName, y => y.MapFrom(z => z.BrandName))
-                .ForMember(x => x.VinNumber, y => y.MapFrom(z => z.VinNumber))
-                .ForMember(x => x.PaintColor, y => y.MapFrom(z => z.PaintColor))
-                .ForMember(x => x.FuelType, y => y.MapFrom(z => z.FuelType))
-                .ForMember(x => x.Mileage, y => y.MapFrom(z => z.Mileage));
+                .ForMember(vehicle => vehicle.BrandName, y => y.MapFrom(updateVehicleCommand => updateVehicleCommand.BrandName))
+                .ForMember(vehicle => vehicle.VinNumber, y => y.MapFrom(updateVehicleCommand => updateVehicleCommand.VinNumber))
+                .ForMember(vehicle => vehicle.PaintColor, y => y.MapFrom(updateVehicleCommand => updateVehicleCommand.PaintColor))
+                .ForMember(vehicle => vehicle.FuelType, y => y.MapFrom(updateVehicleCommand => updateVehicleCommand.FuelType))
+                .ForMember(vehicle => vehicle.Mileage, y => y.MapFrom(updateVehicleCommand => updateVehicleCommand.Mileage));
         }
     }
 }

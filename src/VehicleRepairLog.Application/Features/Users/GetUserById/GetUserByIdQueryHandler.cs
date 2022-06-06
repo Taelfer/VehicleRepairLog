@@ -18,25 +18,25 @@ namespace VehicleRepairLog.Application.Features.Users
 
     public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
     {
-        private readonly IMapper mapper;
-        private readonly IUserService userService;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IMapper _mapper;
+        private readonly IUserService _userService;
+        private readonly VehicleProfileStorageContext _context;
 
         public GetUserByIdQueryHandler(IMapper mapper, IUserService userService, VehicleProfileStorageContext context)
         {
-            this.mapper = mapper;
-            this.userService = userService;
-            this.context = context;
+            _mapper = mapper;
+            _userService = userService;
+            _context = context;
         }
 
         public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            var claim = userService.GetCurrentUser();
+            UserDto claim = _userService.GetCurrentUser();
             User user = null;
 
             if (claim.Role == "Admin" || claim.Role == "User")
             {
-                user = await this.context.Users.FirstOrDefaultAsync(x => x.Id == request.UserId);
+                user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.UserId);
             }
             else
             {
@@ -48,7 +48,7 @@ namespace VehicleRepairLog.Application.Features.Users
                 throw new NotFoundException("User not found.");
             }
 
-            return this.mapper.Map<UserDto>(user);
+            return _mapper.Map<UserDto>(user);
         }
     }
 }

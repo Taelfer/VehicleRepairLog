@@ -2,7 +2,6 @@
 
 @inject IAuthenticationService authenticationService
 @inject NavigationManager navigationManager
-@inject ILocalStorageService localStorageService
 
 <h2>Login</h2>
 
@@ -28,7 +27,7 @@
                 <InputText id="password" type="password" class="form-control" @bind-Value="loginRequest.Password" />
                 <ValidationMessage For="@(() => loginRequest.Password)" />
             </div>
-            <button type="submit" class="btn btn-primary mt-2">Login</button>
+            <button type="submit" class="btn btn-success mt-2">Login</button>
         </EditForm>
     </div>
 </div>

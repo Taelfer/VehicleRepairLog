@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.Features.Vehicles
 {
@@ -16,30 +17,30 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 
     public class GetAllVehiclesQueryHandler : IRequestHandler<GetAllVehiclesQuery, List<VehicleDto>>
     {
-        private readonly IMapper mapper;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IMapper _mapper;
+        private readonly VehicleProfileStorageContext _context;
 
         public GetAllVehiclesQueryHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
-            this.mapper = mapper;
-            this.context = context;
+            _mapper = mapper;
+            _context = context;
         }
 
         public async Task<List<VehicleDto>> Handle(GetAllVehiclesQuery request, CancellationToken cancellationToken)
         {
-            //if (cancellationToken != null)
+            //if (cancellationToken is null)
             //{
             //    throw new TaskCanceledException("Task canceled");
             //}
 
-            var vehicles = await this.context.Vehicles.ToListAsync(cancellationToken);
+            List<Vehicle> vehicles = await _context.Vehicles.ToListAsync(cancellationToken);
 
             if (vehicles is null)
             {
                 throw new NotFoundException("Vehicles not found.");
             }
 
-            return this.mapper.Map<List<VehicleDto>>(vehicles);
+            return _mapper.Map<List<VehicleDto>>(vehicles);
         }
     }
 }

@@ -18,25 +18,25 @@ namespace VehicleRepairLog.Application.Features.Parts
 
     public class GetAllPartsQueryHandler : IRequestHandler<GetAllPartsQuery, List<PartDto>>
     {
-        private readonly IMapper mapper;
-        private readonly IUserService userClaims;
-        private readonly IPartRepository partRepository;
+        private readonly IMapper _mapper;
+        private readonly IUserService _userClaims;
+        private readonly IPartRepository _partRepository;
 
         public GetAllPartsQueryHandler(IMapper mapper, IUserService userClaims, IPartRepository partRepository)
         {
-            this.mapper = mapper;
-            this.userClaims = userClaims;
-            this.partRepository = partRepository;
+            _mapper = mapper;
+            _userClaims = userClaims;
+            _partRepository = partRepository;
         }
 
         public async Task<List<PartDto>> Handle(GetAllPartsQuery request, CancellationToken cancellationToken)
         {
-            var claims = userClaims.GetCurrentUser();
+            UserDto claims = _userClaims.GetCurrentUser();
             List<Part> parts = null;
 
             if (claims.Role == "Admin")
             {
-                parts = await this.partRepository.GetAllAsync();
+                parts = await _partRepository.GetAllAsync();
             }
             else
             {
@@ -48,7 +48,7 @@ namespace VehicleRepairLog.Application.Features.Parts
                 throw new NotFoundException("Parts not found.");
             }
 
-            return this.mapper.Map<List<PartDto>>(parts);
+            return _mapper.Map<List<PartDto>>(parts);
         }
     }
 }

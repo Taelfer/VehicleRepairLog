@@ -8,18 +8,18 @@ namespace VehicleRepairLog.Application.Features.Users
     {
         public RegisterUserCommandValidator(VehicleProfileStorageContext dbContext)
         {
-            RuleFor(x => x.Email).EmailAddress().NotEmpty();
+            RuleFor(user => user.Email).EmailAddress().NotEmpty();
 
-            RuleFor(x => x.Password).NotEmpty().MinimumLength(8).MaximumLength(100);
+            RuleFor(user => user.Password).NotEmpty().MinimumLength(8).MaximumLength(100);
 
-            RuleFor(x => x.ConfirmPassword).Equal(e => e.Password);
+            RuleFor(user => user.ConfirmPassword).Equal(e => e.Password);
 
-            RuleFor(x => x.Username).MaximumLength(100).NotEmpty();
+            RuleFor(user => user.Username).MaximumLength(100).NotEmpty();
 
-            RuleFor(x => x.Email)
+            RuleFor(user => user.Email)
                 .Custom((value, context) =>
                 {
-                    var emailInUse = dbContext.Users.Any(x => x.Email == value);
+                    bool emailInUse = dbContext.Users.Any(x => x.Email == value);
 
                     if (emailInUse)
                     {
@@ -27,10 +27,10 @@ namespace VehicleRepairLog.Application.Features.Users
                     }
                 });
 
-            RuleFor(x => x.Username)
+            RuleFor(user => user.Username)
                 .Custom((value, context) =>
                 {
-                    var usernameInUse = dbContext.Users.Any(x => x.Username == value);
+                    bool usernameInUse = dbContext.Users.Any(x => x.Username == value);
 
                     if (usernameInUse)
                     {

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Infrastructure.Entities;
 using VehicleRepairLog.Infrastructure.Repositories;
 
 namespace VehicleRepairLog.Application.Features.Repairs
@@ -20,29 +21,29 @@ namespace VehicleRepairLog.Application.Features.Repairs
 
     public class UpdateRepairCommandHandler : IRequestHandler<UpdateRepairCommand, RepairDto>
     {
-        private readonly IMapper mapper;
-        private readonly IRepairRepository repairRepository;
+        private readonly IMapper _mapper;
+        private readonly IRepairRepository _repairRepository;
 
         public UpdateRepairCommandHandler(IMapper mapper, IRepairRepository repairRepository)
         {
-            this.mapper = mapper;
-            this.repairRepository = repairRepository;
+            _mapper = mapper;
+            _repairRepository = repairRepository;
         }
 
         public async Task<RepairDto> Handle(UpdateRepairCommand request, CancellationToken cancellationToken)
         {
-            var repair = await this.repairRepository.GetByIdAsync(request.RepairId);
+            Repair repair = await _repairRepository.GetByIdAsync(request.RepairId);
 
             if (repair is null)
             {
                 throw new NotFoundException("Repair not found.");
             }
 
-            var updatedRepair = this.mapper.Map(request, repair);
+            Repair updatedRepair = _mapper.Map(request, repair);
 
-            await this.repairRepository.UpdateAsync(repair);
+            await _repairRepository.UpdateAsync(repair);
 
-            return this.mapper.Map<RepairDto>(updatedRepair);
+            return _mapper.Map<RepairDto>(updatedRepair);
         }
     }
 }

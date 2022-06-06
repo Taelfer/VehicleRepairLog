@@ -7,42 +7,44 @@ namespace VehicleRepairLogUI.Services.Authentication
 {
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
-        private readonly HttpClient httpClient;
-        private readonly ILocalStorageService localStorageService;
-        private readonly AuthenticationState anonymous;
+        private readonly HttpClient _httpClient;
+        private readonly ILocalStorageService _localStorage;
+        private readonly AuthenticationState _anonymous;
 
-        public CustomAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorageService)
+        public CustomAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
         {
-            this.httpClient = httpClient;
-            this.localStorageService = localStorageService;
-            this.anonymous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            _httpClient = httpClient;
+            _localStorage = localStorage;
+            _anonymous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var savedToken = await this.localStorageService.GetItemAsync<string>("authToken");
+            string savedToken = await _localStorage.GetItemAsync<string>("authToken");
 
             if (string.IsNullOrWhiteSpace(savedToken))
             {
-                return this.anonymous;
+                // Returns null value if auth token is empty.
+                return _anonymous;
             }
 
-            this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
+            // Returns user AuthenticationState with claims parsed from authentication token taken from local storage.
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(savedToken), "jwtAuthType")));
         }
 
         public void NotifyUserIsAuthenticated(string token)
         {
-            var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType"));
-            var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+            ClaimsPrincipal authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType"));
+            Task<AuthenticationState> authState = Task.FromResult(new AuthenticationState(authenticatedUser));
 
             NotifyAuthenticationStateChanged(authState);
         }
 
         public void NotifyUserLogout()
         {
-            var authState = Task.FromResult(this.anonymous);
+            Task<AuthenticationState> authState = Task.FromResult(_anonymous);
             NotifyAuthenticationStateChanged(authState);
         }
     }

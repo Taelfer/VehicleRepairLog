@@ -17,22 +17,22 @@ namespace VehicleRepairLog.Application.Features.Parts
 
     public class AddPartCommandHandler : IRequestHandler<AddPartCommand, PartDto>
     {
-        private readonly IMapper mapper;
-        private readonly IPartRepository partRepository;
+        private readonly IMapper _mapper;
+        private readonly IPartRepository _partRepository;
 
         public AddPartCommandHandler(IMapper mapper, IPartRepository partRepository)
         {
-            this.mapper = mapper;
-            this.partRepository = partRepository;
+            _mapper = mapper;
+            _partRepository = partRepository;
         }
 
         public async Task<PartDto> Handle(AddPartCommand request, CancellationToken cancellationToken)
         {
-            var part = this.mapper.Map<Part>(request);
+            var part = _mapper.Map<Part>(request);
 
-            await this.partRepository.AddAsync(part);
+            await _partRepository.AddAsync(part);
 
-            return this.mapper.Map<PartDto>(part);
+            return _mapper.Map<PartDto>(part);
         }
     }
 }

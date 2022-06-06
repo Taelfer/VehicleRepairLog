@@ -10,13 +10,13 @@ namespace VehicleRepairLogUI.Services
 {
     public class VehicleService : IVehicleService
     {
-        private readonly HttpClient httpClient;
-        private readonly ILocalStorageService localStorageService;
+        private readonly HttpClient _httpClient;
+        private readonly ILocalStorageService _localStorage;
 
-        public VehicleService(HttpClient httpClient, IConfiguration configuration, ILocalStorageService localStorageService)
+        public VehicleService(HttpClient httpClient, IConfiguration configuration, ILocalStorageService localStorage)
         {
-            this.httpClient = httpClient;
-            this.localStorageService = localStorageService;
+            _httpClient = httpClient;
+            _localStorage = localStorage;
             httpClient.BaseAddress = new Uri(configuration["ApiUri"]);
         }
 
@@ -24,26 +24,27 @@ namespace VehicleRepairLogUI.Services
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "/api/Vehicles");
             request.Content = new StringContent(JsonSerializer.Serialize(vehicle), Encoding.UTF8, Application.Json);
-            var response = await this.httpClient.SendAsync(request);
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
         }
 
         public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync()
         {
-            var token = await this.localStorageService.GetItemAsync<string>("authToken");
-            this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            // Getting authentication token from local storage and adding it to HTTP request authorization header as Bearer.
+            string token = await _localStorage.GetItemAsync<string>("authToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var request = await this.httpClient.GetAsync("/api/Vehicles");
+            HttpResponseMessage response = await _httpClient.GetAsync("/api/Vehicles");
 
-            if (request.IsSuccessStatusCode == false)
+            if (response.IsSuccessStatusCode == false)
             {
                 return null;
             }
 
-            var response = await request.Content.ReadFromJsonAsync<IEnumerable<Vehicle>>();
+            var vehicles = await response.Content.ReadFromJsonAsync<IEnumerable<Vehicle>>();
 
-            return response;
+            return vehicles;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.Features.Vehicles
 {
@@ -21,29 +22,29 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 
     public class UpdateVehicleCommandHandler : IRequestHandler<UpdateVehicleCommand, VehicleDto>
     {
-        private readonly IMapper mapper;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IMapper _mapper;
+        private readonly VehicleProfileStorageContext _context;
 
         public UpdateVehicleCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
-            this.mapper = mapper;
-            this.context = context;
+            _mapper = mapper;
+            _context = context;
         }
 
         public async Task<VehicleDto> Handle(UpdateVehicleCommand request, CancellationToken cancellationToken)
         {
-            var vehicle = await this.context.Vehicles.FirstOrDefaultAsync(x => x.Id == request.VehicleId);
+            Vehicle vehicle = await _context.Vehicles.FirstOrDefaultAsync(x => x.Id == request.VehicleId);
 
             if (vehicle is null)
             {
                 throw new NotFoundException("Vehicle not found.");
             }
 
-            var updatedVehicle = this.mapper.Map(request, vehicle);
-            this.context.Vehicles.Update(updatedVehicle);
-            await this.context.SaveChangesAsync();
+            Vehicle updatedVehicle = _mapper.Map(request, vehicle);
+            _context.Vehicles.Update(updatedVehicle);
+            await _context.SaveChangesAsync();
 
-            return this.mapper.Map<VehicleDto>(vehicle);
+            return _mapper.Map<VehicleDto>(vehicle);
         }
     }
 }

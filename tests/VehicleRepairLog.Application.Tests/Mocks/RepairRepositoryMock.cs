@@ -10,7 +10,7 @@ namespace VehicleRepairLog.Application.Tests.Mocks
     {
         public static Mock<IRepairRepository> RepositoryMock()
         {
-            var repairs = new List<Repair>()
+            List<Repair> repairs = new()
             {
                 new Repair()
                 {

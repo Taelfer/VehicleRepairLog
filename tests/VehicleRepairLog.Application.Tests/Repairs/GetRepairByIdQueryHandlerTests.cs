@@ -16,7 +16,7 @@ namespace VehicleRepairLog.Application.Tests.Repairs
 {
     public class GetRepairByIdQueryHandlerTests
     {
-        public readonly IMapper mapper;
+        public readonly IMapper _mapper;
 
         public GetRepairByIdQueryHandlerTests()
         {
@@ -25,32 +25,32 @@ namespace VehicleRepairLog.Application.Tests.Repairs
                 c.AddProfile<RepairProfile>();
             });
 
-            this.mapper = mapperConfig.CreateMapper();
+            _mapper = mapperConfig.CreateMapper();
         }
 
         [Fact]
         private async Task Handle_GivenNotExistingRepairId_ReturnsNotFoundException()
         {
-            //arrange
+            // arrange
             var repositoryMock = new Mock<IRepairRepository>();
             repositoryMock
                 .Setup(r => r.GetByIdAsync(1))
                 .ReturnsAsync(() => null);
 
-            var queryHandler = new GetRepairByIdQueryHandler(this.mapper, repositoryMock.Object);
+            var queryHandler = new GetRepairByIdQueryHandler(_mapper, repositoryMock.Object);
 
-            //act
+            // act
             Func<Task> result = async () => await queryHandler.Handle(new GetRepairByIdQuery() { RepairId = 1 }, CancellationToken.None);
 
-            //assert
+            // assert
             await result.Should().ThrowAsync<NotFoundException>();
         }
 
         [Fact]
         private async Task Handle_GivenExistingRepairId_ReturnsCorrectRepairDto()
         {
-            //arrange
-            Repair repair = new Repair()
+            // arrange
+            Repair repair = new()
             {
                 Id = 1, 
                 Date = new DateTime(2022, 4, 9), 
@@ -62,12 +62,12 @@ namespace VehicleRepairLog.Application.Tests.Repairs
                 .Setup(r => r.GetByIdAsync(repair.Id))
                 .ReturnsAsync(repair);
 
-            var queryHandler = new GetRepairByIdQueryHandler(this.mapper, repositoryMock.Object);
+            var queryHandler = new GetRepairByIdQueryHandler(_mapper, repositoryMock.Object);
 
-            //act
-            var result = await queryHandler.Handle(new GetRepairByIdQuery() { RepairId = repair.Id }, CancellationToken.None);
+            // act
+            RepairDto result = await queryHandler.Handle(new GetRepairByIdQuery() { RepairId = repair.Id }, CancellationToken.None);
 
-            //assert
+            // assert
             result.Should().NotBeNull();
             result.Id.Should().Be(repair.Id);
             result.Date.Should().Be(repair.Date);

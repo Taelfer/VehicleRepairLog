@@ -17,19 +17,19 @@ namespace VehicleRepairLog.Application.Tests.Repairs
 {
     public class AddRepairCommandHandlerTests
     {
-        private readonly IMapper mapper;
-        private readonly Mock<IRepairRepository> repoMock;
+        private readonly IMapper _mapper;
+        private readonly Mock<IRepairRepository> _repoMock;
 
         public AddRepairCommandHandlerTests()
         {
-            repoMock = RepairRepositoryMock.RepositoryMock(); 
+            _repoMock = RepairRepositoryMock.RepositoryMock(); 
 
             var mapperConfig = new MapperConfiguration(c =>
             {
                 c.AddProfile<RepairProfile>();
             });
 
-            mapper = mapperConfig.CreateMapper();
+            _mapper = mapperConfig.CreateMapper();
 
             
         }

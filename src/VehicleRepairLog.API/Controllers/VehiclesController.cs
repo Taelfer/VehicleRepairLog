@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Vehicles;
+using VehicleRepairLog.Application.Models;
 
 namespace VehicleRepairLog.API.Controllers
 {
@@ -12,37 +14,37 @@ namespace VehicleRepairLog.API.Controllers
     [ApiController]
     public class VehiclesController : ControllerBase
     {
-        private readonly IMediator mediator;
+        private readonly IMediator _mediator;
 
         public VehiclesController(IMediator mediator)
         {
-            this.mediator = mediator;
+            _mediator = mediator;
         }
 
         [HttpPost]
         public async Task<IActionResult> AddVehicle([FromBody] AddVehicleCommand command)
         {
-            await this.mediator.Send(command);
+            await _mediator.Send(command);
             return NoContent();
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllVehicles([FromQuery] GetAllVehiclesQuery query, CancellationToken cancellationToken)
         {
-            var response = await this.mediator.Send(query, cancellationToken:cancellationToken);
-            return this.Ok(response);
+            List<VehicleDto> response = await _mediator.Send(query, cancellationToken);
+            return Ok(response);
         }
 
         [HttpGet("{vehicleId}")]
         public async Task<IActionResult> GetVehicleById([FromRoute] int vehicleId)
         {
-            var query = new GetVehicleByIdQuery()
+            GetVehicleByIdQuery query = new()
             {
                 VehicleId = vehicleId
             };
 
-            var response = await this.mediator.Send(query);
-            return this.Ok(response);
+            VehicleDto response = await _mediator.Send(query);
+            return Ok(response);
         }
 
         [HttpPut("{vehicleId}")]
@@ -50,19 +52,19 @@ namespace VehicleRepairLog.API.Controllers
         {
             command.VehicleId = vehicleId;
 
-            var response = await this.mediator.Send(command);
-            return this.Ok(response);
+            VehicleDto response = await _mediator.Send(command);
+            return Ok(response);
         }
 
         [HttpDelete("{vehicleId}")]
         public async Task<IActionResult> DeleteVehicle([FromRoute] int vehicleId)
         {
-            var command = new DeleteVehicleCommand()
+            DeleteVehicleCommand command = new()
             {
                 VehicleId = vehicleId
             };
 
-            await this.mediator.Send(command);
+            await _mediator.Send(command);
             return NoContent();
         }
     }

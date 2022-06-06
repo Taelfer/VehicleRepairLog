@@ -19,26 +19,26 @@ namespace VehicleRepairLog.Application.Features.Users
 
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, RegisterResultDto>
     {
-        private readonly IMapper mapper;
-        private readonly IPasswordHasher<User> passwordHasher;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IMapper _mapper;
+        private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly VehicleProfileStorageContext _context;
 
         public RegisterUserCommandHandler(IMapper mapper, IPasswordHasher<User> passwordHasher, VehicleProfileStorageContext context)
         {
-            this.mapper = mapper;
-            this.passwordHasher = passwordHasher;
-            this.context = context;
+            _mapper = mapper;
+            _passwordHasher = passwordHasher;
+            _context = context;
         }
 
         public async Task<RegisterResultDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            var user = this.mapper.Map<User>(request);
+            var user = _mapper.Map<User>(request);
 
-            var hashedPassword = this.passwordHasher.HashPassword(user, request.Password);
+            string hashedPassword = _passwordHasher.HashPassword(user, request.Password);
             user.Password = hashedPassword;
 
-            this.context.Users.Add(user);
-            await this.context.SaveChangesAsync();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
             return new RegisterResultDto
             {

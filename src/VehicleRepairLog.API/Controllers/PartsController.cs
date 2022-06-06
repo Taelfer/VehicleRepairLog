@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Parts;
+using VehicleRepairLog.Application.Models;
 
 namespace VehicleRepairLog.API.Controllers
 {
@@ -11,37 +13,37 @@ namespace VehicleRepairLog.API.Controllers
     [ApiController]
     public class PartsController : ControllerBase
     {
-        private readonly IMediator mediator;
+        private readonly IMediator _mediator;
 
         public PartsController(IMediator mediator)
         {
-            this.mediator = mediator;
+            _mediator = mediator;
         }
 
         [HttpPost]
         public async Task<IActionResult> AddPart([FromBody] AddPartCommand command)
         {
-            await this.mediator.Send(command);
+            await _mediator.Send(command);
             return NoContent();
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllParts([FromQuery] GetAllPartsQuery query)
         {
-            var response = await this.mediator.Send(query);
-            return this.Ok(response);
+            List<PartDto> response = await _mediator.Send(query);
+            return Ok(response);
         }
 
         [HttpGet("{partId}")]
         public async Task<IActionResult> GetPartById([FromRoute] int partId)
         {
-            var query = new GetPartByIdQuery()
+            GetPartByIdQuery query = new()
             {
                 PartId = partId
             };
 
-            var response = await this.mediator.Send(query);
-            return this.Ok(response);
+            PartDto response = await _mediator.Send(query);
+            return Ok(response);
         }
 
         [HttpPut("{partId}")]
@@ -49,19 +51,19 @@ namespace VehicleRepairLog.API.Controllers
         {
             command.PartId = partId;
 
-            var response = await this.mediator.Send(command);
-            return this.Ok(response);
+            PartDto response = await _mediator.Send(command);
+            return Ok(response);
         }
 
         [HttpDelete("{partId}")]
         public async Task<IActionResult> DeletePart([FromRoute] int partId)
         {
-            var command = new DeletePartCommand()
+            DeletePartCommand command = new()
             {
                 PartId = partId
             };
 
-            await this.mediator.Send(command);
+            await _mediator.Send(command);
             return NoContent();
         }
     }

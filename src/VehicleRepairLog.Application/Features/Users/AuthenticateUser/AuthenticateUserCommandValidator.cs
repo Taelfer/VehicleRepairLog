@@ -8,7 +8,7 @@ namespace VehicleRepairLog.Application.Features.Users
         {
             //RuleFor(x => x.Username).NotEmpty();
 
-            RuleFor(x => x.Password).NotEmpty();
+            RuleFor(user => user.Password).NotEmpty();
         }
     }
 }

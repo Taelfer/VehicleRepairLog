@@ -7,9 +7,9 @@ namespace VehicleRepairLogUI.Services.Authentication
     {
         public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
-            var claims = new List<Claim>();
-            var payload = jwt.Split('.')[1];
-            var jsonBytes = ParseBase64WithoutPadding(payload);
+            List<Claim> claims = new();
+            string payload = jwt.Split('.')[1];
+            byte[] jsonBytes = ParseBase64WithoutPadding(payload);
             var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
 
             ExtractRolesFromJwt(claims, keyValuePairs);
@@ -25,11 +25,11 @@ namespace VehicleRepairLogUI.Services.Authentication
 
             if (roles is not null)
             {
-                var parsedRoles = roles.ToString().Trim().TrimStart('[').TrimEnd(']').Split(',');
+                string[] parsedRoles = roles.ToString().Trim().TrimStart('[').TrimEnd(']').Split(',');
 
                 if (parsedRoles.Length > 1)
                 {
-                    foreach (var parsedRole in parsedRoles)
+                    foreach (string parsedRole in parsedRoles)
                     {
                         claims.Add(new Claim(ClaimTypes.Role, parsedRole.Trim('"')));
                     }

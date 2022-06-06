@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Infrastructure;
+using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.Features.Vehicles
 {
@@ -16,18 +17,18 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 
     public class GetVehicleByIdQueryHandler : IRequestHandler<GetVehicleByIdQuery, VehicleDto>
     {
-        private readonly IMapper mapper;
-        private readonly VehicleProfileStorageContext context;
+        private readonly IMapper _mapper;
+        private readonly VehicleProfileStorageContext _context;
 
         public GetVehicleByIdQueryHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
-            this.mapper = mapper;
-            this.context = context;
+            _mapper = mapper;
+            _context = context;
         }
 
         public async Task<VehicleDto> Handle(GetVehicleByIdQuery request, CancellationToken cancellationToken)
         {
-            var vehicle = await this.context.Vehicles
+            Vehicle vehicle = await _context.Vehicles
                             .Include(x => x.Repairs)
                             .FirstOrDefaultAsync(x => x.Id == request.VehicleId);
 
@@ -36,7 +37,7 @@ namespace VehicleRepairLog.Application.Features.Vehicles
                 throw new NotFoundException("Vehicle not found.");
             }
 
-            return this.mapper.Map<VehicleDto>(vehicle);
+            return _mapper.Map<VehicleDto>(vehicle);
         }
     }
 }
