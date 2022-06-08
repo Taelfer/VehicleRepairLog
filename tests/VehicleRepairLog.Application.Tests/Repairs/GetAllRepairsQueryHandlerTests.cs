@@ -61,7 +61,7 @@ namespace VehicleRepairLog.Application.Tests.Repairs
 
             var repositoryMock = new Mock<IRepairRepository>();
             repositoryMock
-                .Setup(x => x.GetAllAsync())
+                .Setup(repairRepo => repairRepo.GetAllAsync())
                 .ReturnsAsync(repairs);
 
             var queryHandler = new GetAllRepairsQueryHandler(_mapper, repositoryMock.Object);

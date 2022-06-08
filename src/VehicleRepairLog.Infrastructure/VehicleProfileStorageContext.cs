@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using VehicleRepairLog.Infrastructure.Configurations;
 using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Infrastructure
@@ -23,11 +24,10 @@ namespace VehicleRepairLog.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .Property(x => x.Role)
-                .HasConversion<string>()
-                .HasMaxLength(50)
-                .IsRequired();
+            new UserEntityConfiguration().Configure(modelBuilder.Entity<User>());
+            new VehicleEntityConfiguration().Configure(modelBuilder.Entity<Vehicle>());
+            new RepairEntityConfiguration().Configure(modelBuilder.Entity<Repair>());
+            new PartEntityConfiguration().Configure(modelBuilder.Entity<Part>());
         }
     }
 }

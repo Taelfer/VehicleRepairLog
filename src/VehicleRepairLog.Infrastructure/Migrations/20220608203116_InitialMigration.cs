@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace VehicleRepairLog.Infrastructure.Migrations
 {
     public partial class InitialMigration : Migration
@@ -8,12 +10,33 @@ namespace VehicleRepairLog.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Parts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    BrandName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Parts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,10 +49,10 @@ namespace VehicleRepairLog.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VinNumber = table.Column<int>(type: "int", nullable: false),
-                    PaintColor = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FuelType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BrandName = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
+                    VinNumber = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
+                    PaintColor = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    FuelType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Mileage = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -51,8 +74,8 @@ namespace VehicleRepairLog.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CarWorkshopName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    CarWorkshopName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     VehicleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -67,31 +90,33 @@ namespace VehicleRepairLog.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Parts",
+                name: "PartRepair",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    RepairId = table.Column<int>(type: "int", nullable: false)
+                    PartsId = table.Column<int>(type: "int", nullable: false),
+                    RepairsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Parts", x => x.Id);
+                    table.PrimaryKey("PK_PartRepair", x => new { x.PartsId, x.RepairsId });
                     table.ForeignKey(
-                        name: "FK_Parts_Repairs_RepairId",
-                        column: x => x.RepairId,
+                        name: "FK_PartRepair_Parts_PartsId",
+                        column: x => x.PartsId,
+                        principalTable: "Parts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PartRepair_Repairs_RepairsId",
+                        column: x => x.RepairsId,
                         principalTable: "Repairs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parts_RepairId",
-                table: "Parts",
-                column: "RepairId");
+                name: "IX_PartRepair_RepairsId",
+                table: "PartRepair",
+                column: "RepairsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Repairs_VehicleId",
@@ -106,6 +131,9 @@ namespace VehicleRepairLog.Infrastructure.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "PartRepair");
+
             migrationBuilder.DropTable(
                 name: "Parts");
 

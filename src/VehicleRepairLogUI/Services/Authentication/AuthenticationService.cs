@@ -27,7 +27,7 @@ namespace VehicleRepairLogUI.Services.Authentication
         {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/api/Users/register", registerRequest);
 
-            if (response.IsSuccessStatusCode is false)
+            if (response.IsSuccessStatusCode == false)
             {
                 return null;
             }
@@ -41,7 +41,7 @@ namespace VehicleRepairLogUI.Services.Authentication
         {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/api/Users/authenticate", loginRequest);
             
-            if (response.IsSuccessStatusCode is false)
+            if (response.IsSuccessStatusCode == false)
             {
                 return null;
             }
@@ -70,19 +70,6 @@ namespace VehicleRepairLogUI.Services.Authentication
 
             // Changes HTTP authorization header to null.
             _httpClient.DefaultRequestHeaders.Authorization = null;
-        }
-
-        public async Task<LoginResult> ValidateJwt(string token)
-        {
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/api/Users/validateJwt", token);
-
-            if (response.IsSuccessStatusCode is false)
-            {
-                return null;
-            }
-
-            var loginResult = await response.Content.ReadFromJsonAsync<LoginResult>();
-            return loginResult;
         }
     }
 }

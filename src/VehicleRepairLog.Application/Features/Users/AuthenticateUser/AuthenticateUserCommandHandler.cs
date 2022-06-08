@@ -36,7 +36,7 @@ namespace VehicleRepairLog.Application.Features.Users
 
             if(request.Email is not null)
             {
-                user = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
+                user = await _context.Users.FirstOrDefaultAsync(user => user.Email == request.Email, cancellationToken);
             }
 
             if (user is null)
@@ -53,11 +53,6 @@ namespace VehicleRepairLog.Application.Features.Users
             }
 
             string token = _jwtAuth.GenerateToken(user);
-
-            if (token is null)
-            {
-                throw new UnauthorizedException("You have to log in.");
-            }
 
             return new LoginResultDto()
             {

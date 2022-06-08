@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
 using System.Text;
 using VehicleRepairLog.Application.Authentication;
 using VehicleRepairLog.Application.Features.Parts;
@@ -58,11 +57,10 @@ namespace VehicleRepairLog.API
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuerSigningKey = true,
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,
-                        ClockSkew = TimeSpan.FromMinutes(5),
+                        ValidateIssuerSigningKey = true,
                         ValidIssuer = Configuration["Jwt:Issuer"],
                         ValidAudience = Configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(
@@ -108,12 +106,11 @@ namespace VehicleRepairLog.API
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();
-
             app.UseRouting();
 
             app.UseCors("AllowBlazorOrigin");
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

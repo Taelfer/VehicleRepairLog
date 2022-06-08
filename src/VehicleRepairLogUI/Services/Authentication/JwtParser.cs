@@ -31,7 +31,8 @@ namespace VehicleRepairLogUI.Services.Authentication
                 {
                     foreach (string parsedRole in parsedRoles)
                     {
-                        claims.Add(new Claim(ClaimTypes.Role, parsedRole.Trim('"')));
+                        //claims.Add(new Claim(ClaimTypes.Role, parsedRole.Trim('"')));
+                        claims.Add(new Claim(ClaimTypes.Role, parsedRole));
                     }
                 }
                 else

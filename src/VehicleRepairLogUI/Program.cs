@@ -22,9 +22,9 @@ namespace VehicleRepairLogUI
                 .AddScoped<IVehicleService, VehicleService>()
                 .AddScoped<IAuthenticationService, AuthenticationService>();
 
-            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-
             builder.Services.AddAuthorizationCore();
+
+            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
             builder.Services.AddBlazoredLocalStorage();
 

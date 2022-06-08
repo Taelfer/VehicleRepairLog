@@ -22,7 +22,7 @@ namespace VehicleRepairLog.Application.Authentication
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var jwtExpire = DateTime.Now.AddDays(Convert.ToInt32(_configuration["ExpiresInDays"]));
+            var jwtExpire = DateTime.UtcNow.AddDays(30);
 
             List<Claim> claims = new()
             {

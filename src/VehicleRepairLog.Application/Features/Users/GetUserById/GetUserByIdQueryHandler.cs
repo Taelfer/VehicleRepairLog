@@ -19,29 +19,17 @@ namespace VehicleRepairLog.Application.Features.Users
     public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
     {
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
         private readonly VehicleProfileStorageContext _context;
 
-        public GetUserByIdQueryHandler(IMapper mapper, IUserService userService, VehicleProfileStorageContext context)
+        public GetUserByIdQueryHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
             _mapper = mapper;
-            _userService = userService;
             _context = context;
         }
 
         public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            UserDto claim = _userService.GetCurrentUser();
-            User user = null;
-
-            if (claim.Role == "Admin" || claim.Role == "User")
-            {
-                user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.UserId);
-            }
-            else
-            {
-                throw new UnauthorizedException("You have no access to this resource.");
-            }
+            User user = await _context.Users.FirstOrDefaultAsync(user => user.Id == request.UserId);
             
             if (user is null)
             {

@@ -7,7 +7,7 @@
 
 @if (showAuthenticationError)
 {
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-danger col-2" role="alert">
         <p>@authenticationErrorMessage</p>
     </div>
 }
@@ -43,7 +43,7 @@
 
         var authResult = await authenticationService.LoginAsync(loginRequest);
 
-        if (authResult.Successful)
+        if (authResult is not null)
         {
             navigationManager.NavigateTo("/"); 
         }

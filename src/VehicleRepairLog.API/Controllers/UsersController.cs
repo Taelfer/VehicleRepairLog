@@ -2,10 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Users;
 using VehicleRepairLog.Application.Models;
@@ -47,9 +43,7 @@ namespace VehicleRepairLog.API.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "User,Admin")]
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUserById([FromRoute] int userId)
+        private async Task<UserDto> GetUserById(int userId)
         {
             GetUserByIdQuery query = new()
             {
@@ -57,51 +51,7 @@ namespace VehicleRepairLog.API.Controllers
             };
 
             UserDto response = await _mediator.Send(query);
-            return Ok(response);
-        }
-
-        [HttpPost("validateJwt")]
-        public ActionResult<LoginResultDto> ValidateJwt([FromBody] string token)
-        {
-            try
-            {
-                var secretKey = _configuration["Jwt:Key"];
-
-                TokenValidationParameters tokenValidationParameters = new()
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = _configuration["Jwt:Issuer"],
-                    ValidAudience = _configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(token))
-                };
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-                SecurityToken securityToken;
-
-                var validationResult = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-                var validatedToken = (JwtSecurityToken)securityToken;
-
-                if (validatedToken is not null && validatedToken.ValidTo > DateTime.Now)
-                {
-                    return new LoginResultDto()
-                    {
-                        IsAuthenticated = true
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Exception: " + ex.Message);
-
-                return new LoginResultDto()
-                {
-                    IsAuthenticated = false
-                };
-            }
-
-            return null;
+            return response;
         }
     }
 }
