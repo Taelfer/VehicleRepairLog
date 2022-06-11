@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace VehicleRepairLog.Infrastructure.Repositories
 
         public async Task<Repair> AddAsync(Repair repair, List<string> partNames)
         {
-            var parts = await this.context.Parts.Where(x => partNames.Contains(x.Name)).ToListAsync();
+            var parts = await this.context.Parts.Where(part => partNames.Contains(part.Name)).ToListAsync();
 
             repair.Parts = parts;
 
@@ -29,28 +30,28 @@ namespace VehicleRepairLog.Infrastructure.Repositories
         public Task<List<Repair>> GetAllAsync()
         {
             return this.context.Repairs
-                .Include(x => x.Parts)
+                .Include(repair => repair.Parts)
                 .ToListAsync();
         }
 
         public async Task<Repair> GetByIdAsync(int id)
         {
-            var part = await this.context.Repairs
-                .Include(x => x.Parts)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            Repair repair = await this.context.Repairs
+            .Include(repair => repair.Parts)
+            .FirstOrDefaultAsync(repair => repair.Id == id);
 
-            return part;
+            return repair;
         }
 
-        public Task RemoveAsync(Repair part)
+        public Task RemoveAsync(Repair repair)
         {
-            this.context.Remove(part);
+            this.context.Remove(repair);
             return this.context.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(Repair part)
+        public Task UpdateAsync(Repair repair)
         {
-            this.context.Update(part);
+            this.context.Update(repair);
             return this.context.SaveChangesAsync();
         }
     }

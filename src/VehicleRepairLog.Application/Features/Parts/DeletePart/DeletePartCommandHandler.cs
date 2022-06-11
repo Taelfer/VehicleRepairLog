@@ -31,7 +31,7 @@ namespace VehicleRepairLog.Application.Features.Parts
 
             if (part is null)
             {
-                throw new NotFoundException("Part not found.");
+                throw new NotFoundException("Part has not been found.");
             }
 
             await _partRepository.RemoveAsync(part);

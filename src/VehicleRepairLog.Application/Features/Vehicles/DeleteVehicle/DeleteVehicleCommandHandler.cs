@@ -32,7 +32,7 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 
             if (vehicle is null)
             {
-                throw new NotFoundException("Vehicle not found.");
+                throw new NotFoundException("Vehicle has not been found.");
             }
 
             _context.Vehicles.Remove(vehicle);

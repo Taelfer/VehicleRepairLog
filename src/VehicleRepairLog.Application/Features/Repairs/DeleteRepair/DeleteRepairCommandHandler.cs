@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Exceptions;
@@ -18,20 +20,24 @@ namespace VehicleRepairLog.Application.Features.Repairs
     {
         private readonly IMapper _mapper;
         private readonly IRepairRepository _repairRepository;
+        private readonly ILogger<DeleteRepairCommandHandler> _logger;
 
-        public DeleteRepairCommandHandler(IMapper mapper, IRepairRepository repairRepository)
+        public DeleteRepairCommandHandler(IMapper mapper, IRepairRepository repairRepository, ILogger<DeleteRepairCommandHandler> logger)
         {
             _mapper = mapper;
             _repairRepository = repairRepository;
+            _logger = logger;
         }
 
         public async Task<RepairDto> Handle(DeleteRepairCommand request, CancellationToken cancellationToken)
         {
-            Repair repair = await _repairRepository.GetByIdAsync(request.RepairId);
+            Repair repair = null;
+
+            repair = await _repairRepository.GetByIdAsync(request.RepairId);
 
             if (repair is null)
             {
-                throw new NotFoundException("Repair not found.");
+                throw new NotFoundException("Repair has not been found.");
             }
 
             await _repairRepository.RemoveAsync(repair);
