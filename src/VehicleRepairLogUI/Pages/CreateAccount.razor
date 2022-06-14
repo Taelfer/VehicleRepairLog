@@ -43,9 +43,9 @@
 </div>
 
 @code {
-    RegisterRequest registerRequest = new();
-    private bool showRegistrationError;
-    private string registrationErrorMessage = "";
+    protected RegisterRequest registerRequest = new();
+    protected bool showRegistrationError;
+    protected string registrationErrorMessage = "";
 
     public async Task HandleRegistration()
     {

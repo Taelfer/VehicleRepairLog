@@ -38,14 +38,14 @@ else
 }
 
 @code {
-    private IEnumerable<Vehicle> vehicles;
+    protected IEnumerable<Vehicle> vehicles;
 
     [CascadingParameter]
-    public Task<AuthenticationState> AuthState { get; set; }
+    protected Task<AuthenticationState> AuthState { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthState;
+        AuthenticationState authState = await AuthState;
 
         if (authState.User.Identity.IsAuthenticated)
         {

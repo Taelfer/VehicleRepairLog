@@ -1,9 +1,8 @@
-﻿using VehicleRepairLog.Application.Models;
-
-namespace VehicleRepairLog.Application.Authentication
+﻿namespace VehicleRepairLog.Application.Authentication
 {
     public interface IUserService
     {
-        UserDto GetCurrentUser();
+        int? GetCurrentUserId();
+        string GetCurrentUserRole();
     }
 }

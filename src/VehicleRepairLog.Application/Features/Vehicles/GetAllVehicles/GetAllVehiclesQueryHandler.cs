@@ -2,10 +2,12 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Application.Authentication;
 using VehicleRepairLog.Application.Exceptions;
+using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Infrastructure;
 using VehicleRepairLog.Infrastructure.Entities;
 
@@ -19,11 +21,13 @@ namespace VehicleRepairLog.Application.Features.Vehicles
     {
         private readonly IMapper _mapper;
         private readonly VehicleProfileStorageContext _context;
+        private readonly IUserService _userService;
 
-        public GetAllVehiclesQueryHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public GetAllVehiclesQueryHandler(IMapper mapper, VehicleProfileStorageContext context, IUserService userService)
         {
             _mapper = mapper;
             _context = context;
+            _userService = userService;
         }
 
         public async Task<List<VehicleDto>> Handle(GetAllVehiclesQuery request, CancellationToken cancellationToken)
@@ -33,7 +37,9 @@ namespace VehicleRepairLog.Application.Features.Vehicles
             //    throw new TaskCanceledException("Task canceled");
             //}
 
-            List<Vehicle> vehicles = await _context.Vehicles.ToListAsync(cancellationToken);
+            int? userId = _userService.GetCurrentUserId();
+
+            List<Vehicle> vehicles = await _context.Vehicles.Where(vehicle => vehicle.UserId == userId).ToListAsync(cancellationToken);
 
             if (vehicles is null)
             {

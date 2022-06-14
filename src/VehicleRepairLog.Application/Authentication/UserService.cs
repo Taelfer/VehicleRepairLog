@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.Linq;
+using System;
 using System.Security.Claims;
-using VehicleRepairLog.Application.Models;
 
 namespace VehicleRepairLog.Application.Authentication
 {
@@ -14,18 +13,27 @@ namespace VehicleRepairLog.Application.Authentication
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public UserDto GetCurrentUser()
+        public int? GetCurrentUserId()
         {
-            ClaimsPrincipal identity = _httpContextAccessor.HttpContext.User;
+            int? userId = null;
+            string identity = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (identity is not null)
             {
-                var userClaims = identity.Claims;
+                userId = Int32.Parse(identity);
+                return userId;
+            }
+            return null;
+        }
 
-                return new UserDto
-                {
-                    Role = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value
-                };
+        public string GetCurrentUserRole()
+        {
+            string userRole = "";
+            string identity = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+
+            if (identity is not null)
+            {
+                userRole = identity;
             }
             return null;
         }

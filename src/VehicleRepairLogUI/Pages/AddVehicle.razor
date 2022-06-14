@@ -5,35 +5,45 @@
 
 <h3>Add Vehicle</h3>
 
-<div class="row">
-    <div class="col-md-4">
-        <form>
+<div class="card col-2">
+    <div class=" card-body">
+        <EditForm Model="vehicle" OnValidSubmit="CreateVehicleAsync">
+            <DataAnnotationsValidator />
+
             <div class="form-group">
                 <label for="BrandName" class="control-label">Brand Name</label>
-                <input form="BrandName" class="form-control" @bind-value="@vehicle.BrandName"/>
-
-                <label for="VinNumber" class="control-label">Vin Number</label>
-                <input form="VinNumber" class="form-control" @bind-value="@vehicle.VinNumber"/>
-
-                <label for="UserId" class="control-label">user id</label>
-                <input form="UserId" class="form-control" @bind-value="@vehicle.UserId"/>
-
-                <input type="hidden" @bind-value="@vehicle.Id" />
+                <InputText id="BrandName" class="form-control" @bind-Value="vehicle.BrandName"/>
+                <ValidationMessage For="@(() => vehicle.BrandName)"/>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary" @onclick="() => CreateVehicle()">Save</button>
-                <button type="button" class="btn btn-danger" @onclick="() => cancel()">Cancel</button>
+                <label for="VinNumber" class="control-label">Vin Number</label>
+                <InputText id="VinNumber" class="form-control" @bind-Value="vehicle.VinNumber"/>
+                <ValidationMessage For="@(() => vehicle.VinNumber)"/>
             </div>
-        </form>
+
+            <button type="submit" class="btn btn-primary mt-2">Save</button>
+        </EditForm>
     </div>
 </div>
 
 @code {
-    Vehicle vehicle = new();
+    protected Vehicle vehicle = new();
 
-    protected async Task CreateVehicle()
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; }
+
+    protected async Task CreateVehicleAsync()
     {
-        await vehicleService.AddVehicleAsync(vehicle);
+        AuthenticationState authState = await AuthState;
+
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            // Find better way of adding user ID to request???
+            vehicle.UserId = Convert.ToInt32(authState.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            await vehicleService.AddVehicleAsync(vehicle);
+        }
+
         navigationManager.NavigateTo("/vehicles");
     }
 

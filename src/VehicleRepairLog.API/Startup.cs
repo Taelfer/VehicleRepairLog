@@ -47,11 +47,6 @@ namespace VehicleRepairLog.API
                     });
             });
 
-            services.AddTransient<IJwtAuth, JwtAuth>();
-            services.AddTransient<IUserService, UserService>();
-
-            services.AddHttpContextAccessor();
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -78,6 +73,11 @@ namespace VehicleRepairLog.API
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
             services.AddAutoMapper(typeof(PartProfile).Assembly);
+
+            services.AddHttpContextAccessor();
+
+            services.AddTransient<IJwtAuth, JwtAuth>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddScoped<IPartRepository, PartRepository>();
             services.AddScoped<IRepairRepository, RepairRepository>();

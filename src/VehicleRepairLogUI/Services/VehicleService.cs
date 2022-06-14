@@ -32,11 +32,17 @@ namespace VehicleRepairLogUI.Services
 
         public async Task AddVehicleAsync(Vehicle vehicle)
         {
+            string token = await _localStorage.GetItemAsync<string>("authToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             var request = new HttpRequestMessage(HttpMethod.Post, "/api/Vehicles");
             request.Content = new StringContent(JsonSerializer.Serialize(vehicle), Encoding.UTF8, Application.Json);
             HttpResponseMessage response = await _httpClient.SendAsync(request);
 
-            response.EnsureSuccessStatusCode();
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                throw new Exception();
+            }
         }
 
         public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync()

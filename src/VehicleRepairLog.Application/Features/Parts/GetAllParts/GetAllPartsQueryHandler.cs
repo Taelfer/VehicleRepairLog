@@ -31,10 +31,10 @@ namespace VehicleRepairLog.Application.Features.Parts
 
         public async Task<List<PartDto>> Handle(GetAllPartsQuery request, CancellationToken cancellationToken)
         {
-            UserDto claims = _userClaims.GetCurrentUser();
+            string userRole = _userClaims.GetCurrentUserRole();
             List<Part> parts = null;
 
-            if (claims.Role == "Admin")
+            if (userRole == "Admin")
             {
                 parts = await _partRepository.GetAllAsync();
             }
