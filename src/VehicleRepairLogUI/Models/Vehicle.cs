@@ -12,8 +12,6 @@ namespace VehicleRepairLogUI.Models
         public string PaintColor { get; set; }
         public string FuelType { get; set; }
         public int Mileage { get; set; }
-
-        [Required(ErrorMessage = "Add user ID.")]
         public int UserId { get; set; }
     }
 }

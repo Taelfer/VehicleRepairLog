@@ -11,7 +11,7 @@ namespace VehicleRepairLog.Application.Features.Vehicles
             RuleFor(vehicle => vehicle.PaintColor).MaximumLength(20);
             RuleFor(vehicle => vehicle.FuelType).MaximumLength(20);
             RuleFor(vehicle => vehicle.Mileage).InclusiveBetween(0, 10000000);
-            //RuleFor(vehicle => vehicle.UserId).NotEmpty();
+            RuleFor(vehicle => vehicle.UserId).NotEmpty();
         }
     }
 }

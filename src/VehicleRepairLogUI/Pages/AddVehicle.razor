@@ -20,6 +20,21 @@
                 <InputText id="VinNumber" class="form-control" @bind-Value="vehicle.VinNumber"/>
                 <ValidationMessage For="@(() => vehicle.VinNumber)"/>
             </div>
+            <div class="form-group">
+                <label for="PaintColor" class="control-label">Paint Color</label>
+                <InputText id="PaintColor" class="form-control" @bind-Value="vehicle.PaintColor"/>
+                <ValidationMessage For="@(() => vehicle.PaintColor)"/>
+            </div>
+            <div class="form-group">
+                <label for="FuelType" class="control-label">Fuel Type</label>
+                <InputText id="FuelType" class="form-control" @bind-Value="vehicle.FuelType"/>
+                <ValidationMessage For="@(() => vehicle.FuelType)"/>
+            </div>
+            <div class="form-group">
+                <label for="Mileage" class="control-label">Mileage</label>
+                <input id="Mileage" class="form-control" @bind-value="@vehicle.Mileage"/>
+                <ValidationMessage For="@(() => vehicle.Mileage)"/>
+            </div>
 
             <button type="submit" class="btn btn-primary mt-2">Save</button>
         </EditForm>
