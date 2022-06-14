@@ -19,6 +19,9 @@ namespace VehicleRepairLog.Infrastructure.Configurations
             builder.Property(repair => repair.CarWorkshopName)
                    .IsRequired()
                    .HasMaxLength(50);
+
+            builder.Property(repair => repair.Name)
+                   .HasMaxLength(50);
         }
     }
 }

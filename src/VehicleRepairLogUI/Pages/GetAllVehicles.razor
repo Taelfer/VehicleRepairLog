@@ -12,6 +12,10 @@
 }
 else
 {
+    <NavLink class="nav-link" href="/addVehicle">
+        <button type="button" class="btn btn-primary">Add Vehicle</button>
+    </NavLink>
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -20,6 +24,8 @@ else
                 <th>Paint Color</th>
                 <th>Fuel Type</th>
                 <th>Mileage</th>
+                <th>Repairs</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +37,18 @@ else
                     <td>@vehicle.PaintColor</td>
                     <td>@vehicle.FuelType</td>
                     <td>@vehicle.Mileage</td>
+                    <td>
+                        <ul>
+                            @foreach (Repair repair in vehicle.Repairs)
+                            {
+                                <li>@repair.Name</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" type="button" value="vehicle.Id" 
+                                            @onclick="@(() => DeleteVehicleAsync(vehicle))">Delete</button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -39,6 +57,7 @@ else
 
 @code {
     protected IEnumerable<Vehicle> vehicles;
+    protected IEnumerable<Repair> repairs;
 
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; }
@@ -50,6 +69,21 @@ else
         if (authState.User.Identity.IsAuthenticated)
         {
             vehicles = await vehicleService.GetAllVehiclesAsync();
+        }
+        else
+        {
+            navigatorManager.NavigateTo("/", true);
+        }
+    }
+
+    protected async Task DeleteVehicleAsync(Vehicle vehicle)
+    {
+        AuthenticationState authState = await AuthState;
+
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            await vehicleService.DeleteVehicleAsync(vehicle.Id);
+            navigatorManager.NavigateTo("/vehicles", true);
         }
         else
         {

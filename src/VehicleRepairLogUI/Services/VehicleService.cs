@@ -1,12 +1,10 @@
-﻿using System.Net.Http.Json;
-using System.Text.Json;
+﻿using Blazored.LocalStorage;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using VehicleRepairLogUI.Models;
 using static System.Net.Mime.MediaTypeNames;
-using Blazored.LocalStorage;
-using System.Net.Http.Headers;
-using Microsoft.AspNetCore.Components.Authorization;
-using VehicleRepairLogUI.Services.Authentication;
 
 namespace VehicleRepairLogUI.Services
 {
@@ -14,19 +12,13 @@ namespace VehicleRepairLogUI.Services
     {
         private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorage;
-        private readonly AuthenticationStateProvider _authenticationStateProvider;
-        private readonly IAuthenticationService _authenticationService;
 
         public VehicleService(HttpClient httpClient,
                               IConfiguration configuration,
-                              ILocalStorageService localStorage,
-                              AuthenticationStateProvider authenticationStateProvider,
-                              IAuthenticationService authenticationService)
+                              ILocalStorageService localStorage)
         {
             _httpClient = httpClient;
             _localStorage = localStorage;
-            _authenticationStateProvider = authenticationStateProvider;
-            _authenticationService = authenticationService;
             httpClient.BaseAddress = new Uri(configuration["ApiUri"]);
         }
 
@@ -53,14 +45,6 @@ namespace VehicleRepairLogUI.Services
 
             HttpResponseMessage response = await _httpClient.GetAsync("/api/Vehicles");
 
-            // Test Code to logout user if unauthorized
-            //var httpCode = response.StatusCode;
-
-            //if (httpCode == System.Net.HttpStatusCode.Unauthorized)
-            //{
-            //    await _authenticationService.LogoutAsync();
-            //}
-
             if (response.IsSuccessStatusCode == false)
             {
                 return null;
@@ -69,6 +53,14 @@ namespace VehicleRepairLogUI.Services
             var vehicles = await response.Content.ReadFromJsonAsync<IEnumerable<Vehicle>>();
 
             return vehicles;
+        }
+
+        public async Task DeleteVehicleAsync(int vehicleId)
+        {
+            string token = await _localStorage.GetItemAsync<string>("authToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            await _httpClient.DeleteAsync("/api/Vehicles/" + $"{vehicleId}");
         }
     }
 }

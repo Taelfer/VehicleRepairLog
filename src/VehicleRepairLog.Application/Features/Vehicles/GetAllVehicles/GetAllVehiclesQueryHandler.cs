@@ -39,7 +39,9 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 
             int? userId = _userService.GetCurrentUserId();
 
-            List<Vehicle> vehicles = await _context.Vehicles.Where(vehicle => vehicle.UserId == userId).ToListAsync(cancellationToken);
+            List<Vehicle> vehicles = await _context.Vehicles.Where(vehicle => vehicle.UserId == userId)
+                                                            .Include(vehicle => vehicle.Repairs)
+                                                            .ToListAsync(cancellationToken);
 
             if (vehicles is null)
             {

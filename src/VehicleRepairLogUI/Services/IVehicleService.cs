@@ -6,5 +6,6 @@ namespace VehicleRepairLogUI.Services
     {
         Task<IEnumerable<Vehicle>> GetAllVehiclesAsync();
         Task AddVehicleAsync(Vehicle vehicle);
+        Task DeleteVehicleAsync(int vehicleId);
     }
 }

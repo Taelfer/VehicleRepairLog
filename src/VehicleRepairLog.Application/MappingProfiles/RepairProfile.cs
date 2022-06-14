@@ -14,6 +14,7 @@ namespace VehicleRepairLog.Application.MappingProfiles
             CreateMap<Repair, RepairDto>()
                 .ForMember(repairDto => repairDto.Id, y => y.MapFrom(repair => repair.Id))
                 .ForMember(repairDto => repairDto.Date, y => y.MapFrom(repair => repair.Date))
+                .ForMember(repairDto => repairDto.Name, y => y.MapFrom(repair => repair.Name))
                 .ForMember(repairDto => repairDto.Description, y => y.MapFrom(repair => repair.Description))
                 .ForMember(repairDto => repairDto.CarWorkshopName, y => y.MapFrom(repair => repair.CarWorkshopName))
                 .ForMember(repairDto => repairDto.PartNames,

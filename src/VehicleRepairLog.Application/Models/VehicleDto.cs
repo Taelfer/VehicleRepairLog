@@ -11,6 +11,6 @@ namespace VehicleRepairLog.Application.Models
         public string FuelType { get; set; }
         public int Mileage { get; set; }
         public int UserId { get; set; }
-        public List<string> RepairDescriptions { get; set; }
+        public List<RepairDto> Repairs { get; set; }
     }
 }
