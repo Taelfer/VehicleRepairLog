@@ -1,13 +1,13 @@
-﻿@page "/addVehicle"
+﻿@page "/updateVehicle/{Id}"
 
 @inject IVehicleService vehicleService
 @inject NavigationManager navigationManager
 
-<h3>Add Vehicle</h3>
+<h3>Update Vehicle</h3>
 
 <div class="card col-2">
     <div class="card-body">
-        <EditForm Model="vehicle" OnValidSubmit="CreateVehicleAsync">
+        <EditForm Model="vehicle" OnValidSubmit="(() => UpdateVehicleAsync(vehicle))">
             <DataAnnotationsValidator />
 
             <div class="form-group">
@@ -36,34 +36,35 @@
                 <ValidationMessage For="@(() => vehicle.Mileage)"/>
             </div>
 
-            <button type="submit" class="btn btn-primary mt-2">Save</button>
+            <button type="submit" class="btn btn-success">Save changes</button>
         </EditForm>
     </div>
 </div>
 
 @code {
-    protected Vehicle vehicle = new();
+    [Parameter]
+    public string Id { get; set; }
 
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; }
 
-    protected async Task CreateVehicleAsync()
+    protected Vehicle vehicle = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        vehicle = await vehicleService.GetVehicleByIdAsync(Convert.ToInt32(Id));
+    }
+
+    protected async Task UpdateVehicleAsync(Vehicle vehicle)
     {
         AuthenticationState authState = await AuthState;
 
         if (authState.User.Identity.IsAuthenticated == false)
         {
-            navigationManager.NavigateTo("/vehicles");
+            navigationManager.NavigateTo("/", true);
         }
 
-        // Find better way of adding user ID to request???
-        vehicle.UserId = Convert.ToInt32(authState.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-        await vehicleService.AddVehicleAsync(vehicle);
-    }
-
-    void cancel()
-    {
-        navigationManager.NavigateTo("/vehicles");
+        await vehicleService.UpdateVehicleAsync(vehicle);
+        navigationManager.NavigateTo("/vehicles", true);
     }
 }

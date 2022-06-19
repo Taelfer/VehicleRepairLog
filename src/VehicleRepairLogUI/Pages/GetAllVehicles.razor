@@ -2,7 +2,7 @@
 
 @inject HttpClient httpClient
 @inject IVehicleService vehicleService 
-@inject NavigationManager navigatorManager
+@inject NavigationManager navigationManager
 
 <h3>Vehicles List</h3>
 
@@ -20,11 +20,9 @@ else
         <thead>
             <tr>
                 <th>Brand Name</th>
-                <th>VIN number</th>
                 <th>Paint Color</th>
                 <th>Fuel Type</th>
                 <th>Mileage</th>
-                <th>Repairs</th>
                 <th></th>
             </tr>
         </thead>
@@ -33,21 +31,14 @@ else
             {
                 <tr>
                     <td>@vehicle.BrandName</td>
-                    <td>@vehicle.VinNumber</td>
                     <td>@vehicle.PaintColor</td>
                     <td>@vehicle.FuelType</td>
                     <td>@vehicle.Mileage</td>
                     <td>
-                        <ul>
-                            @foreach (Repair repair in vehicle.Repairs)
-                            {
-                                <li>@repair.Name</li>
-                            }
-                        </ul>
-                    </td>
-                    <td>
                         <button class="btn btn-danger" type="button" value="vehicle.Id" 
-                                            @onclick="@(() => DeleteVehicleAsync(vehicle))">Delete</button>
+                                            @onclick="@(() => DeleteVehicleAsync(vehicle.Id))">Delete</button>
+                        <button class="btn btn-primary" type="button" value="vehicle"
+                                            @onclick="@(() => UpdateVehicleAsync(vehicle.Id))">Update</button>
                     </td>
                 </tr>
             }
@@ -66,28 +57,36 @@ else
     {
         AuthenticationState authState = await AuthState;
 
-        if (authState.User.Identity.IsAuthenticated)
+        if (authState.User.Identity.IsAuthenticated == false)
         {
-            vehicles = await vehicleService.GetAllVehiclesAsync();
+            navigationManager.NavigateTo("/", true);
         }
-        else
-        {
-            navigatorManager.NavigateTo("/", true);
-        }
+
+        vehicles = await vehicleService.GetAllVehiclesAsync();
     }
 
-    protected async Task DeleteVehicleAsync(Vehicle vehicle)
+    protected async Task DeleteVehicleAsync(int id)
     {
         AuthenticationState authState = await AuthState;
 
-        if (authState.User.Identity.IsAuthenticated)
+        if (authState.User.Identity.IsAuthenticated == false)
         {
-            await vehicleService.DeleteVehicleAsync(vehicle.Id);
-            navigatorManager.NavigateTo("/vehicles", true);
+            navigationManager.NavigateTo("/", true);
         }
-        else
+
+        await vehicleService.DeleteVehicleAsync(id);
+        navigationManager.NavigateTo("/vehicles", true);
+    }
+
+    protected async Task UpdateVehicleAsync(int id)
+    {
+        AuthenticationState authState = await AuthState;
+
+        if (authState.User.Identity.IsAuthenticated == false)
         {
-            navigatorManager.NavigateTo("/", true);
+            navigationManager.NavigateTo("/", true);
         }
+
+        navigationManager.NavigateTo($"/updateVehicle/{id}", true);
     }
 }

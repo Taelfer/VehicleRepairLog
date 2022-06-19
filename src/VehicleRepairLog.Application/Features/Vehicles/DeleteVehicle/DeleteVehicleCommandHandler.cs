@@ -28,7 +28,7 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 
         public async Task<VehicleDto> Handle(DeleteVehicleCommand request, CancellationToken cancellationToken)
         {
-            Vehicle vehicle = await _context.Vehicles.FirstOrDefaultAsync(x => x.Id == request.VehicleId);
+            Vehicle vehicle = await _context.Vehicles.FirstOrDefaultAsync(vehicle => vehicle.Id == request.VehicleId);
 
             if (vehicle is null)
             {

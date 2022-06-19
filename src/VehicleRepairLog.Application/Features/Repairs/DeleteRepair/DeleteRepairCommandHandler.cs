@@ -20,13 +20,11 @@ namespace VehicleRepairLog.Application.Features.Repairs
     {
         private readonly IMapper _mapper;
         private readonly IRepairRepository _repairRepository;
-        private readonly ILogger<DeleteRepairCommandHandler> _logger;
 
-        public DeleteRepairCommandHandler(IMapper mapper, IRepairRepository repairRepository, ILogger<DeleteRepairCommandHandler> logger)
+        public DeleteRepairCommandHandler(IMapper mapper, IRepairRepository repairRepository)
         {
             _mapper = mapper;
             _repairRepository = repairRepository;
-            _logger = logger;
         }
 
         public async Task<RepairDto> Handle(DeleteRepairCommand request, CancellationToken cancellationToken)

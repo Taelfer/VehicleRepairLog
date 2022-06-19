@@ -55,12 +55,46 @@ namespace VehicleRepairLogUI.Services
             return vehicles;
         }
 
+        public async Task<Vehicle> GetVehicleByIdAsync(int id)
+        {
+            string token = await _localStorage.GetItemAsync<string>("authToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"/api/Vehicles/{id}");
+
+            if (response.IsSuccessStatusCode == false)
+            {
+                return null;
+            }
+
+            var vehicle = await response.Content.ReadFromJsonAsync<Vehicle>();
+            return vehicle;
+        }
+
+        public async Task<Vehicle> UpdateVehicleAsync(Vehicle vehicle)
+        {
+            string token = await _localStorage.GetItemAsync<string>("authToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage response = await _httpClient.PutAsJsonAsync($"/api/Vehicles/{vehicle.Id}", vehicle);
+
+            if (response.IsSuccessStatusCode == false)
+            {
+                return null;
+            }
+
+            vehicle = await response.Content.ReadFromJsonAsync<Vehicle>();
+
+            return vehicle;
+
+        }
+
         public async Task DeleteVehicleAsync(int vehicleId)
         {
             string token = await _localStorage.GetItemAsync<string>("authToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            await _httpClient.DeleteAsync("/api/Vehicles/" + $"{vehicleId}");
+            await _httpClient.DeleteAsync($"/api/Vehicles/{vehicleId}");
         }
     }
 }
