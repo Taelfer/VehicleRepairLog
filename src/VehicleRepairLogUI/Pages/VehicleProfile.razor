@@ -1,0 +1,91 @@
+﻿@page "/vehicleProfile/{Id}"
+
+@inject HttpClient httpClient
+@inject IVehicleService vehicleService
+@inject NavigationManager navigationManager
+
+<h3>Vehicle Profile</h3>
+
+@if (vehicle == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Brand Name</th>
+                <th>Paint Color</th>
+                <th>Fuel Type</th>
+                <th>Mileage</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@vehicle.BrandName</td>
+                <td>@vehicle.PaintColor</td>
+                <td>@vehicle.FuelType</td>
+                <td>@vehicle.Mileage</td>
+                <td>
+                    <button class="btn btn-primary" type="button" value="vehicle"
+                                     @onclick="@(() => UpdateVehicleAsync(vehicle.Id))">Update</button>
+                </td>
+                <td>
+                    <button class="btn btn-danger" type="button" value="vehicle.Id" 
+                                     @onclick="@(() => DeleteVehicleAsync(vehicle.Id))">Delete</button>
+                    
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+@code {
+    protected Vehicle vehicle;
+
+    [Parameter]
+    public string Id { get; set; }     
+
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState authState = await AuthState;
+
+        if (authState.User.Identity.IsAuthenticated == false)
+        {
+            navigationManager.NavigateTo("/", true);
+        }
+
+        vehicle = await vehicleService.GetVehicleByIdAsync(Convert.ToInt32(Id));
+    }
+
+    protected async Task UpdateVehicleAsync(int id)
+    {
+        AuthenticationState authState = await AuthState;
+
+        if (authState.User.Identity.IsAuthenticated == false)
+        {
+            navigationManager.NavigateTo("/", true);
+        }
+
+        navigationManager.NavigateTo($"/updateVehicle/{id}", true);
+    }
+
+    protected async Task DeleteVehicleAsync(int id)
+    {
+        AuthenticationState authState = await AuthState;
+
+        if (authState.User.Identity.IsAuthenticated == false)
+        {
+            navigationManager.NavigateTo("/", true);
+        }
+
+        await vehicleService.DeleteVehicleAsync(id);
+        navigationManager.NavigateTo("/vehicles", true);
+    }
+}
