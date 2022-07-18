@@ -20,9 +20,8 @@ else
         <thead>
             <tr>
                 <th>Brand Name</th>
-                <th>Paint Color</th>
-                <th>Fuel Type</th>
-                <th>Mileage</th>
+                <th>Image</th>
+                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -30,15 +29,19 @@ else
             @foreach(var vehicle in vehicles)
             {
                 <tr>
-                    <td>@vehicle.BrandName</td>
-                    <td>@vehicle.PaintColor</td>
-                    <td>@vehicle.FuelType</td>
-                    <td>@vehicle.Mileage</td>
+                    <td>
+                        <NavLink class="nav-link" @onclick="@(() => VehicleProfileAsync(vehicle.Id))">
+                            @vehicle.BrandName
+                        </NavLink>
+                    </td>
+                    <td></td>
+                    <td>
+                        <button class="btn btn-primary" type="button" value="vehicle"
+                                        @onclick="@(() => UpdateVehicleAsync(vehicle.Id))">Update</button>
+                    </td>
                     <td>
                         <button class="btn btn-danger" type="button" value="vehicle.Id" 
-                                            @onclick="@(() => DeleteVehicleAsync(vehicle.Id))">Delete</button>
-                        <button class="btn btn-primary" type="button" value="vehicle"
-                                            @onclick="@(() => UpdateVehicleAsync(vehicle.Id))">Update</button>
+                                        @onclick="@(() => DeleteVehicleAsync(vehicle.Id))">Delete</button>
                     </td>
                 </tr>
             }
@@ -65,6 +68,18 @@ else
         vehicles = await vehicleService.GetAllVehiclesAsync();
     }
 
+    protected async Task UpdateVehicleAsync(int id)
+    {
+        AuthenticationState authState = await AuthState;
+
+        if (authState.User.Identity.IsAuthenticated == false)
+        {
+            navigationManager.NavigateTo("/", true);
+        }
+
+        navigationManager.NavigateTo($"/updateVehicle/{id}", true);
+    }
+
     protected async Task DeleteVehicleAsync(int id)
     {
         AuthenticationState authState = await AuthState;
@@ -78,7 +93,7 @@ else
         navigationManager.NavigateTo("/vehicles", true);
     }
 
-    protected async Task UpdateVehicleAsync(int id)
+    protected async Task VehicleProfileAsync(int id)
     {
         AuthenticationState authState = await AuthState;
 
@@ -87,6 +102,6 @@ else
             navigationManager.NavigateTo("/", true);
         }
 
-        navigationManager.NavigateTo($"/updateVehicle/{id}", true);
+        navigationManager.NavigateTo($"/vehicleProfile/{id}", true);
     }
 }
