@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Users;
 using VehicleRepairLog.Application.Models;
@@ -13,12 +12,10 @@ namespace VehicleRepairLog.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IConfiguration _configuration;
 
-        public UsersController(IMediator mediator, IConfiguration configuration)
+        public UsersController(IMediator mediator)
         {
             _mediator = mediator;
-            _configuration = configuration;
         }
 
         [AllowAnonymous]
