@@ -44,48 +44,78 @@ else
 }
 
 @code {
+    // Stores Vehicle data.
     protected Vehicle vehicle;
 
+    // Stores Vehicle ID taken from URI.
     [Parameter]
     public string Id { get; set; }     
 
+    // Stores the user Authentication State data.
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        // Gets current user State.
         AuthenticationState authState = await AuthState;
 
+        // If the current user state is not authenticated...
         if (authState.User.Identity.IsAuthenticated == false)
         {
+            // Takes to homepage.
             navigationManager.NavigateTo("/", true);
         }
 
+        // Otherwise.
+        // Gets Vehicle data asynchronously with ID from URI. 
         vehicle = await vehicleService.GetVehicleByIdAsync(Convert.ToInt32(Id));
     }
 
+    /// <summary>
+    ///     Takes to page where vehicle of given ID can be updated.
+    /// </summary>
+    /// <param name="id">ID of chosen Vehicle.</param>
+    /// <returns>A <see cref="Task"/> representing an asynchronous operation.</returns>
     protected async Task UpdateVehicleAsync(int id)
     {
+        // Gets current user State.
         AuthenticationState authState = await AuthState;
 
+        // If the current user state is not authenticated...
         if (authState.User.Identity.IsAuthenticated == false)
         {
+            // Takes to homepage.
             navigationManager.NavigateTo("/", true);
         }
 
+        // Otherwise...
+        // Takes to Vehicle update page.
         navigationManager.NavigateTo($"/updateVehicle/{id}", true);
     }
 
+    /// <summary>
+    ///     Deletes Vehicle of given ID.
+    /// </summary>
+    /// <param name="id">ID of chosen Vehicle.</param>
+    /// <returns>A <see cref="Task"/> representing an asynchronous operation.</returns>
     protected async Task DeleteVehicleAsync(int id)
     {
+        // Gets current user State.
         AuthenticationState authState = await AuthState;
 
+        // If the current user state is not authenticated...
         if (authState.User.Identity.IsAuthenticated == false)
         {
+            // Takes to homepage.
             navigationManager.NavigateTo("/", true);
         }
 
+        // Otherwise...
+        // Deletes vehicle.
         await vehicleService.DeleteVehicleAsync(id);
+
+        // Takes to page with Vehicles after deleting Vehicle of chosen ID.
         navigationManager.NavigateTo("/vehicles", true);
     }
 }
