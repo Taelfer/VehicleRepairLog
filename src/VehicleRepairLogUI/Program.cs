@@ -20,6 +20,7 @@ namespace VehicleRepairLogUI
             // Adding DI configuration for HttpClient implementation.
             builder.Services
                 .AddScoped<IVehicleService, VehicleService>()
+                .AddScoped<IUserService, UserService>()
                 .AddScoped<IAuthenticationService, AuthenticationService>();
 
             builder.Services.AddAuthorizationCore();
@@ -30,6 +31,7 @@ namespace VehicleRepairLogUI
 
             // Creating 'typed' HttpClient instance for Services.
             builder.Services.AddHttpClient<IVehicleService, VehicleService>();
+            builder.Services.AddHttpClient<IUserService, UserService>();
             builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>();
             builder.Services.AddHttpClient<CustomAuthenticationStateProvider>(httpClient =>
             {
