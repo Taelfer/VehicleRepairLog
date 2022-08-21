@@ -84,9 +84,7 @@ namespace VehicleRepairLogUI.Services
             }
 
             vehicle = await response.Content.ReadFromJsonAsync<Vehicle>();
-
             return vehicle;
-
         }
 
         public async Task DeleteVehicleAsync(int vehicleId)

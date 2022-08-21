@@ -29,7 +29,7 @@ namespace VehicleRepairLogUI
 
             builder.Services.AddBlazoredLocalStorage();
 
-            // Creating 'typed' HttpClient instance for Services.
+            // Creating 'typed' HttpClient instances for Services.
             builder.Services.AddHttpClient<IVehicleService, VehicleService>();
             builder.Services.AddHttpClient<IUserService, UserService>();
             builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>();
