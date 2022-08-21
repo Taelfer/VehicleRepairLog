@@ -24,7 +24,7 @@ namespace VehicleRepairLogUI.Services
             string token = await _localStorage.GetItemAsync<string>("authToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _httpClient.GetAsync($"/api/getUserById/{id}");
+            HttpResponseMessage response = await _httpClient.GetAsync($"/api/Users/{id}");
 
             if (response.IsSuccessStatusCode == false)
             {
