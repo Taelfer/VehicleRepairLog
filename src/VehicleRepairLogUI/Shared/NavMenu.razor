@@ -1,4 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject NavigationManager navigationManager
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Vehicle Repair Log</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -21,12 +23,21 @@
                         <span class="oi active" aria-hidden="true"></span> Vehicles
                     </NavLink>
                 </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" @onclick="@(() => UserProfileAsync())">
+                        <span class="oi active" aria-hidden="true"></span> Profile
+                    </NavLink>
+                </div>
             </Authorized>
         </AuthorizeView>
     </nav>
 </div>
 
 @code {
+    // Stores the User Authentication State data.
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; }
+
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
@@ -34,5 +45,26 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected async Task UserProfileAsync()
+    {
+        // Get the current user State.
+        AuthenticationState authState = await AuthState;
+
+        // If the current user state is not authenticated...
+        if (authState.User.Identity.IsAuthenticated == false)
+        {
+            // Takes to homepage.
+            navigationManager.NavigateTo("/", true);
+        }
+        else
+        {
+            string userId = authState.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            int id = Convert.ToInt32(userId);
+
+            // Takes to user with given ID profile page.
+            navigationManager.NavigateTo($"/userProfile/{id}", true);
+        }
     }
 }
