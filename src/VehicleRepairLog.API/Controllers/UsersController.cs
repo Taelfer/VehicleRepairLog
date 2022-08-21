@@ -40,7 +40,9 @@ namespace VehicleRepairLog.API.Controllers
             return Ok(response);
         }
 
-        private async Task<UserDto> GetUserById(int userId)
+        [Authorize]
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUserById([FromRoute] int userId)
         {
             GetUserByIdQuery query = new()
             {
@@ -48,7 +50,7 @@ namespace VehicleRepairLog.API.Controllers
             };
 
             UserDto response = await _mediator.Send(query);
-            return response;
+            return Ok(response);
         }
     }
 }
