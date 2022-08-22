@@ -42,9 +42,11 @@
 </div>
 
 @code {
+    // Stores Vehicle ID taken from URI.
     [Parameter]
     public string Id { get; set; }
 
+    // Stores the User Authentication State data.
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; }
 
@@ -52,19 +54,32 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // Gets Vehicle data asynchronously with ID from URI.
         vehicle = await vehicleService.GetVehicleByIdAsync(Convert.ToInt32(Id));
     }
 
+    /// <summary>
+    ///     Updates chosen Vehicle with changes made.
+    /// </summary>
+    /// <param name="vehicle">Chosen Vehicle</param>
+    /// <returns>A <see cref="Task"/> representing an asynchronous operation.</returns>
     protected async Task UpdateVehicleAsync(Vehicle vehicle)
     {
+        // Get the current user State.
         AuthenticationState authState = await AuthState;
 
+        // If the current user state is not authenticated...
         if (authState.User.Identity.IsAuthenticated == false)
         {
+            // Takes to homepage.
             navigationManager.NavigateTo("/", true);
         }
 
+        // Otherwise...
+        // Updates Vehicle with changes made.
         await vehicleService.UpdateVehicleAsync(vehicle);
+
+        // Takes to Vehicles list page.
         navigationManager.NavigateTo("/vehicles", true);
     }
 }
