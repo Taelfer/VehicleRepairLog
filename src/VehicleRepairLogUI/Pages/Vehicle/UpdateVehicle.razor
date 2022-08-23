@@ -59,13 +59,13 @@
     }
 
     /// <summary>
-    ///     Updates chosen Vehicle with changes made.
+    ///     Updates chosen <see cref="Vehicle"/> with changes made.
     /// </summary>
-    /// <param name="vehicle">Chosen Vehicle</param>
+    /// <param name="vehicle"></param>
     /// <returns>A <see cref="Task"/> representing an asynchronous operation.</returns>
     protected async Task UpdateVehicleAsync(Vehicle vehicle)
     {
-        // Get the current user State.
+        // Gets the current user State.
         AuthenticationState authState = await AuthState;
 
         // If the current user state is not authenticated...
