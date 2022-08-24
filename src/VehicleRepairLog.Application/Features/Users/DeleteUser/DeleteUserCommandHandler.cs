@@ -35,7 +35,7 @@ namespace VehicleRepairLog.Application.Features.Users.DeleteUser
         public async Task<UserDto> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             // Returns User data with given ID from Database.
-            User user = await _context.Users.FirstOrDefaultAsync(user => user.Id == request.userId);
+            User user = await _context.Users.FirstOrDefaultAsync(user => user.Id == request.UserId);
 
             if (user is null)
             {
