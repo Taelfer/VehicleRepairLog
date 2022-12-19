@@ -1,15 +1,13 @@
 ﻿using AutoMapper;
-using System.Collections.Generic;
-using System.Linq;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Features.Vehicles;
+using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.MappingProfiles
 {
-    public class VehicleProfile : Profile
+    public class VehicleMappingProfile : Profile
     {
-        public VehicleProfile()
+        public VehicleMappingProfile()
         {
             CreateMap<Vehicle, VehicleDto>()
                 .ForMember(vehicleDto => vehicleDto.Id, y => y.MapFrom(vehicle => vehicle.Id))
