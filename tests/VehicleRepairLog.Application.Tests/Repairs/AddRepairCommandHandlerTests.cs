@@ -26,7 +26,7 @@ namespace VehicleRepairLog.Application.Tests.Repairs
 
             var mapperConfig = new MapperConfiguration(c =>
             {
-                c.AddProfile<RepairProfile>();
+                c.AddProfile<RepairMappingProfile>();
             });
 
             _mapper = mapperConfig.CreateMapper();
