@@ -72,7 +72,7 @@ namespace VehicleRepairLog.API
 
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
-            services.AddAutoMapper(typeof(PartProfile).Assembly);
+            services.AddAutoMapper(typeof(PartMappingProfile).Assembly);
 
             services.AddHttpContextAccessor();
 

@@ -5,9 +5,9 @@ using VehicleRepairLog.Infrastructure.Entities;
 
 namespace VehicleRepairLog.Application.MappingProfiles
 {
-    public class PartProfile : Profile
+    public class PartMappingProfile : Profile
     {
-        public PartProfile()
+        public PartMappingProfile()
         {
             CreateMap<Part, PartDto>()
                 .ForMember(partDto => partDto.Id, y => y.MapFrom(part => part.Id))
