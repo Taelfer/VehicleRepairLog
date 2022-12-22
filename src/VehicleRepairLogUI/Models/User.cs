@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace VehicleRepairLogUI.Models
+﻿namespace VehicleRepairLogUI.Models
 {
     public class User
     {
@@ -12,5 +10,6 @@ namespace VehicleRepairLogUI.Models
         public DateTime? DateOfBirth { get; set; }
         public string role { get; set; }
         public bool IsAuthenticated { get; set; }
+        public string Password { get; set; }
     }
 }
