@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Users;
 using VehicleRepairLog.Application.Features.Users.DeleteUser;
+using VehicleRepairLog.Application.Features.Users.UpdateUser;
 using VehicleRepairLog.Application.Models;
 
 namespace VehicleRepairLog.API.Controllers
@@ -69,6 +70,21 @@ namespace VehicleRepairLog.API.Controllers
 
             // Sends Query with given data to Handler. Receives response.
             UserDto response = await _mediator.Send(query);
+
+            // Returns HTTP Response with status code 200(OK).
+            return Ok(response);
+        }
+
+        /// <summary>
+        ///     Endpoint for updating User data.
+        /// </summary>
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command, int userId)
+        {
+            command.UserId = userId;
+
+            // Sends Command with given data to Handler. Receives response.
+            UserDto response = await _mediator.Send(command);
 
             // Returns HTTP Response with status code 200(OK).
             return Ok(response);
