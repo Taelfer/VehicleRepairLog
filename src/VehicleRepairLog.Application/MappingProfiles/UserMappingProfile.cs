@@ -32,9 +32,9 @@ namespace VehicleRepairLog.Application.MappingProfiles
                 .ForMember(user => user.FirstName, y => y.MapFrom(updateUserCommand => updateUserCommand.FirstName))
                 .ForMember(user => user.LastName, y => y.MapFrom(updateUserCommand => updateUserCommand.LastName))
                 .ForMember(user => user.Email, y => y.MapFrom(updateUserCommand => updateUserCommand.Email))
-                .ForMember(user => user.Password, y => y.MapFrom(registerUserCommand => registerUserCommand.Password))
                 .ForMember(user => user.DateOfBirth, y => y.MapFrom(updateUserCommand => updateUserCommand.DateOfBirth))
                 .ForMember(user => user.Username, y => y.MapFrom(updateUserCommand => updateUserCommand.Username))
+                .ForMember(user => user.Password, y => y.MapFrom(registerUserCommand => registerUserCommand.Password))
                 .ForMember(user => user.Role, y => y.MapFrom(updateUserCommand => updateUserCommand.Role));
         }
     }
