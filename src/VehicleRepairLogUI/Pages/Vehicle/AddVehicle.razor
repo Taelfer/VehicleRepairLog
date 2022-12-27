@@ -53,13 +53,15 @@
 
         if (authState.User.Identity.IsAuthenticated == false)
         {
-            navigationManager.NavigateTo("/vehicles");
+            navigationManager.NavigateTo("/");
         }
 
         // Find better way of adding user ID to request???
         vehicle.UserId = Convert.ToInt32(authState.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
         await vehicleService.AddVehicleAsync(vehicle);
+
+        navigationManager.NavigateTo("/vehicles");
     }
 
     void cancel()
