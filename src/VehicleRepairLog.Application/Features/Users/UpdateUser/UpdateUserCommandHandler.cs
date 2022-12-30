@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -29,11 +30,13 @@ namespace VehicleRepairLog.Application.Features.Users.UpdateUser
     internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
     {
         private readonly IMapper _mapper;
+        private readonly IPasswordHasher<User> _passwordHasher;
         private readonly VehicleProfileStorageContext _context;
 
-        public UpdateUserCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public UpdateUserCommandHandler(IMapper mapper, IPasswordHasher<User> passwordHasher, VehicleProfileStorageContext context)
         {
             _mapper = mapper;
+            _passwordHasher = passwordHasher;
             _context = context;
         }
 
@@ -47,6 +50,10 @@ namespace VehicleRepairLog.Application.Features.Users.UpdateUser
             }
 
             User updatedUser = _mapper.Map(request, user);
+
+            string hashedPassword = _passwordHasher.HashPassword(user, request.Password);
+            updatedUser.Password = hashedPassword;
+
             _context.Users.Update(updatedUser);
             await _context.SaveChangesAsync();
 
