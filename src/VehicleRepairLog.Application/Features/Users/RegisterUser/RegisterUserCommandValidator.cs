@@ -30,7 +30,7 @@ namespace VehicleRepairLog.Application.Features.Users
 
                     if (emailInUse)
                     {
-                        context.AddFailure("Try other email address.");
+                        context.AddFailure("This Email is already in use.");
                     }
                 });
 
