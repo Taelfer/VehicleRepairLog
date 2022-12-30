@@ -4,11 +4,12 @@
 @inject IVehicleService vehicleService
 @inject NavigationManager navigationManager
 
-<h3>Vehicle Profile</h3>
+<h1>Vehicle Profile</h1>
+<hr />
 
 @if (vehicle == null)
 {
-    <p>Loading...</p>
+    <p><em>Loading...</em></p>
 }
 else
 {
