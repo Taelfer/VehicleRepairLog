@@ -72,6 +72,7 @@ namespace VehicleRepairLogUI.Services
             // Otherwise map data returned by API into User object.
             user = await response.Content.ReadFromJsonAsync<User>();
 
+            // Return updated User details.
             return user;
         }
     }
