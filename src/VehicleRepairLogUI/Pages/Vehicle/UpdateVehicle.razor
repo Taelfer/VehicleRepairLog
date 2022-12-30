@@ -3,7 +3,8 @@
 @inject IVehicleService vehicleService
 @inject NavigationManager navigationManager
 
-<h3>Update Vehicle</h3>
+<h1>Update Vehicle</h1>
+<hr />
 
 <div class="card col-2">
     <div class="card-body">
@@ -32,7 +33,7 @@
             </div>
             <div class="form-group">
                 <label for="Mileage" class="control-label">Mileage</label>
-                <input id="Mileage" class="form-control" @bind-value="@vehicle.Mileage"/>
+                <input id="Mileage" class="form-control" @bind-value="vehicle.Mileage"/>
                 <ValidationMessage For="@(() => vehicle.Mileage)"/>
             </div>
 
