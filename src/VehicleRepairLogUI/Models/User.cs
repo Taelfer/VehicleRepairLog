@@ -11,5 +11,6 @@
         public string role { get; set; }
         public bool IsAuthenticated { get; set; }
         public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }
