@@ -1,0 +1,129 @@
+﻿@page "/userProfile/{Id}"
+
+@inject HttpClient httpClient
+@inject IUserService userService
+@inject NavigationManager navigationManager
+@inject AuthenticationStateProvider authenticationStateProvider
+
+@if (user is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="user-profile-body">
+        <header>
+            <h1>User Profile</h1>
+            <hr />
+        </header>
+
+        <section>
+            <div class="user-profile-container">
+                <div class="split">
+                    <div class="user-photo-container">
+                        <img src="/icon-192.png" />
+                    </div>
+
+                    <div class="user-details-container">
+                        <div class="user-details">
+                            <h2>Your Details</h2>
+                            <hr />
+                            <ul class="user-information-list">
+                                <li class="user-information-list-item">
+                                    <span class="user-information-item-label user-information-section">Username :</span>
+                                    <strong class="user-information-item-value user-information-section">@user.Username</strong>
+                                </li>
+                                <li class="user-information-list-item">
+                                    <span class="user-information-item-label user-information-section">First name :</span>
+                                    <strong class="user-information-item-value user-information-section">@user.FirstName</strong>
+                                </li>
+                                <li class="user-information-list-item">
+                                    <span class="user-information-item-label user-information-section">Last name :</span>
+                                    <strong class="user-information-item-value user-information-section">@user.LastName</strong>
+                                </li>
+                                <li class="user-information-list-item">
+                                    <span class="user-information-item-label user-information-section">Email :</span>
+                                    <strong class="user-information-item-value user-information-section">@user.Email</strong>
+                                </li>
+                                <li class="user-information-list-item">
+                                    <span class="user-information-item-label user-information-section">Date of birth :</span>
+                                    <strong class="user-information-item-value user-information-section">@user.DateOfBirth</strong>
+                                </li>
+                                <li class="user-information-list-item">
+                                    <button class="btn btn-primary" type="button" value="user"
+                                        @onclick="@(() => UpdateUserAsync(user.Id, false))"> Edit Details
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="change-password">
+                            <h2>Change Password</h2>
+                            <hr />
+                            <div class="password-change-btn">
+                                <button class="btn btn-primary" type="button" value="user"
+                                    @onclick="@(() => UpdateUserAsync(user.Id, true))"> Change Password
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>  
+}
+
+@code {
+    // Stores User data.
+    protected User user;
+
+    // Stores User ID taken from URI.
+    [Parameter]
+    public string Id { get; set; }
+
+    // Stores the User Authentication State data.
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Get the current user State.
+        AuthenticationState authState = await AuthState;
+
+        // If the current user state is not authenticated...
+        if (authState.User.Identity.IsAuthenticated == false)
+        {
+            // Takes to homepage.
+            navigationManager.NavigateTo("/", true);
+        }
+
+        // Otherwise.
+        // Gets User data asynchronously with ID from URI.
+        user = await userService.GetUserByIdAsync(Convert.ToInt32(Id));
+    }
+
+
+    protected async Task UpdateUserAsync(int userId, bool passwordChange)
+    {
+        // Gets the current user State.
+        AuthenticationState authState = await AuthState;
+
+        // If the current user state is not authenticated...
+        if (authState.User.Identity.IsAuthenticated == false)
+        {
+            // Takes to homepage.
+            navigationManager.NavigateTo("/", true);
+        }
+        else if (passwordChange == true)
+        {
+            // Takes to user password update page.
+            navigationManager.NavigateTo($"/updateUserPassword/{userId}", true);
+        }
+        else
+        {
+            // Otherwise...
+            // Takes to User details update page.
+            navigationManager.NavigateTo($"/updateUserDetails/{userId}", true);
+        }
+    }
+}
