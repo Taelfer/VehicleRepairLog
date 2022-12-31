@@ -20,6 +20,7 @@ else
                 <th>Paint Color</th>
                 <th>Fuel Type</th>
                 <th>Mileage</th>
+                <th>Repairs</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -31,13 +32,31 @@ else
                 <td>@vehicle.FuelType</td>
                 <td>@vehicle.Mileage</td>
                 <td>
+                    <table width="100%">
+                        <tr>
+                            <th>Name</th>
+                            <th>Date</th>
+                        </tr>
+                        @foreach (Repair repair in vehicle.Repairs.OrderByDescending(repair => repair.Date))
+                        {
+                            <tr>
+                                <td>
+                                    @repair.Name
+                                </td>
+                                <td>
+                                    @repair.Date
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+                <td>
                     <button class="btn btn-primary" type="button" value="vehicle"
                                      @onclick="@(() => UpdateVehicleAsync(vehicle.Id))">Update</button>
                 </td>
                 <td>
                     <button class="btn btn-danger" type="button" value="vehicle.Id" 
                                      @onclick="@(() => DeleteVehicleAsync(vehicle.Id))">Delete</button>
-                    
                 </td>
             </tr>
         </tbody>
