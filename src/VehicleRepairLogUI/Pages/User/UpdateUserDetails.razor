@@ -1,0 +1,82 @@
+﻿@page "/updateUserDetails/{id}"
+
+@inject IUserService userService
+@inject NavigationManager navigationManager
+
+<h1>UpdateUserDetails</h1>
+<hr />
+
+<div class="card col-2">
+    <div class="card-body">
+        <EditForm Model="user" OnValidSubmit="(() => UpdateUserAsync(user))">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <label for="Username">Username</label>
+                <InputText id="Username" class="form-control" @bind-Value="user.Username" />
+                <ValidationMessage For="@(() => user.Username)" />
+            </div>
+            <div class="form-group">
+                <label for="FirstName">First Name</label>
+                <InputText id="FirstName" class="form-control" @bind-Value="user.FirstName" />
+                <ValidationMessage For="@(() => user.FirstName)" />
+            </div>
+            <div class="form-group">
+                <label for="LastName">Last Name</label>
+                <InputText id="LastName" class="form-control" @bind-Value="user.LastName" />
+                <ValidationMessage For="@(() => user.LastName)" />
+            </div>
+            <div class="form-group">
+                <label for="Email">Email</label>
+                <InputText id="Email" type="email" class="form-control" @bind-Value="user.Email" />
+                <ValidationMessage For="@(() => user.Email)" />
+            </div>
+            <div class="form-group">
+                <label for="DateOfBirth">Date of birth</label>
+                <InputDate id="DateOfBirth" class="form-control" @bind-Value="user.DateOfBirth" />
+                <ValidationMessage For="@(() => user.DateOfBirth)" />
+            </div>
+
+            <button type="submit" class="btn btn-success">Save changes</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    // Stores User ID taken from URI.
+    [Parameter]
+    public string Id { get; set; }
+
+    protected User user = new();
+
+    // Stores the User Authentication State data.
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Gets User details asynchronously with ID from URI.
+        user = await userService.GetUserByIdAsync(Convert.ToInt32(Id));
+    }
+
+    protected async Task UpdateUserAsync(User user)
+    {
+        // Gets the current user State.
+        AuthenticationState authState = await AuthState;
+
+        // If the current user state is not authenticated...
+        if (authState.User.Identity.IsAuthenticated == false)
+        {
+            // Takes to homepage.
+            navigationManager.NavigateTo("/", true);
+        }
+
+        // Otherwise...
+        // Updates user password.
+        await userService.UpdateUserAsync(user);
+
+        // Takes to User profile page.
+        navigationManager.NavigateTo($"/userProfile/{Convert.ToInt32(Id)}", true);
+    }
+
+}
