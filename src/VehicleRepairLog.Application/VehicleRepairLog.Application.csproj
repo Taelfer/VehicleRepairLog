@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\VehicleRepairLog.Shared\VehicleRepairLog.Shared.csproj" />
     <ProjectReference Include="..\VehicleRepairLog.Infrastructure\VehicleRepairLog.Infrastructure.csproj" />
   </ItemGroup>
 
