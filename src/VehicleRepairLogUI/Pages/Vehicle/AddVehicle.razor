@@ -8,7 +8,7 @@
 
 <div class="card col-2">
     <div class="card-body">
-        <EditForm Model="vehicle" OnValidSubmit="CreateVehicleAsync">
+        <EditForm Model="vehicle" OnValidSubmit="AddVehicleAsync">
             <DataAnnotationsValidator />
 
             <div class="form-group">
@@ -48,7 +48,7 @@
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; }
 
-    protected async Task CreateVehicleAsync()
+    protected async Task AddVehicleAsync()
     {
         AuthenticationState authState = await AuthState;
 
