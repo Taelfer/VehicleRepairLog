@@ -3,13 +3,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Users;
+using VehicleRepairLog.Application.Features.Users.ChangeUserPassword;
 using VehicleRepairLog.Application.Features.Users.DeleteUser;
 using VehicleRepairLog.Application.Features.Users.UpdateUser;
-using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLog.API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -58,7 +60,6 @@ namespace VehicleRepairLog.API.Controllers
         /// <summary>
         ///     Endpoint for getting User data of given ID.
         /// </summary>
-        [Authorize]
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserById([FromRoute] int userId)
         {
@@ -91,9 +92,23 @@ namespace VehicleRepairLog.API.Controllers
         }
 
         /// <summary>
+        ///     Endpoint for updating User password.
+        /// </summary>
+        [HttpPut("PasswordChange/{userId}")]
+        public async Task<IActionResult> ChangeUserPassword([FromBody] ChangeUserPasswordCommand command, int userId)
+        {
+            command.UserId = userId;
+
+            // Sends Command with given data to Handler.
+            await _mediator.Send(command);
+
+            // Returns HTTP Response with status code 200(OK).
+            return NoContent();
+        }
+
+        /// <summary>
         ///     Endpoint for deleting User Accounts.
         /// </summary>
-        [Authorize]
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser([FromRoute] int userId)
         {
