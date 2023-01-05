@@ -3,9 +3,9 @@ using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Application.Features.Users.UpdateUser
 {
-    public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
+    public class UpdateUserDetailsCommandValidator : AbstractValidator<UpdateUserCommand>
     {
-        public UpdateUserCommandValidator(VehicleProfileStorageContext dbContext)
+        public UpdateUserDetailsCommandValidator(VehicleProfileStorageContext dbContext)
         {
             RuleFor(user => user.Email)
                 .EmailAddress()
