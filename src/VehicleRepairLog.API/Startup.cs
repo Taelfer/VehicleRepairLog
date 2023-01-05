@@ -26,10 +26,10 @@ namespace VehicleRepairLog.API
     {
         public Startup(IConfiguration configuration)
         {
-            this.Configuration = configuration;
+            _Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration _Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -56,10 +56,10 @@ namespace VehicleRepairLog.API
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:Audience"],
+                        ValidIssuer = _Configuration["Jwt:Issuer"],
+                        ValidAudience = _Configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                            Encoding.UTF8.GetBytes(_Configuration["Jwt:Key"]))
                     };
                 });
 
@@ -83,7 +83,7 @@ namespace VehicleRepairLog.API
             services.AddScoped<IRepairRepository, RepairRepository>();
 
             services.AddDbContext<VehicleProfileStorageContext>(options =>
-                options.UseSqlServer(this.Configuration.GetConnectionString("VehicleProfileStorageContext")));
+                options.UseSqlServer(this._Configuration.GetConnectionString("VehicleProfileStorageContext")));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

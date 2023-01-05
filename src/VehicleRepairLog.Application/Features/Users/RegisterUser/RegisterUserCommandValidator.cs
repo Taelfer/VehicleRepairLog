@@ -17,7 +17,7 @@ namespace VehicleRepairLog.Application.Features.Users
                 .MinimumLength(8)
                 .MaximumLength(100);
 
-            RuleFor(user => user.ConfirmPassword).Equal(command => command.Password);
+            RuleFor(user => user.ConfirmPassword).Equal(user => user.Password);
 
             RuleFor(user => user.Username)
                 .MaximumLength(100)
