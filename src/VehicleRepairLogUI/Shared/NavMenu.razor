@@ -63,7 +63,7 @@
             string userId = authState.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             int id = Convert.ToInt32(userId);
 
-            // Takes to user with given ID profile page.
+            // Takes to user profile page with given ID.
             navigationManager.NavigateTo($"/userProfile/{id}", true);
         }
     }
