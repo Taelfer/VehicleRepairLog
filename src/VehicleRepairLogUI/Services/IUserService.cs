@@ -1,10 +1,11 @@
-﻿using VehicleRepairLogUI.Models;
+﻿using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLogUI.Services
 {
     public interface IUserService
     {
-        Task<User> GetUserByIdAsync(int id);
-        Task<User> UpdateUserAsync(User user);
+        Task<UserDto> GetUserByIdAsync(int id);
+        Task<UserDto> UpdateUserDetailsAsync(UserDto user);
+        Task ChangePasswordAsync(PasswordChangeRequestDto passwordChangeRequest, int userId);
     }
 }

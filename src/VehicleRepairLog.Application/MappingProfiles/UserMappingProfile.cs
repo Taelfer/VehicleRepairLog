@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Features.Users;
-using VehicleRepairLog.Infrastructure.Entities;
+using VehicleRepairLog.Application.Features.Users.ChangeUserPassword;
 using VehicleRepairLog.Application.Features.Users.UpdateUser;
+using VehicleRepairLog.Infrastructure.Entities;
+using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLog.Application.MappingProfiles
 {
@@ -36,6 +37,9 @@ namespace VehicleRepairLog.Application.MappingProfiles
                 .ForMember(user => user.Username, y => y.MapFrom(updateUserCommand => updateUserCommand.Username))
                 .ForMember(user => user.Password, y => y.MapFrom(registerUserCommand => registerUserCommand.Password))
                 .ForMember(user => user.Role, y => y.MapFrom(updateUserCommand => updateUserCommand.Role));
+
+            CreateMap<ChangeUserPasswordCommand, User>()
+                .ForMember(user => user.Password, y => y.MapFrom(changeUserPasswordCommand => changeUserPasswordCommand.NewPassword));
         }
     }
 }
