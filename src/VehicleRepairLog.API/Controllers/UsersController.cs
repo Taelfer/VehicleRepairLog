@@ -80,7 +80,7 @@ namespace VehicleRepairLog.API.Controllers
         ///     Endpoint for updating User data.
         /// </summary>
         [HttpPut("{userId}")]
-        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command, int userId)
+        public async Task<IActionResult> UpdateUserDetails([FromBody] UpdateUserCommand command, int userId)
         {
             command.UserId = userId;
 
