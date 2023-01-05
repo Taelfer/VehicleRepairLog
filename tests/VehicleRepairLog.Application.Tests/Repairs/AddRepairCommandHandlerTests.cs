@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Repairs;
 using VehicleRepairLog.Application.MappingProfiles;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Tests.Mocks;
 using VehicleRepairLog.Infrastructure.Entities;
 using VehicleRepairLog.Infrastructure.Repositories;

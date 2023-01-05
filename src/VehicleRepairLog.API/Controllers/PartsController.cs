@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Features.Parts;
-using VehicleRepairLog.Application.Models;
+using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLog.API.Controllers
 {

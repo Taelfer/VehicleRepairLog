@@ -3,9 +3,9 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Exceptions;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Infrastructure.Entities;
 using VehicleRepairLog.Infrastructure.Repositories;
+using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLog.Application.Features.Parts
 {
