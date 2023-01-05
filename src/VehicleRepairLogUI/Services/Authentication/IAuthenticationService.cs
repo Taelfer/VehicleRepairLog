@@ -1,11 +1,11 @@
-﻿using VehicleRepairLogUI.Models;
+﻿using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLogUI.Services.Authentication
 {
     public interface IAuthenticationService
     {
-        Task<RegisterResult> RegisterAsync(RegisterRequest registerRequest);
-        Task<LoginResult> LoginAsync(LoginRequest loginRequest);
+        Task<RegisterResultDto> RegisterAsync(RegisterRequestDto registerRequest);
+        Task<LoginResultDto> LoginAsync(LoginRequestDto loginRequest);
         Task LogoutAsync();
     }
 }

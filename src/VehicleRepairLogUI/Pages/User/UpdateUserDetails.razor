@@ -1,38 +1,38 @@
-﻿@page "/updateUserDetails/{id}"
+﻿@page "/updateDetails/{id}"
 
 @inject IUserService userService
 @inject NavigationManager navigationManager
 
-<h1>UpdateUserDetails</h1>
+<h1>Update User Details</h1>
 <hr />
 
 <div class="card col-2">
     <div class="card-body">
-        <EditForm Model="user" OnValidSubmit="(() => UpdateUserAsync(user))">
+        <EditForm Model="user" OnValidSubmit="(() => UpdateUserDetailsAsync(user))">
             <DataAnnotationsValidator />
 
             <div class="form-group">
-                <label for="Username">Username</label>
+                <label for="Username" class="control-label">Username</label>
                 <InputText id="Username" class="form-control" @bind-Value="user.Username" />
                 <ValidationMessage For="@(() => user.Username)" />
             </div>
             <div class="form-group">
-                <label for="FirstName">First Name</label>
+                <label for="FirstName" class="control-label">First Name</label>
                 <InputText id="FirstName" class="form-control" @bind-Value="user.FirstName" />
                 <ValidationMessage For="@(() => user.FirstName)" />
             </div>
             <div class="form-group">
-                <label for="LastName">Last Name</label>
+                <label for="LastName" class="control-label">Last Name</label>
                 <InputText id="LastName" class="form-control" @bind-Value="user.LastName" />
                 <ValidationMessage For="@(() => user.LastName)" />
             </div>
             <div class="form-group">
-                <label for="Email">Email</label>
+                <label for="Email" class="control-label">Email</label>
                 <InputText id="Email" type="email" class="form-control" @bind-Value="user.Email" />
                 <ValidationMessage For="@(() => user.Email)" />
             </div>
             <div class="form-group">
-                <label for="DateOfBirth">Date of birth</label>
+                <label for="DateOfBirth" class="control-label">Date of birth</label>
                 <InputDate id="DateOfBirth" class="form-control" @bind-Value="user.DateOfBirth" />
                 <ValidationMessage For="@(() => user.DateOfBirth)" />
             </div>
@@ -45,13 +45,13 @@
 @code {
     // Stores User ID taken from URI.
     [Parameter]
-    public string Id { get; set; }
-
-    protected User user = new();
+    public string? Id { get; set; }
 
     // Stores the User Authentication State data.
     [CascadingParameter]
-    protected Task<AuthenticationState> AuthState { get; set; }
+    protected Task<AuthenticationState>? AuthState { get; set; }
+
+    protected UserDto user = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,7 +59,7 @@
         user = await userService.GetUserByIdAsync(Convert.ToInt32(Id));
     }
 
-    protected async Task UpdateUserAsync(User user)
+    protected async Task UpdateUserDetailsAsync(UserDto user)
     {
         // Gets the current user State.
         AuthenticationState authState = await AuthState;
@@ -68,15 +68,14 @@
         if (authState.User.Identity.IsAuthenticated == false)
         {
             // Takes to homepage.
-            navigationManager.NavigateTo("/", true);
+            navigationManager.NavigateTo("/login", true);
         }
 
         // Otherwise...
-        // Updates user password.
-        await userService.UpdateUserAsync(user);
+        // Updates user details.
+        await userService.UpdateUserDetailsAsync(user);
 
         // Takes to User profile page.
         navigationManager.NavigateTo($"/userProfile/{Convert.ToInt32(Id)}", true);
     }
-
 }

@@ -15,7 +15,7 @@
 
 <div class="card col-2">
     <div class="card-body">
-        <EditForm Model="loginRequest" OnValidSubmit="HandleAuthentication">
+        <EditForm Model="loginRequest" OnValidSubmit="HandleAuthenticationAsync">
             <DataAnnotationsValidator />
 
             <div class="form-group">
@@ -34,11 +34,11 @@
 </div>
 
 @code {
-    private LoginRequest loginRequest = new();
+    private LoginRequestDto loginRequest = new();
     private bool showAuthenticationError;
     private string authenticationErrorMessage = "";
 
-    public async Task HandleAuthentication()
+    public async Task HandleAuthenticationAsync()
     {
         showAuthenticationError = false;
 
@@ -46,6 +46,7 @@
 
         if (authResult is not null)
         {
+            // Takes to the homepage.
             navigationManager.NavigateTo("/"); 
         }
         else

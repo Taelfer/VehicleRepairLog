@@ -3,10 +3,10 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Infrastructure;
 using VehicleRepairLog.Infrastructure.Entities;
+using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLog.Application.Features.Vehicles
 {

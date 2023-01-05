@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Application.Features.Repairs;
 using VehicleRepairLog.Application.MappingProfiles;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Infrastructure.Entities;
 using VehicleRepairLog.Infrastructure.Repositories;
+using VehicleRepairLog.Shared.DtoModels;
 using Xunit;
 
 namespace VehicleRepairLog.Application.Tests.Repairs

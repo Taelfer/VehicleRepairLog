@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
+using FluentAssertions;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Application.Features.Repairs;
 using VehicleRepairLog.Application.MappingProfiles;
 using VehicleRepairLog.Infrastructure.Entities;
 using VehicleRepairLog.Infrastructure.Repositories;
+using VehicleRepairLog.Shared.DtoModels;
 using Xunit;
-using FluentAssertions;
-using VehicleRepairLog.Application.Models;
-using VehicleRepairLog.Application.Exceptions;
 
 namespace VehicleRepairLog.Application.Tests.Repairs
 {

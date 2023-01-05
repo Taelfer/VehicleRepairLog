@@ -43,7 +43,7 @@
 </div>
 
 @code {
-    protected Vehicle vehicle = new();
+    protected VehicleDto vehicle = new();
 
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; }
@@ -54,7 +54,8 @@
 
         if (authState.User.Identity.IsAuthenticated == false)
         {
-            navigationManager.NavigateTo("/");
+            // Takes to the Login page.
+            navigationManager.NavigateTo("/login");
         }
 
         // Find better way of adding user ID to request???

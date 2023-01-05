@@ -1,13 +1,13 @@
-﻿using VehicleRepairLogUI.Models;
+﻿using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLogUI.Services
 {
     public interface IVehicleService
     {
-        Task<IEnumerable<Vehicle>> GetAllVehiclesAsync();
-        Task<Vehicle> GetVehicleByIdAsync(int id);
-        Task AddVehicleAsync(Vehicle vehicle);
-        Task<Vehicle> UpdateVehicleAsync(Vehicle vehicle);
+        Task<IEnumerable<VehicleDto>> GetAllVehiclesAsync();
+        Task<VehicleDto> GetVehicleByIdAsync(int id);
+        Task AddVehicleAsync(VehicleDto vehicle);
+        Task<VehicleDto> UpdateVehicleAsync(VehicleDto vehicle);
         Task DeleteVehicleAsync(int vehicleId);
     }
 }

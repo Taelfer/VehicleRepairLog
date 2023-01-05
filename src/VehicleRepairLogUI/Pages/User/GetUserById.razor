@@ -1,9 +1,7 @@
 ﻿@page "/userProfile/{Id}"
 
-@inject HttpClient httpClient
 @inject IUserService userService
 @inject NavigationManager navigationManager
-@inject AuthenticationStateProvider authenticationStateProvider
 
 @if (user is null)
 {
@@ -75,7 +73,7 @@ else
 
 @code {
     // Stores User data.
-    protected User user;
+    protected UserDto user;
 
     // Stores User ID taken from URI.
     [Parameter]
@@ -93,8 +91,8 @@ else
         // If the current user state is not authenticated...
         if (authState.User.Identity.IsAuthenticated == false)
         {
-            // Takes to homepage.
-            navigationManager.NavigateTo("/", true);
+            // Takes to the Login page.
+            navigationManager.NavigateTo("/login", true);
         }
 
         // Otherwise.
@@ -111,19 +109,19 @@ else
         // If the current user state is not authenticated...
         if (authState.User.Identity.IsAuthenticated == false)
         {
-            // Takes to homepage.
-            navigationManager.NavigateTo("/", true);
+            // Takes to the Login page.
+            navigationManager.NavigateTo("/login", true);
         }
         else if (passwordChange == true)
         {
             // Takes to user password update page.
-            navigationManager.NavigateTo($"/updateUserPassword/{userId}", true);
+            navigationManager.NavigateTo($"/passwordChange/{userId}", true);
         }
         else
         {
             // Otherwise...
             // Takes to User details update page.
-            navigationManager.NavigateTo($"/updateUserDetails/{userId}", true);
+            navigationManager.NavigateTo($"/updateDetails/{userId}", true);
         }
     }
 }

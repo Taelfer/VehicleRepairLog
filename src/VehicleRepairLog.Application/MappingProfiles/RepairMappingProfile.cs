@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using VehicleRepairLog.Application.Features.Repairs;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Infrastructure.Entities;
+using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLog.Application.MappingProfiles
 {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using VehicleRepairLogUI.Models;
+using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLogUI.Services.Authentication
 {
@@ -23,7 +23,7 @@ namespace VehicleRepairLogUI.Services.Authentication
             httpClient.BaseAddress = new Uri(configuration["ApiUri"]);
         }
 
-        public async Task<RegisterResult> RegisterAsync(RegisterRequest registerRequest)
+        public async Task<RegisterResultDto> RegisterAsync(RegisterRequestDto registerRequest)
         {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/api/Users/register", registerRequest);
 
@@ -32,12 +32,12 @@ namespace VehicleRepairLogUI.Services.Authentication
                 return null;
             }
 
-            var registerResult = await response.Content.ReadFromJsonAsync<RegisterResult>();
+            var registerResult = await response.Content.ReadFromJsonAsync<RegisterResultDto>();
 
             return registerResult;
         }
 
-        public async Task<LoginResult> LoginAsync(LoginRequest loginRequest)
+        public async Task<LoginResultDto> LoginAsync(LoginRequestDto loginRequest)
         {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/api/Users/authenticate", loginRequest);
             
@@ -46,7 +46,7 @@ namespace VehicleRepairLogUI.Services.Authentication
                 return null;
             }
 
-            var loginResult = await response.Content.ReadFromJsonAsync<LoginResult>();
+            var loginResult = await response.Content.ReadFromJsonAsync<LoginResultDto>();
 
             // Adding authentication token to local storage.
             await _localStorage.SetItemAsync("authToken", loginResult.Token);

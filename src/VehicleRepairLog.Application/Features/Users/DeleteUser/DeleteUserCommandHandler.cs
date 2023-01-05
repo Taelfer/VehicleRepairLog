@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Exceptions;
-using VehicleRepairLog.Application.Models;
 using VehicleRepairLog.Infrastructure;
 using VehicleRepairLog.Infrastructure.Entities;
+using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLog.Application.Features.Users.DeleteUser
 {

@@ -58,7 +58,7 @@ else
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; }
 
-    protected Vehicle vehicle = new();
+    protected VehicleDto vehicle = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -71,7 +71,7 @@ else
     /// </summary>
     /// <param name="vehicle"></param>
     /// <returns>A <see cref="Task"/> representing an asynchronous operation.</returns>
-    protected async Task UpdateVehicleAsync(Vehicle vehicle)
+    protected async Task UpdateVehicleAsync(VehicleDto vehicle)
     {
         // Gets the current user State.
         AuthenticationState authState = await AuthState;
@@ -79,8 +79,8 @@ else
         // If the current user state is not authenticated...
         if (authState.User.Identity.IsAuthenticated == false)
         {
-            // Takes to homepage.
-            navigationManager.NavigateTo("/", true);
+            // Takes to the Login page.
+            navigationManager.NavigateTo("/login", true);
         }
 
         // Otherwise...

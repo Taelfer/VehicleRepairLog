@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using VehicleRepairLogUI.Models;
+using VehicleRepairLog.Shared.DtoModels;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace VehicleRepairLogUI.Services
@@ -22,7 +22,7 @@ namespace VehicleRepairLogUI.Services
             httpClient.BaseAddress = new Uri(configuration["ApiUri"]);
         }
 
-        public async Task AddVehicleAsync(Vehicle vehicle)
+        public async Task AddVehicleAsync(VehicleDto vehicle)
         {
             string token = await _localStorage.GetItemAsync<string>("authToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -37,7 +37,7 @@ namespace VehicleRepairLogUI.Services
             }
         }
 
-        public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync()
+        public async Task<IEnumerable<VehicleDto>> GetAllVehiclesAsync()
         {
             // Getting authentication token from local storage and adding it to HTTP request authorization header as Bearer.
             string token = await _localStorage.GetItemAsync<string>("authToken");
@@ -50,12 +50,12 @@ namespace VehicleRepairLogUI.Services
                 return null;
             }
 
-            var vehicles = await response.Content.ReadFromJsonAsync<IEnumerable<Vehicle>>();
+            var vehicles = await response.Content.ReadFromJsonAsync<IEnumerable<VehicleDto>>();
 
             return vehicles;
         }
 
-        public async Task<Vehicle> GetVehicleByIdAsync(int id)
+        public async Task<VehicleDto> GetVehicleByIdAsync(int id)
         {
             string token = await _localStorage.GetItemAsync<string>("authToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -67,11 +67,11 @@ namespace VehicleRepairLogUI.Services
                 return null;
             }
 
-            var vehicle = await response.Content.ReadFromJsonAsync<Vehicle>();
+            var vehicle = await response.Content.ReadFromJsonAsync<VehicleDto>();
             return vehicle;
         }
 
-        public async Task<Vehicle> UpdateVehicleAsync(Vehicle vehicle)
+        public async Task<VehicleDto> UpdateVehicleAsync(VehicleDto vehicle)
         {
             string token = await _localStorage.GetItemAsync<string>("authToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -83,7 +83,7 @@ namespace VehicleRepairLogUI.Services
                 return null;
             }
 
-            vehicle = await response.Content.ReadFromJsonAsync<Vehicle>();
+            vehicle = await response.Content.ReadFromJsonAsync<VehicleDto>();
             return vehicle;
         }
 

@@ -51,8 +51,8 @@ else
 }
 
 @code {
-    protected IEnumerable<Vehicle> vehicles;
-    protected IEnumerable<Repair> repairs;
+    protected IEnumerable<VehicleDto> vehicles;
+    protected IEnumerable<RepairDto> repairs;
 
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; }
@@ -63,6 +63,7 @@ else
 
         if (authState.User.Identity.IsAuthenticated == false)
         {
+            // Takes to the Homepage.
             navigationManager.NavigateTo("/", true);
         }
 
@@ -75,7 +76,8 @@ else
 
         if (authState.User.Identity.IsAuthenticated == false)
         {
-            navigationManager.NavigateTo("/", true);
+            // Takes to the Login page.
+            navigationManager.NavigateTo("/login", true);
         }
 
         navigationManager.NavigateTo($"/updateVehicle/{id}", true);
@@ -87,7 +89,8 @@ else
 
         if (authState.User.Identity.IsAuthenticated == false)
         {
-            navigationManager.NavigateTo("/", true);
+            // Takes to the Login page.
+            navigationManager.NavigateTo("/login", true);
         }
 
         await vehicleService.DeleteVehicleAsync(id);
@@ -100,7 +103,8 @@ else
 
         if (authState.User.Identity.IsAuthenticated == false)
         {
-            navigationManager.NavigateTo("/", true);
+            // Takes to the Login page.
+            navigationManager.NavigateTo("/login", true);
         }
 
         navigationManager.NavigateTo($"/vehicleProfile/{id}", true);

@@ -1,6 +1,5 @@
 ﻿@page "/vehicleProfile/{Id}"
 
-@inject HttpClient httpClient
 @inject IVehicleService vehicleService
 @inject NavigationManager navigationManager
 
@@ -37,7 +36,7 @@ else
                             <th>Name</th>
                             <th>Date</th>
                         </tr>
-                        @foreach (Repair repair in vehicle.Repairs.OrderByDescending(repair => repair.Date))
+                        @foreach (RepairDto repair in vehicle.Repairs.OrderByDescending(repair => repair.Date))
                         {
                             <tr>
                                 <td>
@@ -65,7 +64,7 @@ else
 
 @code {
     // Stores Vehicle data.
-    protected Vehicle vehicle;
+    protected VehicleDto vehicle;
 
     // Stores Vehicle ID taken from URI.
     [Parameter]
@@ -105,8 +104,8 @@ else
         // If the current user state is not authenticated...
         if (authState.User.Identity.IsAuthenticated == false)
         {
-            // Takes to homepage.
-            navigationManager.NavigateTo("/", true);
+            // Takes to the Login page.
+            navigationManager.NavigateTo("/login", true);
         }
 
         // Otherwise...
@@ -127,8 +126,8 @@ else
         // If the current user state is not authenticated...
         if (authState.User.Identity.IsAuthenticated == false)
         {
-            // Takes to homepage.
-            navigationManager.NavigateTo("/", true);
+            // Takes to the Login page.
+            navigationManager.NavigateTo("/login", true);
         }
 
         // Otherwise...
