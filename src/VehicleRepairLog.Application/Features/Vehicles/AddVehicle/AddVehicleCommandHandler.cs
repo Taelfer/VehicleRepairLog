@@ -25,9 +25,9 @@ namespace VehicleRepairLog.Application.Features.Vehicles
     {
         private readonly IMapper _mapper;
         private readonly VehicleProfileStorageContext _context;
-        private readonly IUserService _userService;
+        private readonly IUserAuthService _userService;
 
-        public AddVehicleCommandHandler(IMapper mapper, VehicleProfileStorageContext context, IUserService userService)
+        public AddVehicleCommandHandler(IMapper mapper, VehicleProfileStorageContext context, IUserAuthService userService)
         {
             _mapper = mapper;
             _context = context;

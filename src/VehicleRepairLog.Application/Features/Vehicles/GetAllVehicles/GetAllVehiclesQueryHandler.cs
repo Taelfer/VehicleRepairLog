@@ -21,9 +21,9 @@ namespace VehicleRepairLog.Application.Features.Vehicles
     {
         private readonly IMapper _mapper;
         private readonly VehicleProfileStorageContext _context;
-        private readonly IUserService _userService;
+        private readonly IUserAuthService _userService;
 
-        public GetAllVehiclesQueryHandler(IMapper mapper, VehicleProfileStorageContext context, IUserService userService)
+        public GetAllVehiclesQueryHandler(IMapper mapper, VehicleProfileStorageContext context, IUserAuthService userService)
         {
             _mapper = mapper;
             _context = context;

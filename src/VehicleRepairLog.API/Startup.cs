@@ -77,7 +77,7 @@ namespace VehicleRepairLog.API
             services.AddHttpContextAccessor();
 
             services.AddTransient<IJwtAuth, JwtAuth>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUserAuthService, UserAuthService>();
 
             services.AddScoped<IPartRepository, PartRepository>();
             services.AddScoped<IRepairRepository, RepairRepository>();

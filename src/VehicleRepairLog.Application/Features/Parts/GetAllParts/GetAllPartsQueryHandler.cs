@@ -19,10 +19,10 @@ namespace VehicleRepairLog.Application.Features.Parts
     public class GetAllPartsQueryHandler : IRequestHandler<GetAllPartsQuery, List<PartDto>>
     {
         private readonly IMapper _mapper;
-        private readonly IUserService _userClaims;
+        private readonly IUserAuthService _userClaims;
         private readonly IPartRepository _partRepository;
 
-        public GetAllPartsQueryHandler(IMapper mapper, IUserService userClaims, IPartRepository partRepository)
+        public GetAllPartsQueryHandler(IMapper mapper, IUserAuthService userClaims, IPartRepository partRepository)
         {
             _mapper = mapper;
             _userClaims = userClaims;

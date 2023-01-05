@@ -1,6 +1,6 @@
 ﻿namespace VehicleRepairLog.Application.Authentication
 {
-    public interface IUserService
+    public interface IUserAuthService
     {
         int? GetCurrentUserId();
         string GetCurrentUserRole();

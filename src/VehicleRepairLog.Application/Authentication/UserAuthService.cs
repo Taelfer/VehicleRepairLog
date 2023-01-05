@@ -4,11 +4,11 @@ using System.Security.Claims;
 
 namespace VehicleRepairLog.Application.Authentication
 {
-    public class UserService : IUserService
+    public class UserAuthService : IUserAuthService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IHttpContextAccessor httpContextAccessor)
+        public UserAuthService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
