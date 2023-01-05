@@ -18,7 +18,7 @@ else
                 <DataAnnotationsValidator />
 
                 <div class="form-group">
-                    <label for="BrandName" class="control-label">Brand Name</label>
+                    <label for="BrandName" class="control-label">Vehicle Name</label>
                     <InputText id="BrandName" class="form-control" @bind-Value="vehicle.BrandName" />
                     <ValidationMessage For="@(() => vehicle.BrandName)" />
                 </div>
@@ -88,6 +88,6 @@ else
         await vehicleService.UpdateVehicleAsync(vehicle);
 
         // Takes to Vehicles list page.
-        navigationManager.NavigateTo("/vehicles", true);
+        navigationManager.NavigateTo("/vehicleProfile/{Id}", true);
     }
 }
