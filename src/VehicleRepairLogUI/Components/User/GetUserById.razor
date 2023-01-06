@@ -1,0 +1,66 @@
+﻿<div class="user-profile-body">
+    <header>
+        <h1>User Profile</h1>
+        <hr />
+    </header>
+
+    <section>
+        <div class="user-profile-container">
+            <div class="split">
+                <div class="user-photo-container">
+                    <img src="/icon-192.png" />
+                </div>
+
+                <div class="user-details-container">
+                    <div class="user-details">
+                        <h2>Your Details</h2>
+                        <hr />
+                        <ul class="user-information-list">
+                            <li class="user-information-list-item">
+                                <span class="user-information-item-label user-information-section">Username :</span>
+                                <strong class="user-information-item-value user-information-section">@User.Username</strong>
+                            </li>
+                            <li class="user-information-list-item">
+                                <span class="user-information-item-label user-information-section">First name :</span>
+                                <strong class="user-information-item-value user-information-section">@User.FirstName</strong>
+                            </li>
+                            <li class="user-information-list-item">
+                                <span class="user-information-item-label user-information-section">Last name :</span>
+                                <strong class="user-information-item-value user-information-section">@User.LastName</strong>
+                            </li>
+                            <li class="user-information-list-item">
+                                <span class="user-information-item-label user-information-section">Email :</span>
+                                <strong class="user-information-item-value user-information-section">@User.Email</strong>
+                            </li>
+                            <li class="user-information-list-item">
+                                <span class="user-information-item-label user-information-section">Date of birth :</span>
+                                <strong class="user-information-item-value user-information-section">@User.DateOfBirth</strong>
+                            </li>
+
+                            <li class="user-information-list-item">
+                                <button class="btn btn-primary" type="button" value="User" @onclick="UserDetailsUpdate"> Edit Details </button>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="change-password">
+                        <h2>Change Password</h2>
+                        <hr />
+
+                        <div class="password-change-btn">
+                            <button class="btn btn-primary" type="button" @onclick="UserPasswordChange"> Change Password </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+@code {
+    [Parameter] public UserDto User { get; set; }
+    [Parameter] public EventCallback UserDetailsUpdate { get; set; }
+    [Parameter] public EventCallback UserPasswordChange { get; set; }
+}
