@@ -21,7 +21,8 @@ namespace VehicleRepairLogUI
             builder.Services
                 .AddScoped<IVehicleService, VehicleService>()
                 .AddScoped<IUserService, UserService>()
-                .AddScoped<IAuthenticationService, AuthenticationService>();
+                .AddScoped<IAuthenticationService, AuthenticationService>()
+                .AddScoped<UpdateUserDetailsService>();
 
             builder.Services.AddAuthorizationCore();
 
@@ -32,6 +33,7 @@ namespace VehicleRepairLogUI
             // Creating 'typed' HttpClient instances for Services.
             builder.Services.AddHttpClient<IVehicleService, VehicleService>();
             builder.Services.AddHttpClient<IUserService, UserService>();
+            builder.Services.AddHttpClient<IRepairService, RepairService>();
             builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>();
             builder.Services.AddHttpClient<CustomAuthenticationStateProvider>(httpClient =>
             {
