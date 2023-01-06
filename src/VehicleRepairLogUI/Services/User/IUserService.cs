@@ -1,6 +1,6 @@
 ﻿using VehicleRepairLog.Shared.DtoModels;
 
-namespace VehicleRepairLogUI.Services
+namespace VehicleRepairLogUI.Services.User
 {
     public interface IUserService
     {

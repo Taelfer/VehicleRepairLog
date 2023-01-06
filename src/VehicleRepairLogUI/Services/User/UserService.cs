@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using VehicleRepairLog.Shared.DtoModels;
 
-namespace VehicleRepairLogUI.Services
+namespace VehicleRepairLogUI.Services.User
 {
     public class UserService : IUserService
     {

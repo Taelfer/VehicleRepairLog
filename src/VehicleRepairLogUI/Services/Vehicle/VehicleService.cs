@@ -6,7 +6,7 @@ using System.Text.Json;
 using VehicleRepairLog.Shared.DtoModels;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace VehicleRepairLogUI.Services
+namespace VehicleRepairLogUI.Services.Vehicle
 {
     public class VehicleService : IVehicleService
     {
