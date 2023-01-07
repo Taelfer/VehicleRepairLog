@@ -6,7 +6,7 @@
 
 <div class="card col-3">
     <div class="card-body">
-        <EditForm Model="User" OnValidSubmit="(() => UpdateUserDetailsAsync(User))">
+        <EditForm Model="User">
             <DataAnnotationsValidator />
 
             <div class="form-group">
@@ -35,8 +35,8 @@
                 <ValidationMessage For="@(() => User.DateOfBirth)" />
             </div>
 
-            <button type="submit" class="btn btn-success">Save changes</button>
-            <button type="button" class="btn btn-primary" @onclick="OnCancel">Back to Profile</button>
+            <button type="submit" class="btn btn-success" @onclick="OnConfirm">Save changes</button>
+            <button type="button" class="btn btn-danger" @onclick="OnCancel">Cancel</button>
         </EditForm>
     </div>
 </div>
@@ -44,6 +44,7 @@
 @code {
     [Parameter] public UserDto User { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public EventCallback OnConfirm { get; set; }
 
     // Stores the User Authentication State data.
     [CascadingParameter]
@@ -60,11 +61,5 @@
             // Takes to homepage.
             navigationManager.NavigateTo("/login", true);
         }
-    }
-
-    protected async Task UpdateUserDetailsAsync(UserDto user)
-    {
-        // Updates user details.
-        await userService.UpdateUserDetailsAsync(user);
     }
 }
