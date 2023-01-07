@@ -2,8 +2,10 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using VehicleRepairLogUI.Services;
 using VehicleRepairLogUI.Services.Authentication;
+using VehicleRepairLogUI.Services.Repair;
+using VehicleRepairLogUI.Services.User;
+using VehicleRepairLogUI.Services.Vehicle;
 
 namespace VehicleRepairLogUI
 {
@@ -21,8 +23,7 @@ namespace VehicleRepairLogUI
             builder.Services
                 .AddScoped<IVehicleService, VehicleService>()
                 .AddScoped<IUserService, UserService>()
-                .AddScoped<IAuthenticationService, AuthenticationService>()
-                .AddScoped<UpdateUserDetailsService>();
+                .AddScoped<IAuthenticationService, AuthenticationService>();
 
             builder.Services.AddAuthorizationCore();
 
