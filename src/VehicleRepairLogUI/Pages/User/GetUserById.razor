@@ -1,0 +1,61 @@
+﻿@page "/userProfile/{UserId}"
+
+@inject IUserService userService
+@inject NavigationManager navigationManager
+
+<div class="main">
+    @if (User is null)
+    {
+        <p>Loading...</p>
+    }
+    else if (userService.ShowEditDetailsForm == false && userService.ShowPasswordChangeForm == false)
+    {
+        <UserProfile 
+            User="User"
+            UserDetailsUpdate="userService.ShowUpdateUserDetailsForm"
+            UserPasswordChange="userService.ShowUserPasswordChangeForm" />
+    }
+    else if (userService.ShowEditDetailsForm == true)
+    {
+        <UpdateUserDetails 
+            User="User"
+            OnConfirm="@(async () => await userService.UpdateUserDetailsAsync(User))"
+            OnCancel="userService.ReturnToUserProfilePage" />
+    }
+    else if (userService.ShowPasswordChangeForm == true)
+    {
+        <ChangeUserPassword 
+            PasswordChangeRequest="PasswordChangeRequest"
+            OnConfirm="@(async () => await userService.ChangePasswordAsync(PasswordChangeRequest, User.Id))"
+            OnCancel="userService.ReturnToUserProfilePage" />
+    }
+</div>
+
+@code {
+    [Parameter] public UserDto User { get; set; }
+
+    [Parameter] public PasswordChangeRequestDto PasswordChangeRequest { get; set; } = new PasswordChangeRequestDto();
+
+    // Stores User ID taken from URI.
+    [Parameter] public string UserId { get; set; }
+
+    // Stores the User Authentication State data.
+    [CascadingParameter] protected Task<AuthenticationState> AuthState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Get the current user State.
+        AuthenticationState authState = await AuthState;
+
+        // If the current user state is not authenticated...
+        if (authState.User.Identity.IsAuthenticated == false)
+        {
+            // Takes to the Login page.
+            navigationManager.NavigateTo("/login", true);
+        }
+
+        // Otherwise.
+        // Gets User data asynchronously with ID from URI.
+        User = await userService.GetUserByIdAsync(Convert.ToInt32(UserId));
+    }
+}

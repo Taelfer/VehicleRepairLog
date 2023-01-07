@@ -1,0 +1,44 @@
+﻿ul {
+    list-style: none;
+}
+
+.user-profile-body {
+    font-weight: 500;
+    font-size: 1.3125rem;
+    line-height: 1.6;
+}
+
+h1,
+h2 {
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 0.6em;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+header,
+section {
+    padding: 3rem 0;
+}
+
+/*.container {
+    margin-inline: auto;
+    width: min(90%, 70.5rem);
+}*/
+
+.split {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.split > *:nth-child(1) {
+    flex: 1 1 30%;
+}
+
+.split > *:nth-child(2) {
+    flex: 1 1 70%;
+}
