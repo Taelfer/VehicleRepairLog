@@ -21,8 +21,4 @@
     <ProjectReference Include="..\..\VehicleRepairLog.Shared\VehicleRepairLog.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Components\Vehicle\" />
-  </ItemGroup>
-
 </Project>
