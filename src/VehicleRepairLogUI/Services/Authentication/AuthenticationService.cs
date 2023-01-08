@@ -52,7 +52,7 @@ namespace VehicleRepairLogUI.Services.Authentication
             await _localStorage.SetItemAsync("authToken", loginResult.Token);
 
             // Notifying AuthenticationStateProvider that user state changed and is now authenticated.
-            ((CustomAuthenticationStateProvider)_authenticationStateProvider).NotifyUserIsAuthenticated(loginResult.Token);
+            ((CustomAuthenticationStateProvider)_authenticationStateProvider).Notify();
 
             // Adding authentication token to HTTP Authorization header as Bearer.
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResult.Token);
@@ -66,7 +66,7 @@ namespace VehicleRepairLogUI.Services.Authentication
             await _localStorage.RemoveItemAsync("authToken");
 
             // Notifies AuthenticationStateProvider that user state changed and is no longer authenticated.
-            ((CustomAuthenticationStateProvider)_authenticationStateProvider).NotifyUserLogout();
+            ((CustomAuthenticationStateProvider)_authenticationStateProvider).Notify();
 
             // Changes HTTP authorization header to null.
             _httpClient.DefaultRequestHeaders.Authorization = null;

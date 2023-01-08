@@ -22,7 +22,7 @@ namespace VehicleRepairLogUI.Services.Authentication
         {
             string savedToken = await _localStorage.GetItemAsync<string>("authToken");
 
-            if (string.IsNullOrWhiteSpace(savedToken))
+            if (string.IsNullOrEmpty(savedToken))
             {
                 // Returns null value if auth token is empty.
                 return _anonymous;
@@ -34,18 +34,29 @@ namespace VehicleRepairLogUI.Services.Authentication
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(savedToken), "jwtAuthType")));
         }
 
-        public void NotifyUserIsAuthenticated(string token)
-        {
-            ClaimsPrincipal authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType"));
-            Task<AuthenticationState> authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+        // NOT WORKING AS INTENDED (MAYBE DELETE)
 
-            NotifyAuthenticationStateChanged(authState);
-        }
+        //public void NotifyUserIsAuthenticated(string token)
+        //{
+        //    ClaimsPrincipal authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType"));
+        //    Task<AuthenticationState> authState = Task.FromResult(new AuthenticationState(authenticatedUser));
 
-        public void NotifyUserLogout()
+        //    //NotifyAuthenticationStateChanged(authState);
+
+        //    NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+        //}
+
+        //public void NotifyUserLogout()
+        //{
+        //    Task<AuthenticationState> authState = Task.FromResult(_anonymous);
+        //    //NotifyAuthenticationStateChanged(authState);
+
+        //    NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+        //}
+
+        public void Notify()
         {
-            Task<AuthenticationState> authState = Task.FromResult(_anonymous);
-            NotifyAuthenticationStateChanged(authState);
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
     }
 }
