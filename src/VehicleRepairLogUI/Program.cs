@@ -23,13 +23,13 @@ namespace VehicleRepairLogUI
             builder.Services
                 .AddScoped<IVehicleService, VehicleService>()
                 .AddScoped<IUserService, UserService>()
-                .AddScoped<IAuthenticationService, AuthenticationService>();
+                .AddScoped<IAuthenticationService, AuthenticationService>()
+                .AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
-            builder.Services.AddAuthorizationCore();
-
-            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-
-            builder.Services.AddBlazoredLocalStorage();
+            builder.Services
+                .AddOptions()
+                .AddAuthorizationCore()
+                .AddBlazoredLocalStorage();
 
             // Creating 'typed' HttpClient instances for Services.
             builder.Services.AddHttpClient<IVehicleService, VehicleService>();
