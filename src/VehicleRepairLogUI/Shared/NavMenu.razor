@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager navigationManager
+@inject IUserService userService
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -25,7 +26,7 @@
                 </div>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" @onclick="@(() => UserProfileAsync())">
-                        <span class="oi active" aria-hidden="true"></span> Profile
+                        <span class="oi oi-person active" aria-hidden="true"></span> Profile
                     </NavLink>
                 </div>
             </Authorized>
@@ -34,9 +35,10 @@
 </div>
 
 @code {
+    public int UserId { get; set; }
+
     // Stores the User Authentication State data.
-    [CascadingParameter]
-    protected Task<AuthenticationState> AuthState { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; }
 
     private bool collapseNavMenu = true;
 
@@ -61,10 +63,10 @@
         else
         {
             string userId = authState.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            int id = Convert.ToInt32(userId);
+            UserId = Convert.ToInt32(userId);
 
             // Takes to user profile page with given ID.
-            navigationManager.NavigateTo($"/userProfile/{id}", true);
-        }
+            navigationManager.NavigateTo($"/userProfile/{UserId}", true);
+        }  
     }
 }
