@@ -20,18 +20,19 @@
         <UpdateUserDetails 
             User="User"
             OnConfirm="@(async () => await userService.UpdateUserDetailsAsync(User))"
-            OnCancel="userService.ReturnToUserProfilePage" />
+            OnCancel="userService.CancelDetailsUpdate" />
     }
     else if (userService.ShowPasswordChangeForm == true)
     {
         <ChangeUserPassword 
             PasswordChangeRequest="PasswordChangeRequest"
             OnConfirm="@(async () => await userService.ChangePasswordAsync(PasswordChangeRequest, User.Id))"
-            OnCancel="userService.ReturnToUserProfilePage" />
+            OnCancel="userService.CancelDetailsUpdate" />
     }
 </div>
 
 @code {
+    // Stores current User data.
     [Parameter] public UserDto User { get; set; }
 
     [Parameter] public PasswordChangeRequestDto PasswordChangeRequest { get; set; } = new PasswordChangeRequestDto();
@@ -40,7 +41,7 @@
     [Parameter] public string UserId { get; set; }
 
     // Stores the User Authentication State data.
-    [CascadingParameter] protected Task<AuthenticationState> AuthState { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
