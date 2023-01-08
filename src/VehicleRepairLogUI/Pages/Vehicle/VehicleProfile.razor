@@ -1,0 +1,55 @@
+﻿
+<h1>Vehicle Profile</h1>
+<hr />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Vehicle Name</th>
+            <th>Paint Color</th>
+            <th>Fuel Type</th>
+            <th>Mileage</th>
+            <th>Repairs</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Vehicle.BrandName</td>
+            <td>@Vehicle.PaintColor</td>
+            <td>@Vehicle.FuelType</td>
+            <td>@Vehicle.Mileage</td>
+            <td>
+                <table width="100%">
+                    <tr>
+                        <th>Name</th>
+                        <th>Date</th>
+                    </tr>
+                    @foreach (RepairDto repair in Vehicle.Repairs.OrderByDescending(repair => repair.Date))
+                    {
+                        <tr>
+                            <td>
+                                @repair.Name
+                            </td>
+                            <td>
+                                @repair.Date
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </td>
+            <td>
+                <button class="btn btn-primary" type="button" @onclick="VehicleDetailsUpdate">Update</button>
+            </td>
+            <td>
+                <button class="btn btn-danger" type="button" @onclick="VehicleDelete">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@code {
+    [Parameter] public VehicleDto Vehicle { get; set; }
+    [Parameter] public EventCallback VehicleDetailsUpdate { get; set; }
+    [Parameter] public EventCallback VehicleDelete { get; set; }
+}
