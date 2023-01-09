@@ -7,9 +7,6 @@ namespace VehicleRepairLogUI.Services.User
 {
     public class UserService : IUserService
     {
-        public bool ShowEditDetailsForm { get; set; }
-        public bool ShowPasswordChangeForm { get; set; }
-
         private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorage;
 
@@ -75,9 +72,6 @@ namespace VehicleRepairLogUI.Services.User
             // Otherwise map data returned by API into User object.
             user = await response.Content.ReadFromJsonAsync<UserDto>();
 
-            //_updateUserDetailsService.ShowEditDetailsForm = false;
-            ShowEditDetailsForm = false;
-
             // Return updated User details.
             return user;
         }
@@ -104,24 +98,6 @@ namespace VehicleRepairLogUI.Services.User
                 // NAPISAĆ LOGIKĘ DO OBSŁUGI BŁĘDÓW
                 throw new Exception();
             }
-
-            ShowPasswordChangeForm = false;
-        }
-
-        public void ShowUpdateUserDetailsForm()
-        {
-            ShowEditDetailsForm = true;
-        }
-
-        public void ShowUserPasswordChangeForm()
-        {
-            ShowPasswordChangeForm = true;
-        }
-
-        public void ReturnToUserProfilePage()
-        {
-            ShowEditDetailsForm = false;
-            ShowPasswordChangeForm = false;
         }
     }
 }
