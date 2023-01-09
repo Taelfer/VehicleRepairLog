@@ -1,0 +1,67 @@
+﻿@page "/vehicle/{VehicleId}/addRepair"
+
+@inject IRepairService repairService
+@inject NavigationManager navigationManager
+
+<h1>Add Repair</h1>
+<hr />
+
+<div class="card col-2">
+    <div class="card-body">
+        <EditForm Model="repair" OnValidSubmit="AddRepairAsync">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <label for="Date" class="control-label">Date</label>
+                <InputDate id="Date" class="form-control" @bind-Value="repair.Date" />
+                <ValidationMessage For="@(() => repair.Date)" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Name</label>
+                <InputText id="Name" class="form-control" @bind-Value="repair.Name" />
+                <ValidationMessage For="@(() => repair.Name)" />
+            </div>
+            <div class="form-group">
+                <label for="Description" class="control-label">Description</label>
+                <InputText id="Description" class="form-control" @bind-Value="repair.Description" />
+                <ValidationMessage For="@(() => repair.Description)" />
+            </div>
+            <div class="form-group">
+                <label for="CarWorkshopName" class="control-label">CarWorkshopName</label>
+                <InputText id="CarWorkshopName" class="form-control" @bind-Value="repair.CarWorkshopName" />
+                <ValidationMessage For="@(() => repair.CarWorkshopName)" />
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">Add Repair</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    protected RepairDto repair = new();
+
+    // Stores Vehicle ID taken from URI.
+    [Parameter]
+    public string VehicleId { get; set; }
+
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; }
+
+    protected async Task AddRepairAsync()
+    {
+        AuthenticationState authState = await AuthState;
+
+        if (authState.User.Identity.IsAuthenticated == false)
+        {
+            // Takes to the Login page.
+            navigationManager.NavigateTo("/login");
+        }
+
+        // ID of the Vehicle the Repair is added to.
+        repair.VehicleId = Convert.ToInt32(VehicleId);
+
+        await repairService.AddRepairAsync(repair);
+
+        navigationManager.NavigateTo("/vehicles");
+    }
+}
