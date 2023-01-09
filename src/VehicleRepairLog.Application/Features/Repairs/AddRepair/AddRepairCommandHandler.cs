@@ -13,6 +13,7 @@ namespace VehicleRepairLog.Application.Features.Repairs
     public class AddRepairCommand : IRequest<RepairDto>
     {
         public DateTime Date { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
         public string CarWorkshopName { get; set; }
         public int VehicleId { get; set; }
