@@ -1,93 +1,56 @@
-﻿@page "/updateVehicle/{Id}"
-
-@inject IVehicleService vehicleService
-@inject NavigationManager navigationManager
-
-<h1>Update Vehicle</h1>
-<hr />
-
-@if (vehicle == null)
+﻿@if (Show is true && Vehicle is not null)
 {
-    <p>Loading...</p>
-}
-else
-{
-    <div class="card col-2">
-        <div class="card-body">
-            <EditForm Model="vehicle" OnValidSubmit="(() => UpdateVehicleAsync(vehicle))">
-                <DataAnnotationsValidator />
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Vehicle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <EditForm Model="Vehicle" class="modal-body">
+                    <DataAnnotationsValidator />
 
-                <div class="form-group">
-                    <label for="BrandName" class="control-label">Vehicle Name</label>
-                    <InputText id="BrandName" class="form-control" @bind-Value="vehicle.BrandName" />
-                    <ValidationMessage For="@(() => vehicle.BrandName)" />
-                </div>
-                <div class="form-group">
-                    <label for="VinNumber" class="control-label">Vin Number</label>
-                    <InputText id="VinNumber" class="form-control" @bind-Value="vehicle.VinNumber" />
-                    <ValidationMessage For="@(() => vehicle.VinNumber)" />
-                </div>
-                <div class="form-group">
-                    <label for="PaintColor" class="control-label">Paint Color</label>
-                    <InputText id="PaintColor" class="form-control" @bind-Value="vehicle.PaintColor" />
-                    <ValidationMessage For="@(() => vehicle.PaintColor)" />
-                </div>
-                <div class="form-group">
-                    <label for="FuelType" class="control-label">Fuel Type</label>
-                    <InputText id="FuelType" class="form-control" @bind-Value="vehicle.FuelType" />
-                    <ValidationMessage For="@(() => vehicle.FuelType)" />
-                </div>
-                <div class="form-group">
-                    <label for="Mileage" class="control-label">Mileage</label>
-                    <input id="Mileage" class="form-control" @bind-value="vehicle.Mileage" />
-                    <ValidationMessage For="@(() => vehicle.Mileage)" />
-                </div>
+                    <div class="form-group">
+                        <label for="BrandName" class="control-label">Brand Name</label>
+                        <InputText id="BrandName" class="form-control" @bind-Value="Vehicle.BrandName" />
+                        <ValidationMessage For="@(() => Vehicle.BrandName)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="VinNumber" class="control-label">Vin Number</label>
+                        <InputText id="VinNumber" class="form-control" @bind-Value="Vehicle.VinNumber" />
+                        <ValidationMessage For="@(() => Vehicle.VinNumber)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="PaintColor" class="control-label">Paint Color</label>
+                        <InputText id="PaintColor" class="form-control" @bind-Value="Vehicle.PaintColor" />
+                        <ValidationMessage For="@(() => Vehicle.PaintColor)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="FuelType" class="control-label">Fuel Type</label>
+                        <InputText id="FuelType" class="form-control" @bind-Value="Vehicle.FuelType" />
+                        <ValidationMessage For="@(() => Vehicle.FuelType)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Mileage" class="control-label">Mileage</label>
+                        <input id="Mileage" class="form-control" @bind-value="@Vehicle.Mileage" />
+                        <ValidationMessage For="@(() => Vehicle.Mileage)" />
+                    </div>
 
-                <button type="submit" class="btn btn-success">Save changes</button>
-            </EditForm>
+                </EditForm>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" data-dismiss="modal" @onclick="OnConfirm">Save</button>
+                    <button type="button" class="btn btn-danger" @onclick="OnCancel">Cancel</button>
+                </div>
+            </div>
         </div>
     </div>
 }
 
 @code {
-    // Stores Vehicle ID taken from URI.
-    [Parameter]
-    public string Id { get; set; }
-
-    // Stores the User Authentication State data.
-    [CascadingParameter]
-    protected Task<AuthenticationState> AuthState { get; set; }
-
-    protected VehicleDto vehicle = new();
-
-    protected override async Task OnInitializedAsync()
-    {
-        // Gets Vehicle data asynchronously with ID from URI.
-        vehicle = await vehicleService.GetVehicleByIdAsync(Convert.ToInt32(Id));
-    }
-
-    /// <summary>
-    ///     Updates chosen <see cref="Vehicle"/> with changes made.
-    /// </summary>
-    /// <param name="vehicle"></param>
-    /// <returns>A <see cref="Task"/> representing an asynchronous operation.</returns>
-    protected async Task UpdateVehicleAsync(VehicleDto vehicle)
-    {
-        // Gets the current user State.
-        AuthenticationState authState = await AuthState;
-
-        // If the current user state is not authenticated...
-        if (authState.User.Identity.IsAuthenticated == false)
-        {
-            // Takes to the Login page.
-            navigationManager.NavigateTo("/login", true);
-        }
-
-        // Otherwise...
-        // Updates Vehicle with changes made.
-        await vehicleService.UpdateVehicleAsync(vehicle);
-
-        // Takes to Vehicles list page.
-        navigationManager.NavigateTo("/vehicleProfile/{Id}", true);
-    }
+    [Parameter] public bool Show { get; set; }
+    [Parameter] public VehicleDto Vehicle { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public EventCallback OnConfirm { get; set; }
 }

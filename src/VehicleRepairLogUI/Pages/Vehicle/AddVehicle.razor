@@ -1,73 +1,57 @@
-﻿@page "/addVehicle"
+﻿
+@if (Show is true)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Vehicle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <EditForm Model="Vehicle" class="modal-body">
+                        <DataAnnotationsValidator />
 
-@inject IVehicleService vehicleService
-@inject NavigationManager navigationManager
+                        <div class="form-group">
+                            <label for="BrandName" class="control-label">Brand Name</label>
+                        <InputText id="BrandName" class="form-control" @bind-Value="Vehicle.BrandName" />
+                        <ValidationMessage For="@(() => Vehicle.BrandName)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="VinNumber" class="control-label">Vin Number</label>
+                        <InputText id="VinNumber" class="form-control" @bind-Value="Vehicle.VinNumber" />
+                        <ValidationMessage For="@(() => Vehicle.VinNumber)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="PaintColor" class="control-label">Paint Color</label>
+                        <InputText id="PaintColor" class="form-control" @bind-Value="Vehicle.PaintColor" />
+                        <ValidationMessage For="@(() => Vehicle.PaintColor)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="FuelType" class="control-label">Fuel Type</label>
+                        <InputText id="FuelType" class="form-control" @bind-Value="Vehicle.FuelType" />
+                        <ValidationMessage For="@(() => Vehicle.FuelType)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Mileage" class="control-label">Mileage</label>
+                        <input id="Mileage" class="form-control" @bind-value="@Vehicle.Mileage" />
+                        <ValidationMessage For="@(() => Vehicle.Mileage)" />
+                        </div>
 
-<h1>Add Vehicle</h1>
-<hr />
-
-<div class="card col-2">
-    <div class="card-body">
-        <EditForm Model="vehicle" OnValidSubmit="AddVehicleAsync">
-            <DataAnnotationsValidator />
-
-            <div class="form-group">
-                <label for="BrandName" class="control-label">Brand Name</label>
-                <InputText id="BrandName" class="form-control" @bind-Value="vehicle.BrandName"/>
-                <ValidationMessage For="@(() => vehicle.BrandName)"/>
+                    </EditForm>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" data-dismiss="modal" @onclick="OnConfirm">Save</button>
+                    <button type="button" class="btn btn-danger" @onclick="OnCancel">Cancel</button>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="VinNumber" class="control-label">Vin Number</label>
-                <InputText id="VinNumber" class="form-control" @bind-Value="vehicle.VinNumber"/>
-                <ValidationMessage For="@(() => vehicle.VinNumber)"/>
-            </div>
-            <div class="form-group">
-                <label for="PaintColor" class="control-label">Paint Color</label>
-                <InputText id="PaintColor" class="form-control" @bind-Value="vehicle.PaintColor"/>
-                <ValidationMessage For="@(() => vehicle.PaintColor)"/>
-            </div>
-            <div class="form-group">
-                <label for="FuelType" class="control-label">Fuel Type</label>
-                <InputText id="FuelType" class="form-control" @bind-Value="vehicle.FuelType"/>
-                <ValidationMessage For="@(() => vehicle.FuelType)"/>
-            </div>
-            <div class="form-group">
-                <label for="Mileage" class="control-label">Mileage</label>
-                <input id="Mileage" class="form-control" @bind-value="@vehicle.Mileage"/>
-                <ValidationMessage For="@(() => vehicle.Mileage)"/>
-            </div>
-
-            <button type="submit" class="btn btn-primary mt-2">Save</button>
-        </EditForm>
+        </div>
     </div>
-</div>
+}
 
 @code {
-    protected VehicleDto vehicle = new();
-
-    [CascadingParameter]
-    protected Task<AuthenticationState> AuthState { get; set; }
-
-    protected async Task AddVehicleAsync()
-    {
-        AuthenticationState authState = await AuthState;
-
-        if (authState.User.Identity.IsAuthenticated == false)
-        {
-            // Takes to the Login page.
-            navigationManager.NavigateTo("/login");
-        }
-
-        // Find better way of adding user ID to request???
-        vehicle.UserId = Convert.ToInt32(authState.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-        await vehicleService.AddVehicleAsync(vehicle);
-
-        navigationManager.NavigateTo("/vehicles");
-    }
-
-    void cancel()
-    {
-        navigationManager.NavigateTo("/vehicles");
-    }
+    [Parameter] public VehicleDto Vehicle { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public EventCallback OnConfirm { get; set; }
+    [Parameter] public bool Show { get; set; }
 }
