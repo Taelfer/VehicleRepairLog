@@ -6,7 +6,7 @@
 @code {
     protected override async Task OnInitializedAsync()
     {
-        await this.authService.LogoutAsync();
+        await authService.LogoutAsync();
 
         // Takes to the Login page.
         navigationManager.NavigateTo("/login");
