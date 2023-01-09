@@ -1,62 +1,79 @@
 ﻿@page "/userProfile/{UserId}"
 
+@attribute [Authorize]
+
 @inject IUserService userService
 @inject NavigationManager navigationManager
 
-<div class="main">
-    @if (User is null)
-    {
-        <p>Loading...</p>
-    }
-    else if (userService.ShowEditDetailsForm == false && userService.ShowPasswordChangeForm == false)
-    {
-        <UserProfile 
-            User="User"
-            UserDetailsUpdate="userService.ShowUpdateUserDetailsForm"
-            UserPasswordChange="userService.ShowUserPasswordChangeForm" />
-    }
-    else if (userService.ShowEditDetailsForm == true)
-    {
-        <UpdateUserDetails 
-            User="User"
-            OnConfirm="@(async () => await userService.UpdateUserDetailsAsync(User))"
-            OnCancel="userService.CancelDetailsUpdate" />
-    }
-    else if (userService.ShowPasswordChangeForm == true)
-    {
-        <ChangeUserPassword 
-            PasswordChangeRequest="PasswordChangeRequest"
-            OnConfirm="@(async () => await userService.ChangePasswordAsync(PasswordChangeRequest, User.Id))"
-            OnCancel="userService.CancelDetailsUpdate" />
-    }
-</div>
+@if (User is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <UserProfile 
+        User="User"
+        UserDetailsUpdate="ShowUpdateUserDetailsForm"
+        UserPasswordChange="ShowUserPasswordChangeForm" />
+
+    <UpdateUserDetails 
+        Show="ShowEditDetailsForm"
+        User="User"
+        OnConfirm="@(async () => await ConfirmUserDetailsUpdate())"
+        OnCancel="@(async () => await CancelDetailsUpdate())" />
+
+    <ChangeUserPassword
+        Show="ShowPasswordChangeForm"
+        PasswordChangeRequest="PasswordChangeRequest"
+        OnConfirm="@(async () => await ConfirmPasswordChange())"
+        OnCancel="@(async () => await CancelDetailsUpdate())" />
+}
 
 @code {
     // Stores current User data.
     [Parameter] public UserDto User { get; set; }
-
     [Parameter] public PasswordChangeRequestDto PasswordChangeRequest { get; set; } = new PasswordChangeRequestDto();
+    [Parameter] public bool ShowEditDetailsForm { get; set; }
+    [Parameter] public bool ShowPasswordChangeForm { get; set; }
 
     // Stores User ID taken from URI.
     [Parameter] public string UserId { get; set; }
 
-    // Stores the User Authentication State data.
-    [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
-        // Get the current user State.
-        AuthenticationState authState = await AuthState;
-
-        // If the current user state is not authenticated...
-        if (authState.User.Identity.IsAuthenticated == false)
-        {
-            // Takes to the Login page.
-            navigationManager.NavigateTo("/login", true);
-        }
-
-        // Otherwise.
         // Gets User data asynchronously with ID from URI.
         User = await userService.GetUserByIdAsync(Convert.ToInt32(UserId));
+    }
+
+    protected async Task ConfirmUserDetailsUpdate()
+    {
+        await userService.UpdateUserDetailsAsync(User);
+
+        ShowEditDetailsForm = false;
+    }
+
+    protected async Task ConfirmPasswordChange()
+    {
+        await userService.ChangePasswordAsync(PasswordChangeRequest, User.Id);
+
+        ShowPasswordChangeForm = false;
+    }
+
+    protected void ShowUpdateUserDetailsForm()
+    {
+        ShowEditDetailsForm = true;
+    }
+
+    protected void ShowUserPasswordChangeForm()
+    {
+        ShowPasswordChangeForm = true;
+    }
+
+    protected async Task CancelDetailsUpdate()
+    {
+        await OnInitializedAsync();
+
+        ShowEditDetailsForm = false;
+        ShowPasswordChangeForm = false;
     }
 }
