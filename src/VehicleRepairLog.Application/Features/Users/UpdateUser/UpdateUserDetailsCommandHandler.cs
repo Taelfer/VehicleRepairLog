@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Application.Exceptions;
@@ -21,20 +19,16 @@ namespace VehicleRepairLog.Application.Features.Users.UpdateUser
         public string Email { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string Username { get; set; }
-        public string Role { get; set; }
-        public List<string> Vehicles { get; set; }
     }
 
     internal class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
     {
         private readonly IMapper _mapper;
-        private readonly IPasswordHasher<User> _passwordHasher;
         private readonly VehicleProfileStorageContext _context;
 
-        public UpdateUserDetailsCommandHandler(IMapper mapper, IPasswordHasher<User> passwordHasher, VehicleProfileStorageContext context)
+        public UpdateUserDetailsCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
             _mapper = mapper;
-            _passwordHasher = passwordHasher;
             _context = context;
         }
 
