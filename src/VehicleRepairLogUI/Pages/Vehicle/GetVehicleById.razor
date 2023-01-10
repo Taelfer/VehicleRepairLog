@@ -11,21 +11,70 @@
 }
 else
 {
-    <VehicleProfile
-        Vehicle="Vehicle"
-        VehicleDetailsUpdate="ShowUpdateVehicleDetailsForm"
-        VehicleDelete="DisplayDeleteConfirmationPopUpForm" />
+    <h1>Vehicle Profile</h1>
+    <hr />
+
+    <button class="btn btn-primary" type="button" @onclick="AddRepairForm"> Add Repair </button>
+    <button class="btn btn-primary" type="button" @onclick="ShowUpdateVehicleDetailsForm">Update</button>
+    <button class="btn btn-danger" type="button" @onclick="DisplayDeleteConfirmationPopUpForm">Delete</button>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Vehicle Name</th>
+                <th>Paint Color</th>
+                <th>Fuel Type</th>
+                <th>Mileage</th>
+                <th>Repairs</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Vehicle.BrandName</td>
+                <td>@Vehicle.PaintColor</td>
+                <td>@Vehicle.FuelType</td>
+                <td>@Vehicle.Mileage</td>
+                <td>
+                    <table width="100%">
+                        <tr>
+                            <th>Name</th>
+                            <th>Date</th>
+                        </tr>
+                        @foreach (RepairDto repair in Vehicle.Repairs.OrderByDescending(repair => repair.Date))
+                        {
+                            <tr>
+                                <td>
+                                    @repair.Name
+                                </td>
+                                <td>
+                                    @repair.Date
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
 
     <UpdateVehicle 
-        Show="ShowEditDetailsForm"
         Vehicle="Vehicle"
-        OnConfirm="@(async () => await ConfirmVehicleDetailsUpdate())"
-        OnCancel="@(async () => await CancelDetailsUpdate())"/>
+        Show="ShowEditDetailsForm"
+        OnConfirm="@(async () => await OnInitializedAsync())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
+
+    <AddRepair 
+        Vehicle="Vehicle"
+        Show="ShowAddRepairForm"
+        OnConfirm="@(async () => await OnInitializedAsync())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
 
     <DeleteConfirmationPopUpForm 
         Show="ShowDeleteConfirmationPopUpForm"
-        OnCancel="@(async () => await CancelDetailsUpdate())"
-        OnDelete="@(async () => await ConfirmDelete())"/>
+        OnDelete="@(async () => await ConfirmDelete())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
 }
 
 
@@ -33,6 +82,7 @@ else
     // Stores Vehicle data of given ID.
     [Parameter] public VehicleDto Vehicle { get; set; }
     [Parameter] public bool ShowEditDetailsForm { get; set; }
+    [Parameter] public bool ShowAddRepairForm { get; set; }
     [Parameter] public bool ShowDeleteConfirmationPopUpForm { get; set; }
 
     // Stores Vehicle ID taken from URI.
@@ -42,6 +92,10 @@ else
     {
         // Gets Vehicle data asynchronously with ID from URI. 
         Vehicle = await vehicleService.GetVehicleByIdAsync(Convert.ToInt32(VehicleId));
+
+        ShowAddRepairForm = false;
+        ShowEditDetailsForm = false;
+        ShowDeleteConfirmationPopUpForm = false;
     }
 
     protected async Task ConfirmDelete()
@@ -52,11 +106,9 @@ else
         ShowDeleteConfirmationPopUpForm = false;
     }
 
-    protected async Task ConfirmVehicleDetailsUpdate()
+    protected void AddRepairForm()
     {
-        await vehicleService.UpdateVehicleAsync(Vehicle);
-
-        ShowEditDetailsForm = false;
+        ShowAddRepairForm = true;
     }
 
     public void DisplayDeleteConfirmationPopUpForm()
@@ -64,21 +116,8 @@ else
         ShowDeleteConfirmationPopUpForm = true;
     }
 
-    //public void CancelDeleteConfirmationPopUpform()
-    //{
-    //    ShowDeleteConfirmationPopUpForm = false;
-    //}
-
     public void ShowUpdateVehicleDetailsForm()
     {
         ShowEditDetailsForm = true;
-    }
-
-    protected async Task CancelDetailsUpdate()
-    {
-        await OnInitializedAsync();
-
-        ShowEditDetailsForm = false;
-        ShowDeleteConfirmationPopUpForm = false;
     }
 }

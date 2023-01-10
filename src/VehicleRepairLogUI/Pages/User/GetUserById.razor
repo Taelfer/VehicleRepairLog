@@ -11,22 +11,79 @@
 }
 else
 {
-    <UserProfile 
-        User="User"
-        UserDetailsUpdate="ShowUpdateUserDetailsForm"
-        UserPasswordChange="ShowUserPasswordChangeForm" />
+    <div class="user-profile-body">
+        <header>
+            <h1>User Profile</h1>
+            <hr />
+        </header>
+
+        <section>
+            <div class="user-profile-container">
+                <div class="split">
+                    <div class="user-photo-container">
+                        <img src="/icon-192.png" />
+                    </div>
+
+                    <div class="user-details-container">
+                        <div class="user-details">
+                            <h2>Your Details</h2>
+                            <hr />
+                            <ul class="user-information-list">
+                                <li class="user-information-list-item">
+                                    <span class="user-information-item-label user-information-section">Username :</span>
+                                    <strong class="user-information-item-value user-information-section">@User.Username</strong>
+                                </li>
+                                <li class="user-information-list-item">
+                                    <span class="user-information-item-label user-information-section">First name :</span>
+                                    <strong class="user-information-item-value user-information-section">@User.FirstName</strong>
+                                </li>
+                                <li class="user-information-list-item">
+                                    <span class="user-information-item-label user-information-section">Last name :</span>
+                                    <strong class="user-information-item-value user-information-section">@User.LastName</strong>
+                                </li>
+                                <li class="user-information-list-item">
+                                    <span class="user-information-item-label user-information-section">Email :</span>
+                                    <strong class="user-information-item-value user-information-section">@User.Email</strong>
+                                </li>
+                                <li class="user-information-list-item">
+                                    <span class="user-information-item-label user-information-section">Date of birth :</span>
+                                    <strong class="user-information-item-value user-information-section">@User.DateOfBirth</strong>
+                                </li>
+
+                                <li class="user-information-list-item">
+                                    <button class="btn btn-primary" type="button" value="User" @onclick="ShowUpdateUserDetailsForm"> Edit Details </button>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="change-password">
+                            <h2>Change Password</h2>
+                            <hr />
+
+                            <div class="password-change-btn">
+                                <button class="btn btn-primary" type="button" @onclick="ShowUserPasswordChangeForm">Change Password</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
 
     <UpdateUserDetails 
-        Show="ShowEditDetailsForm"
         User="User"
-        OnConfirm="@(async () => await ConfirmUserDetailsUpdate())"
-        OnCancel="@(async () => await CancelDetailsUpdate())" />
+        Show="ShowEditDetailsForm"
+        OnConfirm="@(async () => await OnInitializedAsync())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
 
     <ChangeUserPassword
-        Show="ShowPasswordChangeForm"
+        User="User"
         PasswordChangeRequest="PasswordChangeRequest"
-        OnConfirm="@(async () => await ConfirmPasswordChange())"
-        OnCancel="@(async () => await CancelDetailsUpdate())" />
+        Show="ShowPasswordChangeForm"
+        OnConfirm="@(async () => await OnInitializedAsync())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
 }
 
 @code {
@@ -43,19 +100,8 @@ else
     {
         // Gets User data asynchronously with ID from URI.
         User = await userService.GetUserByIdAsync(Convert.ToInt32(UserId));
-    }
-
-    protected async Task ConfirmUserDetailsUpdate()
-    {
-        await userService.UpdateUserDetailsAsync(User);
 
         ShowEditDetailsForm = false;
-    }
-
-    protected async Task ConfirmPasswordChange()
-    {
-        await userService.ChangePasswordAsync(PasswordChangeRequest, User.Id);
-
         ShowPasswordChangeForm = false;
     }
 
@@ -67,13 +113,5 @@ else
     protected void ShowUserPasswordChangeForm()
     {
         ShowPasswordChangeForm = true;
-    }
-
-    protected async Task CancelDetailsUpdate()
-    {
-        await OnInitializedAsync();
-
-        ShowEditDetailsForm = false;
-        ShowPasswordChangeForm = false;
     }
 }
