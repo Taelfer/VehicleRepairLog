@@ -14,7 +14,7 @@
 }
 else
 {
-    <button type="button" class="btn btn-primary" @onclick="@(async () => await AddVehicleForm())"> Add Vehicle </button>
+    <button type="button" class="btn btn-primary" @onclick="@(async () => await AddVehicleFormAsync())"> Add Vehicle </button>
 
     <table class="table table-striped">
         <thead>
@@ -34,9 +34,9 @@ else
                     <td></td>
                     <td>
                         <button class="btn btn-primary" type="button"
-                                        @onclick="@(() => AddRepairAsync(vehicle.Id))"> Add Repair </button>
-                        <button class="btn btn-danger" type="button"
-                                        @onclick="@(() => DisplayDeleteConfirmationPopUpForm(vehicle.Id))"> Delete </button>
+                                            @onclick="@(() => AddRepairFormAsync(vehicle.Id))"> Add Repair </button>
+                        <button class="btn btn-danger" type="button" 
+                                            @onclick="@(() => DisplayDeleteConfirmationPopUpForm(vehicle.Id))"> Delete </button>
                     </td>
                 </tr>
             }
@@ -46,20 +46,25 @@ else
     <AddVehicle
         Vehicle="Vehicle"
         Show="ShowAddVehicleForm"
-        OnConfirm="@(async () => await ConfirmAddVehicle())"
-        OnCancel="CancelVehicleForm"/>
+        OnConfirm="@(async () => await OnInitializedAsync())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
+
+    <AddRepair
+        Vehicle="Vehicle"
+        Show="ShowAddRepairForm"
+        OnConfirm="@(async () => await OnInitializedAsync())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
 
     <DeleteConfirmationPopUpForm 
         Show="ShowDeleteConfirmationPopUpForm"
-        OnCancel="CancelDeleteConfirmationPopUpform"
-        OnDelete="@(async () => await ConfirmDelete())" />
+        OnDelete="@(async () => await ConfirmVehicleDeleteAsync())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
 }
 
 @code {
     protected IEnumerable<VehicleDto> vehicles;
-    protected IEnumerable<RepairDto>? repairs;
-
     [Parameter] public VehicleDto Vehicle { get; set; } = new VehicleDto();
+    [Parameter] public bool ShowAddRepairForm { get; set; }
     [Parameter] public bool ShowAddVehicleForm { get; set; }
     [Parameter] public bool ShowDeleteConfirmationPopUpForm { get; set; }
     [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; }
@@ -67,14 +72,13 @@ else
     protected override async Task OnInitializedAsync()
     {
         vehicles = await vehicleService.GetAllVehiclesAsync();
+
+        ShowAddVehicleForm = false;
+        ShowAddRepairForm = false;
+        ShowDeleteConfirmationPopUpForm = false;
     }
 
-    protected async Task AddRepairAsync(int vehicleId)
-    {
-        navigationManager.NavigateTo($"/vehicle/{vehicleId}/addRepair", true);
-    }
-
-    protected async Task AddVehicleForm()
+    protected async Task AddVehicleFormAsync()
     {
         AuthenticationState authState = await AuthState;
 
@@ -87,38 +91,23 @@ else
         ShowAddVehicleForm = true;
     }
 
-    protected void CancelVehicleForm()
+    public void AddRepairFormAsync(int vehicleId)
     {
-        ShowAddVehicleForm = false;
-    }
+        Vehicle.Id = vehicleId;
 
-    protected async Task ConfirmAddVehicle()
-    {
-        await vehicleService.AddVehicleAsync(Vehicle);
-
-        await OnInitializedAsync();
-
-        ShowAddVehicleForm = false;
-    }
-
-    protected async Task ConfirmDelete()
-    {
-        await vehicleService.DeleteVehicleAsync(Vehicle.Id);
-
-        await OnInitializedAsync();
-
-        ShowDeleteConfirmationPopUpForm = false;
+        ShowAddRepairForm = true;
     }
 
     public void DisplayDeleteConfirmationPopUpForm(int vehicleId)
     {
         Vehicle.Id = vehicleId;
-
         ShowDeleteConfirmationPopUpForm = true;
     }
 
-    public void CancelDeleteConfirmationPopUpform()
+    protected async Task ConfirmVehicleDeleteAsync()
     {
-        ShowDeleteConfirmationPopUpForm = false;
+        await vehicleService.DeleteVehicleAsync(Vehicle.Id);
+
+        await OnInitializedAsync();
     }
 }
