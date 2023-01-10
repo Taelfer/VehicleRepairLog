@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
-using VehicleRepairLog.Application.Authentication;
 using VehicleRepairLog.Application.Exceptions;
 using VehicleRepairLog.Infrastructure;
 using VehicleRepairLog.Infrastructure.Entities;
@@ -13,6 +12,7 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 {
     public class AddVehicleCommand : IRequest<VehicleDto>
     {
+        public string Name { get; set; }
         public string BrandName { get; set; }
         public string VinNumber { get; set; }
         public string PaintColor { get; set; }
@@ -25,13 +25,11 @@ namespace VehicleRepairLog.Application.Features.Vehicles
     {
         private readonly IMapper _mapper;
         private readonly VehicleProfileStorageContext _context;
-        private readonly IUserAuthService _userService;
 
-        public AddVehicleCommandHandler(IMapper mapper, VehicleProfileStorageContext context, IUserAuthService userService)
+        public AddVehicleCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
             _mapper = mapper;
             _context = context;
-            _userService = userService;
         }
 
         public async Task<VehicleDto> Handle(AddVehicleCommand request, CancellationToken cancellationToken)

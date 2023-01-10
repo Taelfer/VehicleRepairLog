@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleRepairLog.Infrastructure;
@@ -11,6 +12,9 @@ namespace VehicleRepairLog.Application.Features.Users
 {
     public class RegisterUserCommand : IRequest<RegisterResultDto>
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string Email { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }

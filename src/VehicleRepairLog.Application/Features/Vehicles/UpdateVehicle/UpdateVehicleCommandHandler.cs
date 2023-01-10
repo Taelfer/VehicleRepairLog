@@ -13,6 +13,7 @@ namespace VehicleRepairLog.Application.Features.Vehicles
     public class UpdateVehicleCommand : IRequest<VehicleDto>
     {
         public int VehicleId;
+        public string Name { get; set; }
         public string BrandName { get; set; }
         public string VinNumber { get; set; }
         public string PaintColor { get; set; }
