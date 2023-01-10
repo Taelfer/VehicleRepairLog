@@ -29,9 +29,9 @@ namespace VehicleRepairLog.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllVehicles([FromQuery] GetAllVehiclesQuery query, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllVehicles([FromQuery] GetAllVehiclesQuery query)
         {
-            List<VehicleDto> response = await _mediator.Send(query, cancellationToken);
+            List<VehicleDto> response = await _mediator.Send(query);
             return Ok(response);
         }
 

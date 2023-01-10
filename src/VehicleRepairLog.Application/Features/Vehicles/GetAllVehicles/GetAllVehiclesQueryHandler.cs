@@ -32,11 +32,6 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 
         public async Task<List<VehicleDto>> Handle(GetAllVehiclesQuery request, CancellationToken cancellationToken)
         {
-            //if (cancellationToken is null)
-            //{
-            //    throw new TaskCanceledException("Task canceled");
-            //}
-
             int? userId = _userService.GetCurrentUserId();
 
             List<Vehicle> vehicles = await _context.Vehicles.Where(vehicle => vehicle.UserId == userId)
