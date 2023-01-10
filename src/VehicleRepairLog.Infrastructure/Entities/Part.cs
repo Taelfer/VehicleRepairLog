@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
-
-namespace VehicleRepairLog.Infrastructure.Entities
+﻿namespace VehicleRepairLog.Infrastructure.Entities
 {
     public class Part
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string BrandName { get; set; }
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
+        public short? Amount { get; set; }
 
         // Relation.
-        public ICollection<Repair> Repairs { get; set; } = new List<Repair>();
+        public Repair Repair { get; set; }
+        public int RepairId { get; set; }
     }
 }

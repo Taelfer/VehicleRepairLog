@@ -10,6 +10,9 @@ namespace VehicleRepairLog.Infrastructure.Configurations
         {
             builder.HasKey(vehicle => vehicle.Id);
 
+            builder.Property(vehicle => vehicle.Name)
+                   .HasMaxLength(25);
+
             builder.Property(vehicle => vehicle.BrandName)
                    .HasMaxLength(25);
 

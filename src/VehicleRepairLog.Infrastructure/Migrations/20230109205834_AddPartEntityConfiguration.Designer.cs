@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VehicleRepairLog.Infrastructure;
 
@@ -11,9 +12,10 @@ using VehicleRepairLog.Infrastructure;
 namespace VehicleRepairLog.Infrastructure.Migrations
 {
     [DbContext(typeof(VehicleProfileStorageContext))]
-    partial class VehicleProfileStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20230109205834_AddPartEntityConfiguration")]
+    partial class AddPartEntityConfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +32,7 @@ namespace VehicleRepairLog.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<short?>("Amount")
+                    b.Property<short>("Amount")
                         .HasMaxLength(5)
                         .HasColumnType("smallint");
 
@@ -44,7 +46,7 @@ namespace VehicleRepairLog.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal>("Price")
                         .HasMaxLength(50)
                         .HasColumnType("decimal(18,2)");
 
@@ -154,10 +156,6 @@ namespace VehicleRepairLog.Infrastructure.Migrations
 
                     b.Property<int>("Mileage")
                         .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("PaintColor")
                         .HasMaxLength(20)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VehicleRepairLog.Infrastructure;
 
@@ -11,9 +12,10 @@ using VehicleRepairLog.Infrastructure;
 namespace VehicleRepairLog.Infrastructure.Migrations
 {
     [DbContext(typeof(VehicleProfileStorageContext))]
-    partial class VehicleProfileStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20230109210855_ChangePartPriceAndAmountPropertiesToBeNullable")]
+    partial class ChangePartPriceAndAmountPropertiesToBeNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,10 +156,6 @@ namespace VehicleRepairLog.Infrastructure.Migrations
 
                     b.Property<int>("Mileage")
                         .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("PaintColor")
                         .HasMaxLength(20)
