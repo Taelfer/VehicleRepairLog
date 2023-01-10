@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleRepairLog.Application.Exceptions;
+using VehicleRepairLog.Infrastructure;
 using VehicleRepairLog.Infrastructure.Entities;
-using VehicleRepairLog.Infrastructure.Repositories;
 using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLog.Application.Features.Repairs
@@ -17,30 +18,32 @@ namespace VehicleRepairLog.Application.Features.Repairs
         public string Description { get; set; }
         public string CarWorkshopName { get; set; }
         public int VehicleId { get; set; }
-        public List<string> PartNames { get; set; }
     }
 
     public class AddRepairCommandHandler : IRequestHandler<AddRepairCommand, RepairDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRepairRepository _repairRepository;
-        private readonly IPartRepository _partRepository;
+        private readonly VehicleProfileStorageContext _context;
 
-        public AddRepairCommandHandler(IMapper mapper, IRepairRepository repairRepository, IPartRepository partRepository)
+        public AddRepairCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
         {
             _mapper = mapper;
-            _repairRepository = repairRepository;
-            _partRepository = partRepository;
+            _context = context;
         }
 
         public async Task<RepairDto> Handle(AddRepairCommand request, CancellationToken cancellationToken)
         {
+            var vehicle = await _context.Vehicles.FirstOrDefaultAsync(vehicle => vehicle.Id == request.VehicleId);
+
+            if (vehicle is null)
+            {
+                throw new NotFoundException("Couldn't find vehicle.");
+            }
+
             var repair = _mapper.Map<Repair>(request);
 
-            List<Part> parts = await _partRepository.GetByNameAsync(request.PartNames);
-            repair.Parts = parts;
-
-            await _repairRepository.AddAsync(repair, request.PartNames);
+            _context.Add(repair);
+            await _context.SaveChangesAsync();
 
             return _mapper.Map<RepairDto>(repair);
         }
