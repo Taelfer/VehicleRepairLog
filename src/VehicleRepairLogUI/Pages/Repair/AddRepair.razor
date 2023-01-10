@@ -1,67 +1,63 @@
-﻿@page "/vehicle/{VehicleId}/addRepair"
+﻿@inject IRepairService repairService
 
-@inject IRepairService repairService
-@inject NavigationManager navigationManager
+@if (Show is true)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Repair</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <EditForm Model="repair" class="modal-body">
+                    <DataAnnotationsValidator />
 
-<h1>Add Repair</h1>
-<hr />
+                    <div class="form-group">
+                        <label for="Date" class="control-label">Date</label>
+                        <InputDate id="Date" class="form-control" @bind-Value="repair.Date" />
+                        <ValidationMessage For="@(() => repair.Date)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Name</label>
+                        <InputText id="Name" class="form-control" @bind-Value="repair.Name" />
+                        <ValidationMessage For="@(() => repair.Name)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Description" class="control-label">Description</label>
+                        <InputText id="Description" class="form-control" @bind-Value="repair.Description" />
+                        <ValidationMessage For="@(() => repair.Description)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="CarWorkshopName" class="control-label">CarWorkshopName</label>
+                        <InputText id="CarWorkshopName" class="form-control" @bind-Value="repair.CarWorkshopName" />
+                        <ValidationMessage For="@(() => repair.CarWorkshopName)" />
+                    </div>
 
-<div class="card col-2">
-    <div class="card-body">
-        <EditForm Model="repair" OnValidSubmit="AddRepairAsync">
-            <DataAnnotationsValidator />
-
-            <div class="form-group">
-                <label for="Date" class="control-label">Date</label>
-                <InputDate id="Date" class="form-control" @bind-Value="repair.Date" />
-                <ValidationMessage For="@(() => repair.Date)" />
+                </EditForm>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" data-dismiss="modal" 
+                                                    @onclick="@(async () => await ConfirmAddRepairAsync())">Save</button>
+                    <button type="button" class="btn btn-danger" @onclick="OnCancel">Cancel</button>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="Name" class="control-label">Name</label>
-                <InputText id="Name" class="form-control" @bind-Value="repair.Name" />
-                <ValidationMessage For="@(() => repair.Name)" />
-            </div>
-            <div class="form-group">
-                <label for="Description" class="control-label">Description</label>
-                <InputText id="Description" class="form-control" @bind-Value="repair.Description" />
-                <ValidationMessage For="@(() => repair.Description)" />
-            </div>
-            <div class="form-group">
-                <label for="CarWorkshopName" class="control-label">CarWorkshopName</label>
-                <InputText id="CarWorkshopName" class="form-control" @bind-Value="repair.CarWorkshopName" />
-                <ValidationMessage For="@(() => repair.CarWorkshopName)" />
-            </div>
-
-            <button type="submit" class="btn btn-primary mt-2">Add Repair</button>
-        </EditForm>
+        </div>
     </div>
-</div>
+}
 
 @code {
     protected RepairDto repair = new();
+    [Parameter] public VehicleDto Vehicle { get; set; }
+    [Parameter] public bool Show { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public EventCallback OnConfirm { get; set; }
 
-    // Stores Vehicle ID taken from URI.
-    [Parameter]
-    public string VehicleId { get; set; }
-
-    [CascadingParameter]
-    protected Task<AuthenticationState> AuthState { get; set; }
-
-    protected async Task AddRepairAsync()
+    internal async Task ConfirmAddRepairAsync()
     {
-        AuthenticationState authState = await AuthState;
-
-        if (authState.User.Identity.IsAuthenticated == false)
-        {
-            // Takes to the Login page.
-            navigationManager.NavigateTo("/login");
-        }
-
-        // ID of the Vehicle the Repair is added to.
-        repair.VehicleId = Convert.ToInt32(VehicleId);
-
+        repair.VehicleId = Convert.ToInt32(Vehicle.Id);
         await repairService.AddRepairAsync(repair);
 
-        navigationManager.NavigateTo("/vehicles");
+        await OnConfirm.InvokeAsync();
     }
 }
