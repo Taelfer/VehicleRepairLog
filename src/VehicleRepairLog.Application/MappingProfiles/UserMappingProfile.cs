@@ -19,12 +19,15 @@ namespace VehicleRepairLog.Application.MappingProfiles
                 .ForMember(userDto => userDto.LastName, y => y.MapFrom(user => user.LastName))
                 .ForMember(userDto => userDto.Username, y => y.MapFrom(user => user.Username))
                 .ForMember(userDto => userDto.DateOfBirth, y => y.MapFrom(user => user.DateOfBirth))
-                .ForMember(userDto => userDto.Email, y => y.MapFrom(user => user.Email))
-                .ForMember(userDto => userDto.Vehicles, 
-                                        y => y.MapFrom(user => user.Vehicles != null ?
-                                            user.Vehicles.Select(vehicle => vehicle.BrandName) : new List<string>()));
+                .ForMember(userDto => userDto.Email, y => y.MapFrom(user => user.Email));
+                //.ForMember(userDto => userDto.Vehicles, 
+                //                        y => y.MapFrom(user => user.Vehicles != null ?
+                //                            user.Vehicles.Select(vehicle => vehicle.BrandName) : new List<string>()));
 
             CreateMap<RegisterUserCommand, User>()
+                .ForMember(user => user.FirstName, y => y.MapFrom(registerUserCommand => registerUserCommand.FirstName))
+                .ForMember(user => user.LastName, y => y.MapFrom(registerUserCommand => registerUserCommand.LastName))
+                .ForMember(user => user.DateOfBirth, y => y.MapFrom(registerUserCommand => registerUserCommand.DateOfBirth))
                 .ForMember(user => user.Username, y => y.MapFrom(registerUserCommand => registerUserCommand.Username))
                 .ForMember(user => user.Email, y => y.MapFrom(registerUserCommand => registerUserCommand.Email))
                 .ForMember(user => user.Password, y => y.MapFrom(registerUserCommand => registerUserCommand.Password));
@@ -34,8 +37,7 @@ namespace VehicleRepairLog.Application.MappingProfiles
                 .ForMember(user => user.LastName, y => y.MapFrom(updateUserCommand => updateUserCommand.LastName))
                 .ForMember(user => user.Email, y => y.MapFrom(updateUserCommand => updateUserCommand.Email))
                 .ForMember(user => user.DateOfBirth, y => y.MapFrom(updateUserCommand => updateUserCommand.DateOfBirth))
-                .ForMember(user => user.Username, y => y.MapFrom(updateUserCommand => updateUserCommand.Username))
-                .ForMember(user => user.Role, y => y.MapFrom(updateUserCommand => updateUserCommand.Role));
+                .ForMember(user => user.Username, y => y.MapFrom(updateUserCommand => updateUserCommand.Username));
 
             CreateMap<ChangeUserPasswordCommand, User>()
                 .ForMember(user => user.Password, y => y.MapFrom(changeUserPasswordCommand => changeUserPasswordCommand.NewPassword));

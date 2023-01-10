@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using System.Collections.Generic;
-using System.Linq;
 using VehicleRepairLog.Application.Features.Repairs;
 using VehicleRepairLog.Infrastructure.Entities;
 using VehicleRepairLog.Shared.DtoModels;
@@ -16,10 +14,7 @@ namespace VehicleRepairLog.Application.MappingProfiles
                 .ForMember(repairDto => repairDto.Date, y => y.MapFrom(repair => repair.Date))
                 .ForMember(repairDto => repairDto.Name, y => y.MapFrom(repair => repair.Name))
                 .ForMember(repairDto => repairDto.Description, y => y.MapFrom(repair => repair.Description))
-                .ForMember(repairDto => repairDto.CarWorkshopName, y => y.MapFrom(repair => repair.CarWorkshopName))
-                .ForMember(repairDto => repairDto.PartNames,
-                                            y => y.MapFrom(repair => repair.Parts != null ? 
-                                                repair.Parts.Select(part => part.Name) : new List<string>()));
+                .ForMember(repairDto => repairDto.CarWorkshopName, y => y.MapFrom(repair => repair.CarWorkshopName));
 
             CreateMap<AddRepairCommand, Repair>()
                 .ForMember(repair => repair.Date, y => y.MapFrom(addRepairCommand => addRepairCommand.Date))
