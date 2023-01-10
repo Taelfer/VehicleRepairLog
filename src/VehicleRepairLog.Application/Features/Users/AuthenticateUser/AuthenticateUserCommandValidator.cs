@@ -6,8 +6,7 @@ namespace VehicleRepairLog.Application.Features.Users
     {
         public AuthenticateUserCommandValidator()
         {
-            //RuleFor(x => x.Username).NotEmpty();
-
+            RuleFor(user => user.Email).NotEmpty();
             RuleFor(user => user.Password).NotEmpty();
         }
     }

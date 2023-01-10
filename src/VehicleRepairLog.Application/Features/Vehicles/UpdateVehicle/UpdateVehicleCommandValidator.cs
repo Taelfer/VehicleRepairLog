@@ -6,10 +6,11 @@ namespace VehicleRepairLog.Application.Features.Vehicles
     {
         public UpdateVehicleCommandValidator()
         {
-            RuleFor(vehicle => vehicle.BrandName).MaximumLength(100);
-            RuleFor(vehicle => vehicle.VinNumber).MaximumLength(100).NotEmpty();
-            RuleFor(vehicle => vehicle.PaintColor).MaximumLength(100);
-            RuleFor(vehicle => vehicle.FuelType).MaximumLength(100);
+            RuleFor(vehicle => vehicle.Name).MaximumLength(25);
+            RuleFor(vehicle => vehicle.BrandName).MaximumLength(25);
+            RuleFor(vehicle => vehicle.VinNumber).MaximumLength(25).NotEmpty();
+            RuleFor(vehicle => vehicle.PaintColor).MaximumLength(20);
+            RuleFor(vehicle => vehicle.FuelType).MaximumLength(20);
             RuleFor(vehicle => vehicle.Mileage).InclusiveBetween(0, 10000000);
         }
     }

@@ -8,6 +8,12 @@ namespace VehicleRepairLog.Application.Features.Users
     {
         public RegisterUserCommandValidator(VehicleProfileStorageContext dbContext)
         {
+            RuleFor(user => user.FirstName)
+                .MaximumLength(50);
+
+            RuleFor(user => user.LastName)
+                .MaximumLength(50);
+
             RuleFor(user => user.Email)
                 .EmailAddress()
                 .NotEmpty();
@@ -20,7 +26,7 @@ namespace VehicleRepairLog.Application.Features.Users
             RuleFor(user => user.ConfirmPassword).Equal(user => user.Password);
 
             RuleFor(user => user.Username)
-                .MaximumLength(100)
+                .MaximumLength(50)
                 .NotEmpty();
 
             RuleFor(user => user.Email)
