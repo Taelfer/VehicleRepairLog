@@ -1,4 +1,6 @@
 ﻿
+@inject IVehicleService vehicleService
+
 @if (Show is true)
 {
     <div class="modal fade show d-block" tabindex="-1" role="dialog">
@@ -41,7 +43,8 @@
 
                     </EditForm>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success" data-dismiss="modal" @onclick="OnConfirm">Save</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal" 
+                                                    @onclick="@(async () => await ConfirmAddVehicleAsync())">Save</button>
                     <button type="button" class="btn btn-danger" @onclick="OnCancel">Cancel</button>
                 </div>
             </div>
@@ -54,4 +57,12 @@
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public EventCallback OnConfirm { get; set; }
     [Parameter] public bool Show { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; }
+
+    protected async Task ConfirmAddVehicleAsync()
+    {
+        await vehicleService.AddVehicleAsync(Vehicle);
+
+        await OnConfirm.InvokeAsync();
+    }
 }

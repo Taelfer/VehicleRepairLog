@@ -1,4 +1,7 @@
-﻿@if (Show is true && Vehicle is not null)
+﻿
+@inject IVehicleService vehicleService
+
+@if (Show is true && Vehicle is not null)
 {
     <div class="modal fade show d-block" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -40,7 +43,8 @@
 
                 </EditForm>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success" data-dismiss="modal" @onclick="OnConfirm">Save</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal" 
+                                                    @onclick="@(async () => await ConfirmVehicleDetailsUpdateAsync())">Save</button>
                     <button type="button" class="btn btn-danger" @onclick="OnCancel">Cancel</button>
                 </div>
             </div>
@@ -53,4 +57,11 @@
     [Parameter] public VehicleDto Vehicle { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public EventCallback OnConfirm { get; set; }
+
+    protected async Task ConfirmVehicleDetailsUpdateAsync()
+    {
+        await vehicleService.UpdateVehicleAsync(Vehicle);
+
+        await OnConfirm.InvokeAsync();
+    }
 }
