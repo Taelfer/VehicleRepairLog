@@ -1,7 +1,10 @@
 ﻿using Blazored.LocalStorage;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text;
 using VehicleRepairLog.Shared.DtoModels;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace VehicleRepairLogUI.Services.Repair
 {
@@ -19,7 +22,7 @@ namespace VehicleRepairLogUI.Services.Repair
             httpClient.BaseAddress = new Uri(configuration["ApiUri"]);
         }
 
-        public async Task<RepairDto> AddRepairAsync(RepairDto repair)
+        public async Task AddRepairAsync(RepairDto repair)
         {
             // Gets authentication Token from local storage.
             string token = await _localStorage.GetItemAsync<string>("authToken");
@@ -30,14 +33,10 @@ namespace VehicleRepairLogUI.Services.Repair
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/api/Repairs", repair);
 
             // HANDLE THIS BETTER!!!
-            if (response.IsSuccessStatusCode == false)
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                return null;
+                throw new Exception();
             }
-
-            repair = await response.Content.ReadFromJsonAsync<RepairDto>();
-
-            return repair;
         }
     }
 }
