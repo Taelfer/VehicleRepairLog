@@ -20,9 +20,6 @@ namespace VehicleRepairLog.Application.MappingProfiles
                 .ForMember(userDto => userDto.Username, y => y.MapFrom(user => user.Username))
                 .ForMember(userDto => userDto.DateOfBirth, y => y.MapFrom(user => user.DateOfBirth))
                 .ForMember(userDto => userDto.Email, y => y.MapFrom(user => user.Email));
-                //.ForMember(userDto => userDto.Vehicles, 
-                //                        y => y.MapFrom(user => user.Vehicles != null ?
-                //                            user.Vehicles.Select(vehicle => vehicle.BrandName) : new List<string>()));
 
             CreateMap<RegisterUserCommand, User>()
                 .ForMember(user => user.FirstName, y => y.MapFrom(registerUserCommand => registerUserCommand.FirstName))
