@@ -21,9 +21,9 @@ namespace VehicleRepairLog.Application.Features.Users
     {
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IJwtAuth _jwtAuth;
-        private readonly VehicleProfileStorageContext _context;
+        private readonly VehicleRepairLogContext _context;
 
-        public AuthenticateUserCommandHandler(IPasswordHasher<User> passwordHasher, IJwtAuth jwtAuth, VehicleProfileStorageContext context)
+        public AuthenticateUserCommandHandler(IPasswordHasher<User> passwordHasher, IJwtAuth jwtAuth, VehicleRepairLogContext context)
         {
             _passwordHasher = passwordHasher;
             _jwtAuth = jwtAuth;

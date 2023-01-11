@@ -20,10 +20,10 @@ namespace VehicleRepairLog.Application.Features.Vehicles
     public class GetAllVehiclesQueryHandler : IRequestHandler<GetAllVehiclesQuery, List<VehicleDto>>
     {
         private readonly IMapper _mapper;
-        private readonly VehicleProfileStorageContext _context;
+        private readonly VehicleRepairLogContext _context;
         private readonly IUserAuthService _userService;
 
-        public GetAllVehiclesQueryHandler(IMapper mapper, VehicleProfileStorageContext context, IUserAuthService userService)
+        public GetAllVehiclesQueryHandler(IMapper mapper, VehicleRepairLogContext context, IUserAuthService userService)
         {
             _mapper = mapper;
             _context = context;

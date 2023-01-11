@@ -18,9 +18,9 @@ namespace VehicleRepairLog.Application.Features.Vehicles
     public class GetVehicleByIdQueryHandler : IRequestHandler<GetVehicleByIdQuery, VehicleDto>
     {
         private readonly IMapper _mapper;
-        private readonly VehicleProfileStorageContext _context;
+        private readonly VehicleRepairLogContext _context;
 
-        public GetVehicleByIdQueryHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public GetVehicleByIdQueryHandler(IMapper mapper, VehicleRepairLogContext context)
         {
             _mapper = mapper;
             _context = context;

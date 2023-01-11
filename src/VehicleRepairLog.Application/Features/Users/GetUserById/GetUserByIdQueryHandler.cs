@@ -18,9 +18,9 @@ namespace VehicleRepairLog.Application.Features.Users
     public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
     {
         private readonly IMapper _mapper;
-        private readonly VehicleProfileStorageContext _context;
+        private readonly VehicleRepairLogContext _context;
 
-        public GetUserByIdQueryHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public GetUserByIdQueryHandler(IMapper mapper, VehicleRepairLogContext context)
         {
             _mapper = mapper;
             _context = context;

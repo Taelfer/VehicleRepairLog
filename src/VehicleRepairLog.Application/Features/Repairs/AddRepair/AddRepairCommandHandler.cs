@@ -23,9 +23,9 @@ namespace VehicleRepairLog.Application.Features.Repairs
     public class AddRepairCommandHandler : IRequestHandler<AddRepairCommand, RepairDto>
     {
         private readonly IMapper _mapper;
-        private readonly VehicleProfileStorageContext _context;
+        private readonly VehicleRepairLogContext _context;
 
-        public AddRepairCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public AddRepairCommandHandler(IMapper mapper, VehicleRepairLogContext context)
         {
             _mapper = mapper;
             _context = context;
@@ -33,14 +33,14 @@ namespace VehicleRepairLog.Application.Features.Repairs
 
         public async Task<RepairDto> Handle(AddRepairCommand request, CancellationToken cancellationToken)
         {
-            var vehicle = await _context.Vehicles.FirstOrDefaultAsync(vehicle => vehicle.Id == request.VehicleId);
+            Vehicle vehicle = await _context.Vehicles.FirstOrDefaultAsync(vehicle => vehicle.Id == request.VehicleId);
 
             if (vehicle is null)
             {
                 throw new NotFoundException("Couldn't find vehicle.");
             }
 
-            var repair = _mapper.Map<Repair>(request);
+            Repair repair = _mapper.Map<Repair>(request);
 
             _context.Add(repair);
             await _context.SaveChangesAsync();

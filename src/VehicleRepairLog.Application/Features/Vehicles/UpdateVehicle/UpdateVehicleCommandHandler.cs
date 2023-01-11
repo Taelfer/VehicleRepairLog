@@ -24,9 +24,9 @@ namespace VehicleRepairLog.Application.Features.Vehicles
     public class UpdateVehicleCommandHandler : IRequestHandler<UpdateVehicleCommand, VehicleDto>
     {
         private readonly IMapper _mapper;
-        private readonly VehicleProfileStorageContext _context;
+        private readonly VehicleRepairLogContext _context;
 
-        public UpdateVehicleCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public UpdateVehicleCommandHandler(IMapper mapper, VehicleRepairLogContext context)
         {
             _mapper = mapper;
             _context = context;

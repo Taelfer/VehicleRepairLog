@@ -8,9 +8,9 @@ namespace VehicleRepairLog.Infrastructure.Repositories
 {
     public class PartRepository : IPartRepository
     {
-        private readonly VehicleProfileStorageContext context;
+        private readonly VehicleRepairLogContext context;
 
-        public PartRepository(VehicleProfileStorageContext context)
+        public PartRepository(VehicleRepairLogContext context)
         {
             this.context = context;
         }

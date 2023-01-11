@@ -7,13 +7,13 @@ namespace VehicleRepairLog.Infrastructure
     /// <summary>
     /// Determines database context from given properties of type <see cref="DbSet{TEntity}"/>.
     /// </summary>
-    public class VehicleProfileStorageContext : DbContext
+    public class VehicleRepairLogContext : DbContext
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="options"></param>
-        public VehicleProfileStorageContext(DbContextOptions<VehicleProfileStorageContext> options) : base(options)
+        public VehicleRepairLogContext(DbContextOptions<VehicleRepairLogContext> options) : base(options)
         {
         }
 

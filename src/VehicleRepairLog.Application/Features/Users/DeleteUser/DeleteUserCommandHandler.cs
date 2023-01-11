@@ -24,9 +24,9 @@ namespace VehicleRepairLog.Application.Features.Users.DeleteUser
     internal class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, UserDto>
     {
         private readonly IMapper _mapper;
-        private readonly VehicleProfileStorageContext _context;
+        private readonly VehicleRepairLogContext _context;
 
-        public DeleteUserCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public DeleteUserCommandHandler(IMapper mapper, VehicleRepairLogContext context)
         {
             _mapper = mapper;
             _context = context;

@@ -22,9 +22,9 @@ namespace VehicleRepairLog.Application.Features.Users.ChangeUserPassword
     {
         private readonly IMapper _mapper;
         private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly VehicleProfileStorageContext _context;
+        private readonly VehicleRepairLogContext _context;
 
-        public ChangeUserPasswordCommandHandler(IMapper mapper, IPasswordHasher<User> passwordHasher, VehicleProfileStorageContext context)
+        public ChangeUserPasswordCommandHandler(IMapper mapper, IPasswordHasher<User> passwordHasher, VehicleRepairLogContext context)
         {
             _mapper = mapper;
             _passwordHasher = passwordHasher;

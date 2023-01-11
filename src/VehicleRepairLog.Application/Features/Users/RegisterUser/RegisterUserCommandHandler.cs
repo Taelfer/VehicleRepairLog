@@ -25,9 +25,9 @@ namespace VehicleRepairLog.Application.Features.Users
     {
         private readonly IMapper _mapper;
         private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly VehicleProfileStorageContext _context;
+        private readonly VehicleRepairLogContext _context;
 
-        public RegisterUserCommandHandler(IMapper mapper, IPasswordHasher<User> passwordHasher, VehicleProfileStorageContext context)
+        public RegisterUserCommandHandler(IMapper mapper, IPasswordHasher<User> passwordHasher, VehicleRepairLogContext context)
         {
             _mapper = mapper;
             _passwordHasher = passwordHasher;

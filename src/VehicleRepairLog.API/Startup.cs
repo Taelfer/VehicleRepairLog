@@ -82,8 +82,8 @@ namespace VehicleRepairLog.API
             services.AddScoped<IPartRepository, PartRepository>();
             services.AddScoped<IRepairRepository, RepairRepository>();
 
-            services.AddDbContext<VehicleProfileStorageContext>(options =>
-                options.UseSqlServer(this._Configuration.GetConnectionString("VehicleProfileStorageContext")));
+            services.AddDbContext<VehicleRepairLogContext>(options =>
+                options.UseSqlServer(_Configuration.GetConnectionString("VehicleRepairLogContext")));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

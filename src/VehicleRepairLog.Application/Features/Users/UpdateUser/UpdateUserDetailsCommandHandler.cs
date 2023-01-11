@@ -24,9 +24,9 @@ namespace VehicleRepairLog.Application.Features.Users.UpdateUser
     internal class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
     {
         private readonly IMapper _mapper;
-        private readonly VehicleProfileStorageContext _context;
+        private readonly VehicleRepairLogContext _context;
 
-        public UpdateUserDetailsCommandHandler(IMapper mapper, VehicleProfileStorageContext context)
+        public UpdateUserDetailsCommandHandler(IMapper mapper, VehicleRepairLogContext context)
         {
             _mapper = mapper;
             _context = context;
