@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
-using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Application.Features.Users.UpdateUser
 {
     public class UpdateUserDetailsCommandValidator : AbstractValidator<UpdateUserCommand>
     {
-        public UpdateUserDetailsCommandValidator(VehicleProfileStorageContext dbContext)
+        public UpdateUserDetailsCommandValidator()
         {
             RuleFor(user => user.Email)
                 .EmailAddress()

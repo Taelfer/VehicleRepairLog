@@ -6,7 +6,7 @@ namespace VehicleRepairLog.Application.Features.Users
 {
     public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
     {
-        public RegisterUserCommandValidator(VehicleProfileStorageContext dbContext)
+        public RegisterUserCommandValidator(VehicleRepairLogContext dbContext)
         {
             RuleFor(user => user.FirstName)
                 .MaximumLength(50);

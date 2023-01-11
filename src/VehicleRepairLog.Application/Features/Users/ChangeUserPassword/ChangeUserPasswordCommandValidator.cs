@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
-using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Application.Features.Users.ChangeUserPassword
 {
     public class ChangeUserPasswordCommandValidator : AbstractValidator<ChangeUserPasswordCommand>
     {
-        public ChangeUserPasswordCommandValidator(VehicleProfileStorageContext dbContext)
+        public ChangeUserPasswordCommandValidator()
         {
             RuleFor(user => user.NewPassword)
                 .NotEmpty()
