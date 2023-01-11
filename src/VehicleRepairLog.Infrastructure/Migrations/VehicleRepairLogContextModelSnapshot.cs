@@ -10,8 +10,8 @@ using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Infrastructure.Migrations
 {
-    [DbContext(typeof(VehicleProfileStorageContext))]
-    partial class VehicleProfileStorageContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(VehicleRepairLogContext))]
+    partial class VehicleRepairLogContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

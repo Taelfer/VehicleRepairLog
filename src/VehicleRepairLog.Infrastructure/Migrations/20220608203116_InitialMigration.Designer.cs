@@ -11,7 +11,7 @@ using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Infrastructure.Migrations
 {
-    [DbContext(typeof(VehicleProfileStorageContext))]
+    [DbContext(typeof(VehicleRepairLogContext))]
     [Migration("20220608203116_InitialMigration")]
     partial class InitialMigration
     {

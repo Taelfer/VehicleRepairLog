@@ -11,7 +11,7 @@ using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Infrastructure.Migrations
 {
-    [DbContext(typeof(VehicleProfileStorageContext))]
+    [DbContext(typeof(VehicleRepairLogContext))]
     [Migration("20220614170836_AddNamePropertyToRepairEntity")]
     partial class AddNamePropertyToRepairEntity
     {

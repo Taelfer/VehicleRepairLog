@@ -11,7 +11,7 @@ using VehicleRepairLog.Infrastructure;
 
 namespace VehicleRepairLog.Infrastructure.Migrations
 {
-    [DbContext(typeof(VehicleProfileStorageContext))]
+    [DbContext(typeof(VehicleRepairLogContext))]
     [Migration("20230109210855_ChangePartPriceAndAmountPropertiesToBeNullable")]
     partial class ChangePartPriceAndAmountPropertiesToBeNullable
     {
