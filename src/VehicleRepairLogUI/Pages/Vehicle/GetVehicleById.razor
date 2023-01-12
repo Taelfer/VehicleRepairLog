@@ -3,6 +3,7 @@
 @attribute [Authorize]
 
 @inject IVehicleService vehicleService
+@inject IRepairService repairService
 @inject NavigationManager navigationManager
 
 @if (Vehicle is null)
@@ -16,7 +17,7 @@ else
 
     <button class="btn btn-primary" type="button" @onclick="AddRepairForm"> Add Repair </button>
     <button class="btn btn-primary" type="button" @onclick="ShowUpdateVehicleDetailsForm">Update</button>
-    <button class="btn btn-danger" type="button" @onclick="DisplayDeleteConfirmationPopUpForm">Delete</button>
+    <button class="btn btn-danger" type="button" @onclick="DisplayVehicleDeleteConfirmationPopUpForm">Delete</button>
 
     <table class="table table-striped">
         <thead>
@@ -40,15 +41,22 @@ else
                         <tr>
                             <th>Name</th>
                             <th>Date</th>
+                            <th></th>
                         </tr>
-                        @foreach (RepairDto repair in Vehicle.Repairs.OrderByDescending(repair => repair.Date))
+                        @foreach (RepairDto repair in Vehicle.Repairs.OrderByDescending(repair => repair.CreatedDate))
                         {
                             <tr>
                                 <td>
                                     @repair.Name
                                 </td>
                                 <td>
-                                    @repair.Date
+                                    @repair.CreatedDate
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger" type="button"
+                                                        @onclick="@(() => DisplayRepairDeleteConfirmationPopUpForm(repair.Id))">
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                         }
@@ -73,7 +81,10 @@ else
 
     <DeleteConfirmationPopUpForm 
         Show="ShowDeleteConfirmationPopUpForm"
-        OnDelete="@(async () => await ConfirmDelete())"
+        DeleteVehicleConfirmation="DeleteVehicleConfirmation"
+        DeleteRepairConfirmation="DeleteRepairConfirmation"
+        DeleteVehicle="@(async () => await ConfirmVehicleDeleteAsync())"
+        DeleteRepair="@(async () => await ConfirmRepairDeleteAsync())"
         OnCancel="@(async () => await OnInitializedAsync())" />
 }
 
@@ -81,8 +92,11 @@ else
 @code {
     // Stores Vehicle data of given ID.
     [Parameter] public VehicleDto Vehicle { get; set; }
+    protected RepairDto repair = new RepairDto();
     [Parameter] public bool ShowEditDetailsForm { get; set; }
     [Parameter] public bool ShowAddRepairForm { get; set; }
+    [Parameter] public bool DeleteRepairConfirmation { get; set; }
+    [Parameter] public bool DeleteVehicleConfirmation { get; set; }
     [Parameter] public bool ShowDeleteConfirmationPopUpForm { get; set; }
 
     // Stores Vehicle ID taken from URI.
@@ -98,12 +112,18 @@ else
         ShowDeleteConfirmationPopUpForm = false;
     }
 
-    protected async Task ConfirmDelete()
+    protected async Task ConfirmVehicleDeleteAsync()
     {
         await vehicleService.DeleteVehicleAsync(Vehicle.Id);
-        navigationManager.NavigateTo("/vehicles", true);
 
-        ShowDeleteConfirmationPopUpForm = false;
+        await OnInitializedAsync();
+    }
+
+    protected async Task ConfirmRepairDeleteAsync()
+    {
+        await repairService.DeleteRepairAsync(repair.Id);
+        
+        await OnInitializedAsync();
     }
 
     protected void AddRepairForm()
@@ -111,9 +131,18 @@ else
         ShowAddRepairForm = true;
     }
 
-    public void DisplayDeleteConfirmationPopUpForm()
+    public void DisplayVehicleDeleteConfirmationPopUpForm()
     {
         ShowDeleteConfirmationPopUpForm = true;
+        DeleteVehicleConfirmation = true;
+    }
+
+    public void DisplayRepairDeleteConfirmationPopUpForm(int repairId)
+    {
+        repair.Id = repairId;
+
+        ShowDeleteConfirmationPopUpForm = true;
+        DeleteRepairConfirmation = true;
     }
 
     public void ShowUpdateVehicleDetailsForm()

@@ -15,7 +15,19 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="OnCancel">Cancel</button>
-                    <button type="button" class="btn btn-danger" @onclick="OnDelete">Delete</button>
+
+                    @if (DeleteVehicleConfirmation is true)
+                    {
+                        <button type="button" class="btn btn-danger" @onclick="DeleteVehicle">Delete</button>
+                    }
+                    else if (DeleteRepairConfirmation is true)
+                    {
+                        <button type="button" class="btn btn-danger" @onclick="DeleteRepair">Delete</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-danger" @onclick="OnDelete">Delete</button>
+                    }
                 </div>
             </div>
         </div>
@@ -24,6 +36,10 @@
 
 @code {
     [Parameter] public bool Show { get; set; }
+    [Parameter] public bool DeleteRepairConfirmation { get; set; }
+    [Parameter] public bool DeleteVehicleConfirmation { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public EventCallback OnDelete { get; set; }
- }
+    [Parameter] public EventCallback DeleteVehicle { get; set; }
+    [Parameter] public EventCallback DeleteRepair { get; set; }
+}
