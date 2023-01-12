@@ -55,8 +55,8 @@ namespace VehicleRepairLog.Application.Tests.Repairs
             // arrange
             List<Repair> repairs = new() 
             {
-                new Repair{Id = 1, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop"},
-                new Repair{Id = 2, Date = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop2"}
+                new Repair{Id = 1, CreatedDate = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop"},
+                new Repair{Id = 2, CreatedDate = new DateTime(2022, 4, 9), CarWorkshopName = "testWorkshop2"}
             };
 
             var repositoryMock = new Mock<IRepairRepository>();

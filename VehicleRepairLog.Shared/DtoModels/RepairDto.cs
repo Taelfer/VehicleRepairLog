@@ -7,7 +7,7 @@ namespace VehicleRepairLog.Shared.DtoModels
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Date is required.")]
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         [MaxLength(ErrorMessage = "Maximum length of Repair name is 50 characters.")]
         public string Name { get; set; }

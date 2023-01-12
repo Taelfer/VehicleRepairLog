@@ -15,7 +15,7 @@ namespace VehicleRepairLog.Application.Tests.Mocks
                 new Repair()
                 {
                     VehicleId = 1,
-                    Date = new DateTime(2022, 4, 10),
+                    CreatedDate = new DateTime(2022, 4, 10),
                     Description = "Test",
                     CarWorkshopName = "Test",
                     Parts = new List<Part>()
@@ -29,7 +29,7 @@ namespace VehicleRepairLog.Application.Tests.Mocks
                 new Repair()
                 {
                     VehicleId = 2,
-                    Date = new DateTime(2022, 4, 10),
+                    CreatedDate = new DateTime(2022, 4, 10),
                     Description = "Test2",
                     CarWorkshopName = "Test2",
                     Parts = new List<Part>()

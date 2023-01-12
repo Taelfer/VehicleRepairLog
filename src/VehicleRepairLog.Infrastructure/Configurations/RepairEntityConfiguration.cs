@@ -10,7 +10,7 @@ namespace VehicleRepairLog.Infrastructure.Configurations
         {
             builder.HasKey(repair => repair.Id);
 
-            builder.Property(repair => repair.Date)
+            builder.Property(repair => repair.CreatedDate)
                    .IsRequired();
 
             builder.Property(repair => repair.Description)

@@ -52,8 +52,8 @@ namespace VehicleRepairLog.Application.Tests.Repairs
             // arrange
             Repair repair = new()
             {
-                Id = 1, 
-                Date = new DateTime(2022, 4, 9), 
+                Id = 1,
+                CreatedDate = new DateTime(2022, 4, 9), 
                 CarWorkshopName = "testWorkshop"
             };
 
@@ -70,7 +70,7 @@ namespace VehicleRepairLog.Application.Tests.Repairs
             // assert
             result.Should().NotBeNull();
             result.Id.Should().Be(repair.Id);
-            result.Date.Should().Be(repair.Date);
+            result.CreatedDate.Should().Be(repair.CreatedDate);
             result.CarWorkshopName.Should().Be(repair.CarWorkshopName);
             result.Should().BeOfType<RepairDto>();
         }
