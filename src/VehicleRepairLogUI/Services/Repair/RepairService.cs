@@ -38,5 +38,13 @@ namespace VehicleRepairLogUI.Services.Repair
                 throw new Exception();
             }
         }
+
+        public async Task DeleteRepairAsync(int repairId)
+        {
+            string token = await _localStorage.GetItemAsync<string>("authToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            await _httpClient.DeleteAsync($"/api/Repairs/{repairId}");
+        }
     }
 }
