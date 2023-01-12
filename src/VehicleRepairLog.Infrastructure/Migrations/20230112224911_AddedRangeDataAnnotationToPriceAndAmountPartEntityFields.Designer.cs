@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VehicleRepairLog.Infrastructure;
 
@@ -11,9 +12,10 @@ using VehicleRepairLog.Infrastructure;
 namespace VehicleRepairLog.Infrastructure.Migrations
 {
     [DbContext(typeof(VehicleRepairLogContext))]
-    partial class VehicleRepairLogContextModelSnapshot : ModelSnapshot
+    [Migration("20230112224911_AddedRangeDataAnnotationToPriceAndAmountPartEntityFields")]
+    partial class AddedRangeDataAnnotationToPriceAndAmountPartEntityFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
