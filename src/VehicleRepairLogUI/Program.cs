@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using VehicleRepairLogUI.Services.Authentication;
+using VehicleRepairLogUI.Services.Part;
 using VehicleRepairLogUI.Services.Repair;
 using VehicleRepairLogUI.Services.User;
 using VehicleRepairLogUI.Services.Vehicle;
@@ -35,6 +36,7 @@ namespace VehicleRepairLogUI
             builder.Services.AddHttpClient<IVehicleService, VehicleService>();
             builder.Services.AddHttpClient<IUserService, UserService>();
             builder.Services.AddHttpClient<IRepairService, RepairService>();
+            builder.Services.AddHttpClient<IPartService, PartService>();
             builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>();
             builder.Services.AddHttpClient<CustomAuthenticationStateProvider>(httpClient =>
             {
