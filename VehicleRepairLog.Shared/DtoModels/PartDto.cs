@@ -14,10 +14,12 @@ namespace VehicleRepairLog.Shared.DtoModels
         [MaxLength(ErrorMessage = "Maximum length of Part brand name is 50 characters.")]
         public string BrandName { get; set; }
 
-        [MaxLength(ErrorMessage = "Maximum length of Part price is 50 characters.")]
+        [Range(0, 999999999, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public decimal Price { get; set; }
 
-        [MaxLength(ErrorMessage = "Maximum amount of parts is 5.")]
+        [Range(0, 50, ErrorMessage = "Amount range should be between 0 and 50.")]
         public short? Amount { get; set; }
+        public decimal GetTotalPrice() => ((decimal)Price * (decimal)Amount);
+        public int RepairId { get; set; }
     }
 }
