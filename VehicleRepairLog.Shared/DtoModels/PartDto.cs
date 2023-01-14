@@ -19,7 +19,7 @@ namespace VehicleRepairLog.Shared.DtoModels
 
         [Range(0, 50, ErrorMessage = "Amount range should be between 0 and 50.")]
         public short? Amount { get; set; }
-        public decimal GetTotalPrice() => ((decimal)Price * (decimal)Amount);
+        public decimal GetTotalPrice() => (Price * (decimal)Amount);
         public int RepairId { get; set; }
     }
 }
