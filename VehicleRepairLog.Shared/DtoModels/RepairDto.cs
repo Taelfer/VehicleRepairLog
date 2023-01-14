@@ -18,6 +18,7 @@ namespace VehicleRepairLog.Shared.DtoModels
         [Required(ErrorMessage = "Car workshop name is required.")]
         [MaxLength(ErrorMessage = "Maximum length of Car workshop is 50 characters.")]
         public string CarWorkshopName { get; set; }
+        public List<PartDto> Parts { get; set; }
         public int VehicleId { get; set; }
     }
 }
