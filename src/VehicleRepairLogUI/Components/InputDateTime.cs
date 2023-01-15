@@ -7,7 +7,7 @@ namespace VehicleRepairLogUI.Components
 {
     public class InputDateTime<TValue> : InputDate<TValue>
     {
-        private const string DateFormat = "yyyy-MM-ddTHH:mm";
+        private const string DateFormat = "yyyy-MM-ddTHH:mm:ss";
 
         /// <inheritdoc />
         protected override void BuildRenderTree(RenderTreeBuilder builder)
