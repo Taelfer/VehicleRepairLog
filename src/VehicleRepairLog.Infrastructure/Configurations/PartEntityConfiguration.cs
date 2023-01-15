@@ -17,12 +17,6 @@ namespace VehicleRepairLog.Infrastructure.Configurations
             builder.Property(part => part.BrandName)
                    .IsRequired()
                    .HasMaxLength(50);
-
-            builder.Property(part => part.Price)
-                   .HasMaxLength(50);
-
-            builder.Property(part => part.Amount)
-                   .HasMaxLength(5);
         }
     }
 }
