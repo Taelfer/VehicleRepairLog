@@ -13,12 +13,14 @@ namespace VehicleRepairLog.Application.MappingProfiles
                 .ForMember(partDto => partDto.Id, y => y.MapFrom(part => part.Id))
                 .ForMember(partDto => partDto.Name, y => y.MapFrom(part => part.Name))
                 .ForMember(partDto => partDto.BrandName, y => y.MapFrom(part => part.BrandName))
-                .ForMember(partDto => partDto.Price, y => y.MapFrom(part => part.Price));
+                .ForMember(partDto => partDto.Price, y => y.MapFrom(part => part.Price))
+                .ForMember(partDto => partDto.Amount, y => y.MapFrom(part => part.Amount));
 
             CreateMap<AddPartCommand, Part>()
                 .ForMember(part => part.Name, y => y.MapFrom(addPartCommand => addPartCommand.Name))
                 .ForMember(part => part.BrandName, y => y.MapFrom(addPartCommand => addPartCommand.BrandName))
-                .ForMember(part => part.Price, y => y.MapFrom(addPartCommand => addPartCommand.Price));
+                .ForMember(part => part.Price, y => y.MapFrom(addPartCommand => addPartCommand.Price))
+                .ForMember(part => part.Amount, y => y.MapFrom(addPartCommand => addPartCommand.Amount));
 
             CreateMap<UpdatePartCommand, Part>()
                 .ForMember(part => part.Name, y => y.MapFrom(updatePartCommand => updatePartCommand.Name))
