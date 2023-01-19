@@ -55,12 +55,12 @@ namespace VehicleRepairLogUI.Services.Vehicle
             return vehicles;
         }
 
-        public async Task<VehicleDto> GetVehicleByIdAsync(int id)
+        public async Task<VehicleDto> GetVehicleByIdAsync(int vehicleId)
         {
             string token = await _localStorage.GetItemAsync<string>("authToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _httpClient.GetAsync($"/api/Vehicles/{id}");
+            HttpResponseMessage response = await _httpClient.GetAsync($"/api/Vehicles/{vehicleId}");
 
             if (response.IsSuccessStatusCode == false)
             {
