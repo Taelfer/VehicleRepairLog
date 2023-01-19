@@ -16,22 +16,22 @@ namespace VehicleRepairLog.Application.Tests.Repairs
 {
     public class AddRepairCommandHandlerTests
     {
-        private readonly IMapper _mapper;
-        private readonly Mock<IRepairRepository> _repoMock;
+        //private readonly IMapper _mapper;
+        //private readonly Mock<IRepairRepository> _repoMock;
 
-        public AddRepairCommandHandlerTests()
-        {
-            _repoMock = RepairRepositoryMock.RepositoryMock(); 
+        //public AddRepairCommandHandlerTests()
+        //{
+        //    _repoMock = RepairRepositoryMock.RepositoryMock(); 
 
-            var mapperConfig = new MapperConfiguration(c =>
-            {
-                c.AddProfile<RepairMappingProfile>();
-            });
+        //    var mapperConfig = new MapperConfiguration(c =>
+        //    {
+        //        c.AddProfile<RepairMappingProfile>();
+        //    });
 
-            _mapper = mapperConfig.CreateMapper();
+        //    _mapper = mapperConfig.CreateMapper();
 
             
-        }
+        //}
 
         //[Fact]
         //private async Task Handle_AddsRepairToDb_ReturnsCorrectAmountOfAddedItems()
