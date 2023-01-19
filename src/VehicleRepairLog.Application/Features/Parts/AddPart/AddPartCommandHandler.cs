@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleRepairLog.Application.Exceptions;
+using VehicleRepairLog.Infrastructure;
 using VehicleRepairLog.Infrastructure.Entities;
-using VehicleRepairLog.Infrastructure.Repositories;
 using VehicleRepairLog.Shared.DtoModels;
 
 namespace VehicleRepairLog.Application.Features.Parts
@@ -13,24 +15,34 @@ namespace VehicleRepairLog.Application.Features.Parts
         public string Name { get; set; }
         public string BrandName { get; set; }
         public decimal Price { get; set; }
+        public short? Amount { get; set; }
+        public int RepairId { get; set; }
     }
 
     public class AddPartCommandHandler : IRequestHandler<AddPartCommand, PartDto>
     {
         private readonly IMapper _mapper;
-        private readonly IPartRepository _partRepository;
+        private readonly VehicleRepairLogContext _context;
 
-        public AddPartCommandHandler(IMapper mapper, IPartRepository partRepository)
+        public AddPartCommandHandler(IMapper mapper, VehicleRepairLogContext context)
         {
             _mapper = mapper;
-            _partRepository = partRepository;
+            _context = context;
         }
 
         public async Task<PartDto> Handle(AddPartCommand request, CancellationToken cancellationToken)
         {
-            var part = _mapper.Map<Part>(request);
+            Repair repair = await _context.Repairs.FirstOrDefaultAsync(repair => repair.Id == request.RepairId);
 
-            await _partRepository.AddAsync(part);
+            if (repair is null)
+            {
+                throw new NotFoundException("Couldn't find repair.");
+            }
+
+            Part part = _mapper.Map<Part>(request);
+
+            _context.Add(part);
+            await _context.SaveChangesAsync();
 
             return _mapper.Map<PartDto>(part);
         }
