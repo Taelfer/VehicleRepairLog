@@ -19,22 +19,22 @@
             <DataAnnotationsValidator />
 
             <div class="form-group">
-                <label for="username">Username</label>
+                <label class="required-field" for="username">Username</label>
                 <InputText id="username" class="form-control" @bind-Value="registerRequest.Username"/>
                 <ValidationMessage For="@(() => registerRequest.Username)" />
             </div>
             <div class="form-group">
-                <label for="email">Email Address</label>
+                <label class="required-field" for="email">Email Address</label>
                 <InputText id="email" class="form-control" @bind-Value="registerRequest.Email"/>
                 <ValidationMessage For="@(() => registerRequest.Email)" />
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label class="required-field" for="password">Password</label>
                 <InputText id="password" type="password" class="form-control" @bind-Value="registerRequest.Password" />
                 <ValidationMessage For="@(() => registerRequest.Password)" />
             </div>
             <div class="form-group">
-                <label for="password">Confirm Password</label>
+                <label class="required-field" for="password">Confirm Password</label>
                 <InputText id="confirmPassword" type="password" class="form-control" @bind-Value="registerRequest.ConfirmPassword" />
                 <ValidationMessage For="@(() => registerRequest.ConfirmPassword)" />
             </div>
