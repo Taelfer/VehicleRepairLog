@@ -1,10 +1,196 @@
-﻿@page "/repairProfile/{id}"
+﻿@page "/repair/{RepairId}"
 
+@inject IRepairService repairService
+@inject IPartService partService
+@inject IVehicleService vehicleService
+@inject NavigationManager navigationManager
 
+@if (Repair is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h1>Repair - @Repair.Name</h1>
+    <hr />
 
-<h1>Repair Profile</h1>
-<hr />
+    <button class="btn btn-primary" type="button" @onclick="AddPartForm"> Add Part </button>
+    <button class="btn btn-primary" type="button" @onclick="ShowUpdateRepairDetailsForm">Update</button>
+    <button class="btn btn-danger" type="button" @onclick="DisplayRepairDeleteConfirmationPopUpForm">Delete</button>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Vehicle</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Parts</th>
+                <th>Car Workshop</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a class="nav-link" href="vehicle/@Vehicle.Id"> @Vehicle.Name </a></td>
+                <td>@Repair.Name</td>
+                <td>@Repair.Description</td>
+                <td>
+                    <table width="100%">
+                        <tr>
+                            <th>Name</th>
+                            <th>Brand Name</th>
+                            <th>Price</th>
+                            <th>Amount</th>
+                            <th>Total Price</th>
+                            <th></th>
+                        </tr>
+                        @foreach (PartDto part in Repair.Parts)
+                        {
+                            <tr>
+                                <td>
+                                    @part.Name
+                                </td>
+                                <td>
+                                    @part.BrandName
+                                </td>
+                                <td>
+                                    @part.Price
+                                </td>
+                                <td>
+                                    @part.Amount
+                                </td>
+                                <td>@part.GetTotalPrice()</td>
+                                <td>
+                                    <button class="btn btn-primary" type="button"
+                                        @onclick="@(async () => await ShowUpdatePartDetailsForm(part.Id))"> Update </button>
+                                    <button class="btn btn-danger" type="button"
+                                        @onclick="@(() => DisplayPartDeleteConfirmationPopUpForm(part.Id))"> Delete </button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+                <td>@Repair.CarWorkshopName</td>
+                <td>@Repair.CreatedDate</td>
+                
+            </tr>
+        </tbody>
+    </table>
+
+    <AddPart 
+        Part="Part"
+        Repair="Repair"
+        Show="ShowAddPartForm"
+        OnConfirm="@(async () => await OnInitializedAsync())"
+        OnConfirmNextPart="@(async () => await AddNextPartFormAsync())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
+
+    <UpdateRepair 
+        Repair="Repair"
+        Show="ShowRepairEditDetailsForm"
+        OnConfirm="@(async () => await OnInitializedAsync())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
+
+    <UpdatePart 
+        Part="Part"
+        Show="ShowPartEditDetailsForm"
+        OnConfirm="@(async () => await OnInitializedAsync())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
+
+    <DeleteConfirmationForm 
+        Show="ShowDeleteConfirmationForm"
+        DeleteRepairConfirmation="DeleteRepairConfirmation"
+        DeletePartConfirmation="DeletePartConfirmation"
+        DeleteRepair="@(async () => await ConfirmRepairDeleteAsync())"
+        DeletePart="@(async () => await ConfirmPartDeleteAsync())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
+}
 
 @code {
+    // Stores Repair ID taken from URI.
+    [Parameter] public string RepairId { get; set; }
+    [Parameter] public RepairDto Repair { get; set; }
+    [Parameter] public PartDto Part { get; set; } = new PartDto();
+    public VehicleDto Vehicle { get; set; } = new VehicleDto();
+    protected int vehicleId;
 
+    // Flags indicating if forms should be displayed.
+    [Parameter] public bool ShowAddPartForm { get; set; }
+    [Parameter] public bool ShowRepairEditDetailsForm { get; set; }
+    [Parameter] public bool ShowPartEditDetailsForm { get; set; }
+    [Parameter] public bool ShowDeleteConfirmationForm { get; set; }
+
+    // Flags indicating if actions are confirmed.
+    [Parameter] public bool DeleteRepairConfirmation { get; set; }
+    [Parameter] public bool DeletePartConfirmation { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Gets Repair data asynchronously with ID from URI.
+        Repair = await repairService.GetRepairByIdAsync(Convert.ToInt32(RepairId));
+        vehicleId = Repair.VehicleId;
+
+        Vehicle = await vehicleService.GetVehicleByIdAsync(vehicleId);
+
+        ShowAddPartForm = false;
+        ShowRepairEditDetailsForm = false;
+        ShowDeleteConfirmationForm = false;
+        ShowPartEditDetailsForm = false;
+        DeleteRepairConfirmation = false;
+        DeletePartConfirmation = false;
+    }
+
+    protected void AddPartForm()
+    {
+        ShowAddPartForm = true;
+    }
+
+    protected async Task AddNextPartFormAsync()
+    {
+        Part = new PartDto();
+
+        Repair = await repairService.GetRepairByIdAsync(Repair.Id);
+
+        ShowAddPartForm = true;
+    }
+
+    public void ShowUpdateRepairDetailsForm()
+    {
+        ShowRepairEditDetailsForm = true;
+    }
+
+    public async Task ShowUpdatePartDetailsForm(int partId)
+    {
+        Part = await partService.GetPartByIdAsync(partId);
+
+        ShowPartEditDetailsForm = true;
+    }
+
+    public void DisplayRepairDeleteConfirmationPopUpForm()
+    {
+        ShowDeleteConfirmationForm = true;
+        DeleteRepairConfirmation = true;
+    }
+
+    public void DisplayPartDeleteConfirmationPopUpForm(int partId)
+    {
+        Part.Id = partId;
+
+        ShowDeleteConfirmationForm = true;
+        DeletePartConfirmation = true;
+    }
+
+    protected async Task ConfirmRepairDeleteAsync()
+    {
+        await repairService.DeleteRepairAsync(Repair.Id);
+
+        navigationManager.NavigateTo($"/vehicle/{vehicleId}", true);
+    }
+
+    protected async Task ConfirmPartDeleteAsync()
+    {
+        await partService.DeletePartAsync(Part.Id);
+
+        await OnInitializedAsync();
+    }
 }
