@@ -16,53 +16,103 @@
                         <DataAnnotationsValidator />
 
                         <div class="form-group">
-                            <label for="BrandName" class="control-label">Brand Name</label>
-                        <InputText id="BrandName" class="form-control" @bind-Value="Vehicle.BrandName" />
-                        <ValidationMessage For="@(() => Vehicle.BrandName)" />
+                            <label for="Name" class="control-label">Vehicle Name</label>
+                            <InputText id="Name" class="form-control" @bind-Value="Vehicle.Name" />
+                            <ValidationMessage For="@(() => Vehicle.Name)" />
                         </div>
                         <div class="form-group">
-                            <label for="VinNumber" class="control-label">Vin Number</label>
-                        <InputText id="VinNumber" class="form-control" @bind-Value="Vehicle.VinNumber" />
-                        <ValidationMessage For="@(() => Vehicle.VinNumber)" />
+                            <label for="BrandName" class="control-label">Brand Name</label>
+                            <InputText id="BrandName" class="form-control" @bind-Value="Vehicle.BrandName" />
+                            <ValidationMessage For="@(() => Vehicle.BrandName)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="VinNumber" class="control-label required-field">Vin Number</label>
+                            <InputText id="VinNumber" class="form-control" @bind-Value="Vehicle.VinNumber" />
+                            <ValidationMessage For="@(() => Vehicle.VinNumber)" />
                         </div>
                         <div class="form-group">
                             <label for="PaintColor" class="control-label">Paint Color</label>
-                        <InputText id="PaintColor" class="form-control" @bind-Value="Vehicle.PaintColor" />
-                        <ValidationMessage For="@(() => Vehicle.PaintColor)" />
+                            <InputText id="PaintColor" class="form-control" @bind-Value="Vehicle.PaintColor" />
+                            <ValidationMessage For="@(() => Vehicle.PaintColor)" />
                         </div>
                         <div class="form-group">
                             <label for="FuelType" class="control-label">Fuel Type</label>
-                        <InputText id="FuelType" class="form-control" @bind-Value="Vehicle.FuelType" />
-                        <ValidationMessage For="@(() => Vehicle.FuelType)" />
+                            <InputText id="FuelType" class="form-control" @bind-Value="Vehicle.FuelType" />
+                            <ValidationMessage For="@(() => Vehicle.FuelType)" />
                         </div>
                         <div class="form-group">
                             <label for="Mileage" class="control-label">Mileage</label>
-                        <input id="Mileage" class="form-control" @bind-value="@Vehicle.Mileage" />
-                        <ValidationMessage For="@(() => Vehicle.Mileage)" />
+                            <input id="Mileage" class="form-control" @bind-value="Vehicle.Mileage" />
+                            <ValidationMessage For="@(() => Vehicle.Mileage)" />
                         </div>
 
                     </EditForm>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success" data-dismiss="modal" 
                                                     @onclick="@(async () => await ConfirmAddVehicleAsync())">Save</button>
-                    <button type="button" class="btn btn-danger" @onclick="OnCancel">Cancel</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal"
+                                                    @onclick="ConfirmAddVehicleAndAddNext"> Add Next </button>
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <AddNextConfirmationForm
+        Show="ShowAddNextConfirmationForm"
+        NextVehicleConfirmation="NextVehicleConfirmation"
+        OnNextVehicle="@(async () => await AddNextVehicleAsync())"
+        OnCancel="CloseConfirmationForm" />
 }
 
 @code {
     [Parameter] public VehicleDto Vehicle { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; }
+
+    // Triggers to execute actions assigned to those Events in Parent component.
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public EventCallback OnConfirm { get; set; }
+    [Parameter] public EventCallback OnConfirmNextVehicle { get; set; }
+
+    // Flags indicating if forms should be displayed.
     [Parameter] public bool Show { get; set; }
-    [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; }
+    [Parameter] public bool ShowAddNextConfirmationForm { get; set; }
+
+    // Flags indicating if actions are confirmed.
+    [Parameter] public bool NextVehicleConfirmation { get; set; }
 
     protected async Task ConfirmAddVehicleAsync()
     {
+        // API call to Add new Vehicle.
         await vehicleService.AddVehicleAsync(Vehicle);
 
+        // OnConfirm event trigger.
         await OnConfirm.InvokeAsync();
+    }
+
+    protected void ConfirmAddVehicleAndAddNext()
+    {
+        ShowAddNextConfirmationForm = true;
+        NextVehicleConfirmation = true;
+    }
+
+    protected async Task AddNextVehicleAsync()
+    {
+        ShowAddNextConfirmationForm = false;
+        NextVehicleConfirmation = false;
+
+        // API call to Add new Vehicle.
+        await vehicleService.AddVehicleAsync(Vehicle);
+
+        // Flag used to close this Form.
+        Show = false;
+
+        // OnConfirmNextVehicle event trigger.
+        await OnConfirmNextVehicle.InvokeAsync();
+    }
+
+    protected void CloseConfirmationForm()
+    {
+        ShowAddNextConfirmationForm = false;
     }
 }
