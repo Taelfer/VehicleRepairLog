@@ -1,4 +1,4 @@
-﻿@page "/userProfile/{UserId}"
+﻿@page "/user/{UserId}"
 
 @attribute [Authorize]
 
@@ -47,7 +47,7 @@ else
                                 </li>
                                 <li class="user-information-list-item">
                                     <span class="user-information-item-label user-information-section">Date of birth :</span>
-                                    <strong class="user-information-item-value user-information-section">@User.DateOfBirth</strong>
+                                    <strong class="user-information-item-value user-information-section">@User.DateOfBirth.Value.ToShortDateString()</strong>
                                 </li>
 
                                 <li class="user-information-list-item">
