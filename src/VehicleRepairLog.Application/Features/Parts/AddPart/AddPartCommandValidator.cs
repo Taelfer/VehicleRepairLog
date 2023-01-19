@@ -8,7 +8,7 @@ namespace VehicleRepairLog.Application.Features.Parts
         {
             RuleFor(part => part.Name).MaximumLength(100).NotEmpty();
             RuleFor(part => part.BrandName).MaximumLength(100).NotEmpty();
-            RuleFor(part => part.Price).NotEmpty();
+            RuleFor(part => part.RepairId).NotEmpty();
         }
     }
 }
