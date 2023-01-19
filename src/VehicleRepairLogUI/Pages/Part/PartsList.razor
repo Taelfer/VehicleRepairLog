@@ -1,0 +1,42 @@
+﻿@if (Show is true)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">List of Parts</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <td>
+                            <ul class="list-group">
+                                @foreach (PartDto part in Repair.Parts)
+                                {
+                                    <li class="list-group-item">@part.Name</li>
+                                }
+                            </ul>
+                        </td>
+                    </tbody>
+                </table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public RepairDto Repair { get; set; }
+    [Parameter] public PartDto Part { get; set; }
+    [Parameter] public bool Show { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+}
