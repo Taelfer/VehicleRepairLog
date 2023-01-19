@@ -1,4 +1,4 @@
-﻿@page "/vehicleProfile/{VehicleId}"
+﻿@page "/vehicle/{VehicleId}"
 
 @attribute [Authorize]
 
@@ -12,7 +12,7 @@
 }
 else
 {
-    <h1>Vehicle Profile</h1>
+    <h1>Vehicle - @Vehicle.Name</h1>
     <hr />
 
     <button class="btn btn-primary" type="button" @onclick="AddRepairForm"> Add Repair </button>
@@ -23,64 +23,91 @@ else
         <thead>
             <tr>
                 <th>Vehicle Name</th>
+                <th>Brand Name</th>
                 <th>Paint Color</th>
                 <th>Fuel Type</th>
                 <th>Mileage</th>
                 <th>Repairs</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             <tr>
+                <td>@Vehicle.Name</td>
                 <td>@Vehicle.BrandName</td>
                 <td>@Vehicle.PaintColor</td>
                 <td>@Vehicle.FuelType</td>
                 <td>@Vehicle.Mileage</td>
                 <td>
                     <table width="100%">
-                        <tr>
-                            <th>Name</th>
-                            <th>Date</th>
-                            <th></th>
-                        </tr>
-                        @foreach (RepairDto repair in Vehicle.Repairs.OrderByDescending(repair => repair.CreatedDate))
-                        {
+                        <thead>
                             <tr>
-                                <td>
-                                    @repair.Name
-                                </td>
-                                <td>
-                                    @repair.CreatedDate
-                                </td>
-                                <td>
-                                    <button class="btn btn-danger" type="button"
-                                                        @onclick="@(() => DisplayRepairDeleteConfirmationPopUpForm(repair.Id))">
-                                        Delete
-                                    </button>
-                                </td>
+                                <th>Name</th>
+                                <th>Parts</th>
+                                <th>Date</th>
+                                <th></th>
                             </tr>
-                        }
+                        </thead>
+                        <tbody>
+                            @foreach (RepairDto repair in Vehicle.Repairs.OrderByDescending(repair => repair.CreatedDate))
+                            {
+                                <tr>
+                                    <td>
+                                        <a class="nav-link" href="repair/@repair.Id"> @repair.Name </a>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" type="button"
+                                                        @onclick="@(async () => await PartsListForm(repair.Id))"> List of Parts </button>
+                                    </td>
+                                    <td>
+                                        @repair.CreatedDate
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" type="button"
+                                        @onclick="@(async () => await ShowUpdateRepairDetailsForm(repair.Id))">
+                                            Update
+                                        </button>
+                                        <button class="btn btn-danger" type="button"
+                                        @onclick="@(() => DisplayRepairDeleteConfirmationPopUpForm(repair.Id))">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
                     </table>
                 </td>
-                <td></td>
             </tr>
         </tbody>
     </table>
 
     <UpdateVehicle 
         Vehicle="Vehicle"
-        Show="ShowEditDetailsForm"
+        Show="ShowVehicleEditDetailsForm"
         OnConfirm="@(async () => await OnInitializedAsync())"
         OnCancel="@(async () => await OnInitializedAsync())" />
 
     <AddRepair 
+        Repair="Repair"
         Vehicle="Vehicle"
         Show="ShowAddRepairForm"
         OnConfirm="@(async () => await OnInitializedAsync())"
+        OnConfirmNextRepair="@(async () => await AddNextRepairFormAsync())"
         OnCancel="@(async () => await OnInitializedAsync())" />
 
-    <DeleteConfirmationPopUpForm 
-        Show="ShowDeleteConfirmationPopUpForm"
+    <UpdateRepair
+        Repair="Repair"
+        Show="ShowRepairEditDetailsForm" 
+        OnConfirm="@(async () => await OnInitializedAsync())"
+        OnCancel="@(async () => await OnInitializedAsync())" />
+
+    <PartsList
+        Part="Part"
+        Repair="Repair"
+        Show="ShowPartsListForm"
+        OnCancel="@(async () => await OnInitializedAsync())" />
+
+    <DeleteConfirmationForm
+        Show="ShowDeleteConfirmationForm"
         DeleteVehicleConfirmation="DeleteVehicleConfirmation"
         DeleteRepairConfirmation="DeleteRepairConfirmation"
         DeleteVehicle="@(async () => await ConfirmVehicleDeleteAsync())"
@@ -90,40 +117,41 @@ else
 
 
 @code {
-    // Stores Vehicle data of given ID.
-    [Parameter] public VehicleDto Vehicle { get; set; }
-    protected RepairDto repair = new RepairDto();
-    [Parameter] public bool ShowEditDetailsForm { get; set; }
-    [Parameter] public bool ShowAddRepairForm { get; set; }
-    [Parameter] public bool DeleteRepairConfirmation { get; set; }
-    [Parameter] public bool DeleteVehicleConfirmation { get; set; }
-    [Parameter] public bool ShowDeleteConfirmationPopUpForm { get; set; }
+    [Parameter] public PartDto Part { get; set; } = new PartDto();
 
     // Stores Vehicle ID taken from URI.
     [Parameter] public string VehicleId { get; set; }
+    [Parameter] public VehicleDto Vehicle { get; set; }
+    [Parameter] public RepairDto Repair { get; set; } = new RepairDto();
 
+    // Flags indicating if forms should be displayed.
+    [Parameter] public bool ShowVehicleEditDetailsForm { get; set; }
+    [Parameter] public bool ShowAddRepairForm { get; set; }
+    [Parameter] public bool ShowRepairEditDetailsForm { get; set; }
+    [Parameter] public bool ShowDeleteConfirmationForm { get; set; }
+    [Parameter] public bool ShowPartsListForm { get; set; }
+
+    // Flags indicating if actions are confirmed.
+    [Parameter] public bool DeleteRepairConfirmation { get; set; }
+    [Parameter] public bool DeleteVehicleConfirmation { get; set; }
+    
     protected override async Task OnInitializedAsync()
     {
         // Gets Vehicle data asynchronously with ID from URI. 
         Vehicle = await vehicleService.GetVehicleByIdAsync(Convert.ToInt32(VehicleId));
 
         ShowAddRepairForm = false;
-        ShowEditDetailsForm = false;
-        ShowDeleteConfirmationPopUpForm = false;
+        ShowVehicleEditDetailsForm = false;
+        ShowRepairEditDetailsForm = false;
+        ShowDeleteConfirmationForm = false;
+        ShowPartsListForm = false;
+        DeleteVehicleConfirmation = false;
+        DeleteRepairConfirmation = false;
     }
 
-    protected async Task ConfirmVehicleDeleteAsync()
+    public void ShowUpdateVehicleDetailsForm()
     {
-        await vehicleService.DeleteVehicleAsync(Vehicle.Id);
-
-        await OnInitializedAsync();
-    }
-
-    protected async Task ConfirmRepairDeleteAsync()
-    {
-        await repairService.DeleteRepairAsync(repair.Id);
-        
-        await OnInitializedAsync();
+        ShowVehicleEditDetailsForm = true;
     }
 
     protected void AddRepairForm()
@@ -131,22 +159,61 @@ else
         ShowAddRepairForm = true;
     }
 
+    protected async Task AddNextRepairFormAsync()
+    {
+        // New Repair object in order to empty form fields.
+        Repair = new RepairDto();
+
+        // API call to refresh Vehicle Details.
+        Vehicle = await vehicleService.GetVehicleByIdAsync(Convert.ToInt32(VehicleId));
+
+        ShowAddRepairForm = true;
+    }
+
+    protected async Task PartsListForm(int repairId)
+    {
+        Repair = await repairService.GetRepairByIdAsync(repairId);
+
+        ShowPartsListForm = true;
+    }
+
+    public async Task ShowUpdateRepairDetailsForm(int repairId)
+    {
+        // API call to fill in the form fields with Repair of given ID data.
+        Repair = await repairService.GetRepairByIdAsync(repairId);
+
+        ShowRepairEditDetailsForm = true;
+    }
+
     public void DisplayVehicleDeleteConfirmationPopUpForm()
     {
-        ShowDeleteConfirmationPopUpForm = true;
+        ShowDeleteConfirmationForm = true;
         DeleteVehicleConfirmation = true;
     }
 
     public void DisplayRepairDeleteConfirmationPopUpForm(int repairId)
     {
-        repair.Id = repairId;
+        Repair.Id = repairId;
 
-        ShowDeleteConfirmationPopUpForm = true;
+        ShowDeleteConfirmationForm = true;
         DeleteRepairConfirmation = true;
+    } 
+
+    protected async Task ConfirmVehicleDeleteAsync()
+    {
+        // API call to delete Vehicle with given ID.
+        await vehicleService.DeleteVehicleAsync(Vehicle.Id);
+
+        // Redirecting to Vehicles list page after Vehicle deletion.
+        navigationManager.NavigateTo("/vehicles", true);
     }
 
-    public void ShowUpdateVehicleDetailsForm()
+    protected async Task ConfirmRepairDeleteAsync()
     {
-        ShowEditDetailsForm = true;
+        // API call to delete Repair with given ID.
+        await repairService.DeleteRepairAsync(Repair.Id);
+
+        // OnIntitialized call in order to close Delete Confirmation Form and refresh Vehicle Data.
+        await OnInitializedAsync();
     }
 }
