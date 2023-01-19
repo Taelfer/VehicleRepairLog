@@ -34,7 +34,7 @@ namespace VehicleRepairLog.Application.Features.Vehicles
 
         public async Task<VehicleDto> Handle(UpdateVehicleCommand request, CancellationToken cancellationToken)
         {
-            Vehicle vehicle = await _context.Vehicles.FirstOrDefaultAsync(x => x.Id == request.VehicleId);
+            Vehicle vehicle = await _context.Vehicles.FirstOrDefaultAsync(vehicle => vehicle.Id == request.VehicleId);
 
             if (vehicle is null)
             {
@@ -45,7 +45,7 @@ namespace VehicleRepairLog.Application.Features.Vehicles
             _context.Vehicles.Update(updatedVehicle);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<VehicleDto>(vehicle);
+            return _mapper.Map<VehicleDto>(updatedVehicle);
         }
     }
 }
