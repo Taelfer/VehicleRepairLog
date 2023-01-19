@@ -11,53 +11,104 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <EditForm Model="repair" class="modal-body">
+                <EditForm Model="Repair" class="modal-body">
                     <DataAnnotationsValidator />
 
                     <div class="form-group">
-                        <label for="Date" class="control-label">Date</label>
-                        <InputDateTime id="Date" class="form-control" @bind-Value="repair.CreatedDate" />
-                        <ValidationMessage For="@(() => repair.CreatedDate)" />
+                        <label for="CreatedDate" class="control-label required-field">Date of the Repair</label>
+                        <InputDateTime id="CreatedDate" class="form-control" @bind-Value="Repair.CreatedDate" />
+                        <ValidationMessage For="@(() => Repair.CreatedDate)" />
                     </div>
                     <div class="form-group">
-                        <label for="Name" class="control-label">Name</label>
-                        <InputText id="Name" class="form-control" @bind-Value="repair.Name" />
-                        <ValidationMessage For="@(() => repair.Name)" />
+                        <label for="Name" class="control-label required-field">Name</label>
+                        <InputText id="Name" class="form-control" @bind-Value="Repair.Name" />
+                        <ValidationMessage For="@(() => Repair.Name)" />
                     </div>
                     <div class="form-group">
                         <label for="Description" class="control-label">Description</label>
-                        <InputText id="Description" class="form-control" @bind-Value="repair.Description" />
-                        <ValidationMessage For="@(() => repair.Description)" />
+                        <InputText id="Description" class="form-control" @bind-Value="Repair.Description" />
+                        <ValidationMessage For="@(() => Repair.Description)" />
                     </div>
                     <div class="form-group">
-                        <label for="CarWorkshopName" class="control-label">CarWorkshopName</label>
-                        <InputText id="CarWorkshopName" class="form-control" @bind-Value="repair.CarWorkshopName" />
-                        <ValidationMessage For="@(() => repair.CarWorkshopName)" />
+                        <label for="CarWorkshopName" class="control-label required-field">Car Workshop</label>
+                        <InputText id="CarWorkshopName" class="form-control" @bind-Value="Repair.CarWorkshopName" />
+                        <ValidationMessage For="@(() => Repair.CarWorkshopName)" />
                     </div>
 
                 </EditForm>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success" data-dismiss="modal" 
                                                     @onclick="@(async () => await ConfirmAddRepairAsync())">Save</button>
-                    <button type="button" class="btn btn-danger" @onclick="OnCancel">Cancel</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal"
+                                                    @onclick="ConfirmAddRepairAndAddNext"> Add Next </button>
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <AddNextConfirmationForm
+        Show="ShowAddNextConfirmationForm"
+        NextRepairConfirmation="NextRepairConfirmation"
+        OnNextRepair="@(async () => await AddNextRepairAsync())"
+        OnCancel="CloseConfirmationForm" />
 }
 
 @code {
     protected RepairDto repair = new();
+    [Parameter] public RepairDto Repair { get; set; } = new RepairDto();
     [Parameter] public VehicleDto Vehicle { get; set; }
-    [Parameter] public bool Show { get; set; }
+
+    // Triggers to execute actions assigned to those Events in Parent component.
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public EventCallback OnConfirm { get; set; }
+    [Parameter] public EventCallback OnConfirmNextRepair { get; set; }
+
+    // Flags indicating if forms should be displayed.
+    [Parameter] public bool Show { get; set; }
+    [Parameter] public bool ShowAddNextConfirmationForm { get; set; }
+
+    // Flags indicating if actions are confirmed.
+    [Parameter] public bool NextRepairConfirmation { get; set; }
 
     internal async Task ConfirmAddRepairAsync()
     {
-        repair.VehicleId = Convert.ToInt32(Vehicle.Id);
-        await repairService.AddRepairAsync(repair);
+        // Assigns Vehicle ID to Repair to connect them correctly.
+        Repair.VehicleId = Vehicle.Id;
 
+        // API call to Add new Repair.
+        await repairService.AddRepairAsync(Repair);
+
+        // OnConfirm event trigger.
         await OnConfirm.InvokeAsync();
+    }
+
+    protected void ConfirmAddRepairAndAddNext()
+    {
+        ShowAddNextConfirmationForm = true;
+        NextRepairConfirmation = true;
+    }
+
+    protected async Task AddNextRepairAsync()
+    {
+        ShowAddNextConfirmationForm = false;
+        NextRepairConfirmation = false;
+
+        // Assigns Vehicle ID to Repair to connect them correctly.
+        Repair.VehicleId = Vehicle.Id;
+
+        // API call to Add new Repair.
+        await repairService.AddRepairAsync(Repair);
+
+        // Flag used to close this Form.
+        Show = false;
+
+        // OnConfirmNextRepair event trigger.
+        await OnConfirmNextRepair.InvokeAsync();
+    }
+
+    protected void CloseConfirmationForm()
+    {
+        ShowAddNextConfirmationForm = false;
     }
 }
