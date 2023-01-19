@@ -1,0 +1,113 @@
+﻿@inject IPartService partService
+
+@if (Show is true)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Part</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <EditForm Model="Part" class="modal-body">
+                    <DataAnnotationsValidator />
+
+                    <div class="form-group">
+                        <label for="Name" class="control-label required-field"> Name</label>
+                        <InputText id="Name" class="form-control" @bind-Value="Part.Name" />
+                        <ValidationMessage For="@(() => Part.Name)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="BrandName" class="control-label required-field">Brand Name</label>
+                        <InputText id="BrandName" class="form-control" @bind-Value="Part.BrandName" />
+                        <ValidationMessage For="@(() => Part.BrandName)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Price" class="control-label">Price</label>
+                        <InputNumber id="Price" class="form-control" @bind-Value="Part.Price" />
+                        <ValidationMessage For="@(() => Part.Price)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Amount" class="control-label">Amount</label>
+                        <InputNumber id="Amount" class="form-control" @bind-Value="Part.Amount" />
+                        <ValidationMessage For="@(() => Part.Amount)" />
+                    </div>
+
+                </EditForm>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" data-dismiss="modal"
+                                                    @onclick="@(async () => await ConfirmAddPartAsync())"> Save </button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal"
+                                                    @onclick="ConfirmAddPartAndAddNext"> Add Next </button>
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <AddNextConfirmationForm
+        Show="ShowAddNextConfirmationForm"
+        NextPartConfirmation="NextPartConfirmation"
+        OnNextPart="@(async () => await AddNextPartAsync())"
+        OnCancel="CloseConfirmationForm" />
+}
+
+@code {
+    [Parameter] public PartDto Part { get; set; }
+    [Parameter] public RepairDto Repair { get; set; }
+
+    // Triggers to execute actions assigned to those Events in Parent component.
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public EventCallback OnConfirm { get; set; }
+    [Parameter] public EventCallback OnConfirmNextPart { get; set; }
+
+    // Flags indicating if forms should be displayed.
+    [Parameter] public bool Show { get; set; }
+    [Parameter] public bool ShowAddNextConfirmationForm { get; set; }
+
+    // Flags indicating if actions are confirmed.
+    [Parameter] public bool NextPartConfirmation { get; set; }
+
+    internal async Task ConfirmAddPartAsync()
+    {
+        // Assigns Repair ID to Part to connect them correctly.
+        Part.RepairId = Repair.Id;
+
+        // API call to Add new Part.
+        await partService.AddPartAsync(Part);
+
+        // OnConfirm event trigger.
+        await OnConfirm.InvokeAsync();
+    }
+
+    protected void ConfirmAddPartAndAddNext()
+    {
+        ShowAddNextConfirmationForm = true;
+        NextPartConfirmation = true;
+    }
+
+    protected async Task AddNextPartAsync()
+    {
+        ShowAddNextConfirmationForm = false;
+        NextPartConfirmation = false;
+
+        // Assigns Repair ID to Part to connect them correctly.
+        Part.RepairId = Repair.Id;
+
+        // API call to Add new Part.
+        await partService.AddPartAsync(Part);
+
+        // Flag used to close this Form.
+        Show = false;
+
+        // OnConfirmNextPart event trigger.
+        await OnConfirmNextPart.InvokeAsync();
+    }
+
+    protected void CloseConfirmationForm()
+    {
+        ShowAddNextConfirmationForm = false;
+    }
+}
