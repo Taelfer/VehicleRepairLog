@@ -39,6 +39,38 @@ namespace VehicleRepairLogUI.Services.Repair
             }
         }
 
+        public async Task<RepairDto> GetRepairByIdAsync(int repairId)
+        {
+            string token = await _localStorage.GetItemAsync<string>("authToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"/api/Repairs/{repairId}");
+
+            if (response.IsSuccessStatusCode == false)
+            {
+                return null;
+            }
+
+            var repair = await response.Content.ReadFromJsonAsync<RepairDto>();
+            return repair;
+        }
+
+        public async Task<RepairDto> UpdateRepairAsync(RepairDto repair)
+        {
+            string token = await _localStorage.GetItemAsync<string>("authToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage response = await _httpClient.PutAsJsonAsync($"/api/Repairs/{repair.Id}", repair);
+
+            if (response.IsSuccessStatusCode == false)
+            {
+                return null;
+            }
+
+            repair = await response.Content.ReadFromJsonAsync<RepairDto>();
+            return repair;
+        }
+
         public async Task DeleteRepairAsync(int repairId)
         {
             string token = await _localStorage.GetItemAsync<string>("authToken");
