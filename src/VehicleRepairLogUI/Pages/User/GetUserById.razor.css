@@ -6,6 +6,15 @@
     font-weight: 500;
     font-size: 1.3125rem;
     line-height: 1.6;
+
+}
+
+.user-photo-container {
+    margin: -50px 50px 20px 30px;
+}
+
+.user-details-container {
+    margin: -150px 400px 20px 300px;
 }
 
 h1,
